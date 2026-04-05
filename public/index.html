@@ -27,49 +27,25 @@
     .nav-item.active { background: #FF6600; color: white; }
     .fade-in { animation: fadeIn 0.3s ease-in; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 50; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
   <div class="flex min-h-screen">
 
-    <!-- ========== SIDEBAR ========== -->
-    <aside id="sidebar" class="w-64 bg-[#1a1a2e] min-h-screen flex flex-col transition-all duration-200">
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-[#1a1a2e] min-h-screen flex flex-col">
       <div class="flex items-center gap-3 px-4 py-5 border-b border-gray-700">
         <div class="w-8 h-8 rounded-lg bg-autobacs-orange flex items-center justify-center text-white font-bold text-sm">A</div>
-        <div>
-          <div class="text-white font-bold text-sm">AUTOBACS</div>
-          <div class="text-gray-400 text-xs">Training Management</div>
-        </div>
+        <div><div class="text-white font-bold text-sm">AUTOBACS</div><div class="text-gray-400 text-xs">Training Management</div></div>
       </div>
       <nav class="flex-1 py-4" id="nav">
-        <a onclick="navigate('dashboard')" class="nav-item active flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">📊</span><span>แดชบอร์ด</span>
-        </a>
-        <a onclick="navigate('plan')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">📋</span><span>แผนอบรมประจำปี</span>
-        </a>
-        <a onclick="navigate('courses')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">📚</span><span>หลักสูตร</span>
-        </a>
-        <a onclick="navigate('trainees')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">👥</span><span>ผู้เข้าอบรม</span>
-        </a>
-        <a onclick="navigate('tax')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">🧮</span><span>คำนวณภาษี</span>
-        </a>
-        <a onclick="navigate('duplicates')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">🔍</span><span>ตรวจจับซ้ำ</span>
-        </a>
-        <a onclick="navigate('recommendations')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">💡</span><span>แนะนำส่งอบรม</span>
-        </a>
-        <a onclick="navigate('notifications')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">🔔</span><span>แจ้งเตือน</span>
-        </a>
-        <div class="mx-4 my-2 border-t border-gray-700"></div>
-        <a onclick="navigate('import')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          <span class="text-lg">📥</span><span>นำเข้าข้อมูล</span>
-        </a>
+        <a onclick="navigate('dashboard')" class="nav-item active flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📊</span><span>แดชบอร์ด</span></a>
+        <a onclick="navigate('courses')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📚</span><span>หลักสูตร</span></a>
+        <a onclick="navigate('trainees')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">👥</span><span>พนักงาน</span></a>
+        <a onclick="navigate('enrollments')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📋</span><span>ลงทะเบียนอบรม</span></a>
+        <a onclick="navigate('tax')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">🧮</span><span>คำนวณภาษี</span></a>
       </nav>
       <div class="px-4 py-4 border-t border-gray-700">
         <div class="text-gray-400 text-xs">ปีงบประมาณ 2569</div>
@@ -77,359 +53,91 @@
       </div>
     </aside>
 
-    <!-- ========== MAIN ========== -->
+    <!-- MAIN -->
     <div class="flex-1 flex flex-col">
-      <!-- Header -->
       <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10">
-        <div>
-          <h1 class="text-lg font-bold text-gray-800">ระบบบริหารการอบรมเพื่อลดหย่อนภาษี</h1>
-          <p class="text-xs text-gray-500">Autobacs Training Tax Deduction Management</p>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="relative">
-            <button onclick="toggleNotifPopup()" class="relative p-2 rounded-lg hover:bg-gray-100">
-              <span class="text-xl">🔔</span>
-              <span id="notif-badge" class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">4</span>
-            </button>
-            <div id="notif-popup" class="hidden absolute right-0 top-12 w-80 bg-white rounded-xl shadow-lg border z-50">
-              <div class="p-3 border-b flex justify-between"><span class="font-semibold text-sm">การแจ้งเตือน</span><span class="text-xs text-gray-500">4 ยังไม่อ่าน</span></div>
-              <div class="max-h-60 overflow-y-auto text-sm">
-                <div class="p-3 border-b bg-orange-50 hover:bg-orange-100 cursor-pointer">
-                  <div class="flex items-start gap-2"><span>🔴</span><div><div class="font-medium">ใบ จป. ใกล้หมดอายุ</div><div class="text-xs text-gray-500">วิชัย มั่นคง (AUTO-012) หมดอายุ 30 มิ.ย.</div></div></div>
-                </div>
-                <div class="p-3 border-b bg-orange-50 hover:bg-orange-100 cursor-pointer">
-                  <div class="flex items-start gap-2"><span>🟡</span><div><div class="font-medium">พบรายชื่อซ้ำ</div><div class="text-xs text-gray-500">สมชาย ใจดี อาจซ้ำกับหลักสูตรปี 2568</div></div></div>
-                </div>
-                <div class="p-3 border-b bg-orange-50 hover:bg-orange-100 cursor-pointer">
-                  <div class="flex items-start gap-2"><span>🟡</span><div><div class="font-medium">เตือนยื่น ฝ.1</div><div class="text-xs text-gray-500">หลักสูตรไฮบริด อบรมอีก 30 วัน ยังไม่ยื่น</div></div></div>
-                </div>
-                <div class="p-3 border-b bg-orange-50 hover:bg-orange-100 cursor-pointer">
-                  <div class="flex items-start gap-2"><span>🔵</span><div><div class="font-medium">งบอบรมเหลือ</div><div class="text-xs text-gray-500">เหลือ 480,000 บาท ประหยัดภาษีเพิ่มได้</div></div></div>
-                </div>
-              </div>
-              <div class="p-2 text-center"><a onclick="navigate('notifications')" class="text-xs text-autobacs-orange cursor-pointer hover:underline">ดูทั้งหมด</a></div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2 pl-4 border-l">
-            <div class="w-8 h-8 rounded-full bg-autobacs-orange text-white flex items-center justify-center text-sm font-bold">HR</div>
-            <div class="text-sm"><div class="font-medium text-gray-700">HR Admin</div><div class="text-xs text-gray-400">ฝ่ายทรัพยากรบุคคล</div></div>
-          </div>
+        <div><h1 class="text-lg font-bold text-gray-800">ระบบบริหารการอบรม</h1><p class="text-xs text-gray-500">Autobacs Training Management</p></div>
+        <div class="flex items-center gap-2 pl-4 border-l">
+          <div class="w-8 h-8 rounded-full bg-autobacs-orange text-white flex items-center justify-center text-sm font-bold">HR</div>
+          <div class="text-sm"><div class="font-medium text-gray-700">HR Admin</div></div>
         </div>
       </header>
 
-      <!-- Content -->
       <main class="flex-1 p-6">
 
         <!-- ==================== DASHBOARD ==================== -->
         <div id="page-dashboard" class="page active fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800">แดชบอร์ด</h2>
-              <p class="text-sm text-gray-500">ภาพรวมการอบรมประจำปี 2569</p>
-            </div>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">สถานะแผน: กำลังดำเนินการ</span>
-          </div>
-
-          <!-- Alert Banner -->
-          <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-4 mb-6">
-            <span class="text-2xl">⚠️</span>
-            <div class="flex-1">
-              <div class="font-semibold text-orange-800">ต้องดำเนินการ</div>
-              <div class="text-sm text-orange-700">พบ 3 รายชื่อซ้ำ/ชนกัน | 6 พนักงานที่ควรส่งอบรม</div>
-            </div>
-            <a onclick="navigate('duplicates')" class="inline-flex items-center px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700 cursor-pointer">ดูรายชื่อซ้ำ</a>
-            <a onclick="navigate('recommendations')" class="inline-flex items-center px-4 py-2 rounded-lg font-medium text-xs bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer">ดูคำแนะนำ</a>
-          </div>
-
-          <!-- Stat Cards -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">งบประมาณรวม</div>
-              <div class="text-2xl font-bold text-gray-800">1,200,000</div>
-              <div class="text-xs text-gray-400">บาท</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">ใช้ไปแล้ว</div>
-              <div class="text-2xl font-bold text-autobacs-orange">720,000</div>
-              <div class="text-xs text-gray-400">60% ของงบ</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">งบเหลือ</div>
-              <div class="text-2xl font-bold text-green-600">480,000</div>
-              <div class="text-xs text-gray-400">บาท</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">หลักสูตร</div>
-              <div class="text-2xl font-bold text-blue-600">3/8</div>
-              <div class="text-xs text-gray-400">เสร็จ/ทั้งหมด</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">อบรมแล้ว</div>
-              <div class="text-2xl font-bold text-purple-600">42%</div>
-              <div class="text-xs text-gray-400">50/118 คน</div>
-              <div class="text-xs text-red-500 mt-0.5">ยังไม่ถึง 50% เป้า กพร.</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-4">
-              <div class="text-sm text-gray-500">ภาษีประหยัดได้</div>
-              <div class="text-2xl font-bold text-green-700">74,000</div>
-              <div class="text-xs text-gray-400">บาท (ที่อนุมัติ)</div>
-            </div>
-          </div>
-
-          <!-- Budget Progress -->
+          <h2 class="text-2xl font-bold text-gray-800 mb-1">แดชบอร์ด</h2>
+          <p class="text-sm text-gray-500 mb-6">ภาพรวมการอบรมประจำปี</p>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6" id="dash-stats"></div>
           <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
             <h3 class="font-semibold text-gray-800 mb-3">สถานะงบประมาณ</h3>
             <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-              <div class="bg-autobacs-orange h-6 rounded-full flex items-center justify-end pr-3 text-white text-xs font-medium" style="width:60%">720,000</div>
+              <div id="dash-budget-bar" class="bg-autobacs-orange h-6 rounded-full flex items-center justify-end pr-3 text-white text-xs font-medium" style="width:0%">0</div>
             </div>
-            <div class="flex justify-between text-xs text-gray-500 mt-1.5">
-              <span>0</span><span>ใช้ไป 60%</span><span>1,200,000 บาท</span>
-            </div>
-          </div>
-
-          <!-- Charts area -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border p-6 lg:col-span-2">
-              <h3 class="font-semibold text-gray-800 mb-4">ค่าใช้จ่ายรายเดือน (บาท)</h3>
-              <div class="flex items-end gap-2 h-48">
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:62.5%"></div>
-                  <div class="w-full bg-green-500 rounded-t" style="height:25%"></div>
-                  <span class="text-xs text-gray-500">ม.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:41.7%"></div>
-                  <div class="w-full bg-green-500 rounded-t" style="height:16.7%"></div>
-                  <span class="text-xs text-gray-500">ก.พ.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:50%"></div>
-                  <div class="w-full bg-green-500 rounded-t" style="height:20%"></div>
-                  <span class="text-xs text-gray-500">มี.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:100%"></div>
-                  <div class="w-full bg-gray-200 rounded-t" style="height:0%"></div>
-                  <span class="text-xs text-gray-500">เม.ย.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:95.8%"></div>
-                  <div class="w-full bg-gray-200 rounded-t" style="height:0%"></div>
-                  <span class="text-xs text-gray-500">พ.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:33.3%"></div>
-                  <div class="w-full bg-gray-200 rounded-t" style="height:0%"></div>
-                  <span class="text-xs text-gray-500">มิ.ย.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-gray-200 rounded-t" style="height:2%"></div>
-                  <span class="text-xs text-gray-500">ก.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:50%"></div>
-                  <div class="w-full bg-gray-200 rounded-t" style="height:0%"></div>
-                  <span class="text-xs text-gray-500">ส.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-gray-200 rounded-t" style="height:2%"></div>
-                  <span class="text-xs text-gray-500">ก.ย.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-autobacs-orange rounded-t" style="height:54.2%"></div>
-                  <div class="w-full bg-gray-200 rounded-t" style="height:0%"></div>
-                  <span class="text-xs text-gray-500">ต.ค.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-gray-200 rounded-t" style="height:2%"></div>
-                  <span class="text-xs text-gray-500">พ.ย.</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-1">
-                  <div class="w-full bg-gray-200 rounded-t" style="height:2%"></div>
-                  <span class="text-xs text-gray-500">ธ.ค.</span>
-                </div>
-              </div>
-              <div class="flex gap-6 mt-3 text-xs">
-                <div class="flex items-center gap-1"><div class="w-3 h-3 bg-autobacs-orange rounded"></div>ค่าใช้จ่าย</div>
-                <div class="flex items-center gap-1"><div class="w-3 h-3 bg-green-500 rounded"></div>ภาษีประหยัด</div>
-              </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-              <h3 class="font-semibold text-gray-800 mb-4">หลักสูตรแยกหมวด</h3>
-              <div class="space-y-3 mt-6">
-                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-blue-500"></div><span class="text-sm text-gray-600 flex-1">ทักษะช่าง</span><span class="font-medium">4</span></div>
-                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-red-500"></div><span class="text-sm text-gray-600 flex-1">ความปลอดภัย</span><span class="font-medium">2</span></div>
-                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-green-500"></div><span class="text-sm text-gray-600 flex-1">บริการลูกค้า</span><span class="font-medium">1</span></div>
-                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-purple-500"></div><span class="text-sm text-gray-600 flex-1">การจัดการ</span><span class="font-medium">1</span></div>
-              </div>
-              <!-- Simple donut visualization -->
-              <div class="flex justify-center mt-6">
-                <div class="relative w-32 h-32">
-                  <svg viewBox="0 0 36 36" class="w-32 h-32">
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="50 100" stroke-dashoffset="25" />
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="#ef4444" stroke-width="4" stroke-dasharray="25 100" stroke-dashoffset="75" />
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="#22c55e" stroke-width="4" stroke-dasharray="12.5 100" stroke-dashoffset="50" />
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="#a855f7" stroke-width="4" stroke-dasharray="12.5 100" stroke-dashoffset="37.5" />
-                  </svg>
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="text-center"><div class="text-xl font-bold">8</div><div class="text-xs text-gray-500">หลักสูตร</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Two Column -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-              <h3 class="font-semibold text-gray-800 mb-4">หลักสูตรที่จะมาถึง</h3>
-              <div class="space-y-3">
-                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                  <div class="text-center min-w-[48px]"><div class="text-xs text-gray-500">04/22</div></div>
-                  <div class="flex-1"><div class="font-medium text-sm">ระบบไฟฟ้ารถยนต์ไฮบริด</div><div class="flex gap-2 mt-1"><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ทักษะช่าง</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ยื่นแล้ว</span></div></div>
-                  <div class="text-right"><div class="text-sm font-medium">120,000</div><div class="text-xs text-gray-500">บาท</div></div>
-                </div>
-                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                  <div class="text-center min-w-[48px]"><div class="text-xs text-gray-500">05/12</div></div>
-                  <div class="flex-1"><div class="font-medium text-sm">การจัดการศูนย์บริการยุคใหม่</div><div class="flex gap-2 mt-1"><span class="px-2 py-0.5 rounded-full text-xs bg-purple-100 text-purple-800">การจัดการ</span><span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-800">ยังไม่ยื่น</span></div></div>
-                  <div class="text-right"><div class="text-sm font-medium">115,000</div><div class="text-xs text-gray-500">บาท</div></div>
-                </div>
-                <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                  <div class="text-center min-w-[48px]"><div class="text-xs text-gray-500">06/05</div></div>
-                  <div class="flex-1"><div class="font-medium text-sm">การดับเพลิงและอพยพหนีไฟ</div><div class="flex gap-2 mt-1"><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ความปลอดภัย</span><span class="px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-800">ยังไม่ยื่น</span></div></div>
-                  <div class="text-right"><div class="text-sm font-medium">40,000</div><div class="text-xs text-gray-500">บาท</div></div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-800">การแจ้งเตือนล่าสุด</h3>
-                <a onclick="navigate('notifications')" class="text-xs text-autobacs-orange cursor-pointer hover:underline">ดูทั้งหมด</a>
-              </div>
-              <div class="space-y-2">
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100"><span>🔴</span><div><div class="font-medium text-sm">ใบ จป. ใกล้หมดอายุ</div><div class="text-xs text-gray-600">วิชัย มั่นคง ใบ จป. หมดอายุ 30 มิ.ย. 2569</div></div></div>
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100"><span>🟡</span><div><div class="font-medium text-sm">พบรายชื่อซ้ำ</div><div class="text-xs text-gray-600">สมชาย ใจดี อาจซ้ำกับหลักสูตรปี 2568</div></div></div>
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100"><span>🟡</span><div><div class="font-medium text-sm">เตือนยื่น ฝ.1</div><div class="text-xs text-gray-600">หลักสูตรไฮบริด อบรมอีก 30 วัน ยังไม่ยื่น</div></div></div>
-                <div class="flex items-start gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100"><span>🔵</span><div><div class="font-medium text-sm">งบอบรมเหลือ</div><div class="text-xs text-gray-600">เหลือ 480,000 บาท ประหยัดภาษีเพิ่มได้ ~192,000 บาท</div></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== PLAN ==================== -->
-        <div id="page-plan" class="page fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">แผนอบรมประจำปี 2569</h2><p class="text-sm text-gray-500">วางแผนและติดตามงบประมาณการอบรม</p></div>
-            <div class="flex gap-2"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">กำลังดำเนินการ</span><button class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">แก้ไขแผน</button></div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">งบประมาณรวม</div><div class="text-2xl font-bold">1,200,000</div><div class="text-xs text-gray-400">บาท / ปี</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ใช้ไปแล้ว</div><div class="text-2xl font-bold text-autobacs-orange">720,000</div><div class="text-xs text-gray-400">60%</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">จำนวนหลักสูตร</div><div class="text-2xl font-bold text-blue-600">8</div><div class="text-xs text-gray-400">หลักสูตร</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">เป้าชั่วโมง/คน</div><div class="text-2xl font-bold text-purple-600">12</div><div class="text-xs text-gray-400">ชั่วโมง / คน / ปี</div></div>
-          </div>
-          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3">ข้อมูลการอนุมัติ</h3>
-            <div class="grid grid-cols-4 gap-4 text-sm">
-              <div><div class="text-gray-500">สร้างเมื่อ</div><div class="font-medium">15 พ.ย. 2568</div></div>
-              <div><div class="text-gray-500">อนุมัติโดย</div><div class="font-medium">คุณวีระ ผู้บริหาร</div></div>
-              <div><div class="text-gray-500">วันที่อนุมัติ</div><div class="font-medium">20 ธ.ค. 2568</div></div>
-              <div><div class="text-gray-500">สถานะ</div><div class="font-medium">กำลังดำเนินการ</div></div>
-            </div>
-          </div>
-          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-4">งบประมาณแยกตามหมวด</h3>
-            <div class="space-y-3">
-              <div class="flex items-center gap-3"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 min-w-[100px] text-center">ทักษะช่าง</span><div class="flex-1"><div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-autobacs-orange h-3 rounded-full" style="width:26.7%"></div></div></div><span class="text-sm font-medium min-w-[100px] text-right">320,000 บาท</span></div>
-              <div class="flex items-center gap-3"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 min-w-[100px] text-center">ความปลอดภัย</span><div class="flex-1"><div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-autobacs-orange h-3 rounded-full" style="width:7.5%"></div></div></div><span class="text-sm font-medium min-w-[100px] text-right">90,000 บาท</span></div>
-              <div class="flex items-center gap-3"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 min-w-[100px] text-center">บริการลูกค้า</span><div class="flex-1"><div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-autobacs-orange h-3 rounded-full" style="width:5%"></div></div></div><span class="text-sm font-medium min-w-[100px] text-right">60,000 บาท</span></div>
-              <div class="flex items-center gap-3"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 min-w-[100px] text-center">การจัดการ</span><div class="flex-1"><div class="w-full bg-gray-200 rounded-full h-3"><div class="bg-autobacs-orange h-3 rounded-full" style="width:9.6%"></div></div></div><span class="text-sm font-medium min-w-[100px] text-right">115,000 บาท</span></div>
-            </div>
+            <div class="flex justify-between text-xs text-gray-500 mt-1.5" id="dash-budget-labels"></div>
           </div>
           <div class="bg-white rounded-xl shadow-sm border p-6">
-            <h3 class="font-semibold text-gray-800 mb-4">ปฏิทินอบรมรายเดือน</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="calendar-grid">
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">ม.ค.</div><div class="mt-1 text-xs"><div class="font-medium">เบรค ABS รุ่นใหม่</div><div class="text-gray-500">12 ชม. | 75,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">ก.พ.</div><div class="mt-1 text-xs"><div class="font-medium">จป.หัวหน้างาน</div><div class="text-gray-500">12 ชม. | 50,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">มี.ค.</div><div class="mt-1 text-xs"><div class="font-medium">Customer Service</div><div class="text-gray-500">12 ชม. | 60,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">เม.ย.</div><div class="mt-1 text-xs"><div class="font-medium">ไฟฟ้ารถไฮบริด</div><div class="text-gray-500">18 ชม. | 120,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">พ.ค.</div><div class="mt-1 text-xs"><div class="font-medium">จัดการศูนย์บริการ</div><div class="text-gray-500">18 ชม. | 115,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">มิ.ย.</div><div class="mt-1 text-xs"><div class="font-medium">ดับเพลิง/อพยพ</div><div class="text-gray-500">6 ชม. | 40,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-gray-200 bg-gray-50"><div class="font-semibold text-sm">ก.ค.</div><div class="text-xs text-gray-400 mt-1">ไม่มีอบรม</div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">ส.ค.</div><div class="mt-1 text-xs"><div class="font-medium">ตั้งศูนย์ถ่วงล้อ</div><div class="text-gray-500">12 ชม. | 60,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-gray-200 bg-gray-50"><div class="font-semibold text-sm">ก.ย.</div><div class="text-xs text-gray-400 mt-1">ไม่มีอบรม</div></div>
-              <div class="p-3 rounded-lg border border-autobacs-orange bg-orange-50"><div class="font-semibold text-sm">ต.ค.</div><div class="mt-1 text-xs"><div class="font-medium">ปรับอากาศรถยนต์</div><div class="text-gray-500">12 ชม. | 65,000 บาท</div></div></div>
-              <div class="p-3 rounded-lg border border-gray-200 bg-gray-50"><div class="font-semibold text-sm">พ.ย.</div><div class="text-xs text-gray-400 mt-1">ไม่มีอบรม</div></div>
-              <div class="p-3 rounded-lg border border-gray-200 bg-gray-50"><div class="font-semibold text-sm">ธ.ค.</div><div class="text-xs text-gray-400 mt-1">ไม่มีอบรม</div></div>
-            </div>
+            <h3 class="font-semibold text-gray-800 mb-4">หลักสูตรล่าสุด</h3>
+            <div id="dash-recent-courses" class="space-y-3"></div>
+            <div id="dash-no-courses" class="hidden text-center text-gray-400 py-8">ยังไม่มีหลักสูตร กด "หลักสูตร" เพื่อเพิ่ม</div>
           </div>
         </div>
 
         <!-- ==================== COURSES ==================== -->
         <div id="page-courses" class="page fade-in">
           <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">หลักสูตรอบรม</h2><p class="text-sm text-gray-500">รายละเอียดหลักสูตรทั้งหมดในปี 2569</p></div>
-            <button class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ เพิ่มหลักสูตร</button>
+            <div><h2 class="text-2xl font-bold text-gray-800">หลักสูตรอบรม</h2><p class="text-sm text-gray-500">จัดการหลักสูตรทั้งหมด</p></div>
+            <button onclick="openCourseModal()" class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ เพิ่มหลักสูตร</button>
           </div>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4" id="courses-grid">
-            <!-- Course 1 -->
-            <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between mb-3"><div><h4 class="font-semibold text-gray-800">การบำรุงรักษาระบบเบรค ABS รุ่นใหม่</h4><p class="text-xs text-gray-500 mt-0.5">สถาบันยานยนต์ไทย</p></div><div class="flex gap-1.5"><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ทักษะช่าง</span><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></div></div>
-              <p class="text-sm text-gray-600 mb-3">อบรมเชิงปฏิบัติการเกี่ยวกับระบบเบรค ABS สำหรับรถยนต์รุ่นใหม่</p>
-              <div class="grid grid-cols-4 gap-3 text-sm"><div><div class="text-gray-500 text-xs">วันที่</div><div class="font-medium">20-21 ม.ค.</div></div><div><div class="text-gray-500 text-xs">ชั่วโมง</div><div class="font-medium">12 ชม.</div></div><div><div class="text-gray-500 text-xs">ผู้เข้าอบรม</div><div class="font-medium">12/15 คน</div></div><div><div class="text-gray-500 text-xs">ค่าใช้จ่าย</div><div class="font-medium text-autobacs-orange">75,000 บาท</div></div></div>
-              <div class="mt-3 pt-3 border-t text-xs text-gray-500 flex flex-wrap gap-x-4">ค่าลงทะเบียน: 60,000 | ค่าเดินทาง: 8,000 | เอกสาร: 5,000 | อื่นๆ: 2,000</div>
-            </div>
-            <!-- Course 2 -->
-            <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between mb-3"><div><h4 class="font-semibold text-gray-800">ความปลอดภัยในการทำงาน (จป.หัวหน้างาน)</h4><p class="text-xs text-gray-500 mt-0.5">สมาคมส่งเสริมความปลอดภัย</p></div><div class="flex gap-1.5"><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ความปลอดภัย</span><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></div></div>
-              <p class="text-sm text-gray-600 mb-3">หลักสูตรเจ้าหน้าที่ความปลอดภัยในการทำงาน ระดับหัวหน้างาน</p>
-              <div class="grid grid-cols-4 gap-3 text-sm"><div><div class="text-gray-500 text-xs">วันที่</div><div class="font-medium">15-16 ก.พ.</div></div><div><div class="text-gray-500 text-xs">ชั่วโมง</div><div class="font-medium">12 ชม.</div></div><div><div class="text-gray-500 text-xs">ผู้เข้าอบรม</div><div class="font-medium">8/10 คน</div></div><div><div class="text-gray-500 text-xs">ค่าใช้จ่าย</div><div class="font-medium text-autobacs-orange">50,000 บาท</div></div></div>
-            </div>
-            <!-- Course 3 -->
-            <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between mb-3"><div><h4 class="font-semibold text-gray-800">Customer Service Excellence</h4><p class="text-xs text-gray-500 mt-0.5">Autobacs Academy (In-house)</p></div><div class="flex gap-1.5"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">บริการลูกค้า</span><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></div></div>
-              <p class="text-sm text-gray-600 mb-3">พัฒนาทักษะการบริการลูกค้าระดับสูง สำหรับพนักงานหน้าร้าน</p>
-              <div class="grid grid-cols-4 gap-3 text-sm"><div><div class="text-gray-500 text-xs">วันที่</div><div class="font-medium">10-11 มี.ค.</div></div><div><div class="text-gray-500 text-xs">ชั่วโมง</div><div class="font-medium">12 ชม.</div></div><div><div class="text-gray-500 text-xs">ผู้เข้าอบรม</div><div class="font-medium">15/20 คน</div></div><div><div class="text-gray-500 text-xs">ค่าใช้จ่าย</div><div class="font-medium text-autobacs-orange">60,000 บาท</div></div></div>
-            </div>
-            <!-- Course 4 -->
-            <div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between mb-3"><div><h4 class="font-semibold text-gray-800">ระบบไฟฟ้ารถยนต์ไฮบริด</h4><p class="text-xs text-gray-500 mt-0.5">สถาบันยานยนต์ไทย</p></div><div class="flex gap-1.5"><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ทักษะช่าง</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ยื่นแล้ว</span></div></div>
-              <p class="text-sm text-gray-600 mb-3">อบรมเชิงลึกเรื่องระบบไฟฟ้าและอิเล็กทรอนิกส์ในรถยนต์ไฮบริด</p>
-              <div class="grid grid-cols-4 gap-3 text-sm"><div><div class="text-gray-500 text-xs">วันที่</div><div class="font-medium">22-24 เม.ย.</div></div><div><div class="text-gray-500 text-xs">ชั่วโมง</div><div class="font-medium">18 ชม.</div></div><div><div class="text-gray-500 text-xs">ผู้เข้าอบรม</div><div class="font-medium">8/10 คน</div></div><div><div class="text-gray-500 text-xs">ค่าใช้จ่าย</div><div class="font-medium text-autobacs-orange">120,000 บาท</div></div></div>
-            </div>
-          </div>
+          <div id="courses-list" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
+          <div id="courses-empty" class="hidden text-center py-16 text-gray-400"><span class="text-5xl block mb-3">📚</span><p>ยังไม่มีหลักสูตร กดปุ่ม "+ เพิ่มหลักสูตร" เพื่อเริ่มต้น</p></div>
         </div>
 
         <!-- ==================== TRAINEES ==================== -->
         <div id="page-trainees" class="page fade-in">
           <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">ผู้เข้าอบรม</h2><p class="text-sm text-gray-500">ข้อมูลพนักงานและประวัติการอบรม</p></div>
+            <div><h2 class="text-2xl font-bold text-gray-800">พนักงาน</h2><p class="text-sm text-gray-500">จัดการข้อมูลพนักงาน</p></div>
+            <button onclick="openTraineeModal()" class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ เพิ่มพนักงาน</button>
+          </div>
+          <div class="mb-4"><input type="text" id="trainee-search" placeholder="ค้นหาชื่อ, รหัส, สาขา..." class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-full max-w-md" oninput="renderTrainees()" /></div>
+          <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">รหัส</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">ชื่อ-สกุล</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">ตำแหน่ง</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">สาขา</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200" id="trainees-tbody"></tbody>
+            </table>
+          </div>
+          <div id="trainees-empty" class="hidden text-center py-16 text-gray-400"><span class="text-5xl block mb-3">👥</span><p>ยังไม่มีพนักงาน กดปุ่ม "+ เพิ่มพนักงาน" เพื่อเริ่มต้น</p></div>
+        </div>
+
+        <!-- ==================== ENROLLMENTS ==================== -->
+        <div id="page-enrollments" class="page fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <div><h2 class="text-2xl font-bold text-gray-800">ลงทะเบียนอบรม</h2><p class="text-sm text-gray-500">จับคู่พนักงานกับหลักสูตร</p></div>
+            <button onclick="openEnrollModal()" class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ ลงทะเบียน</button>
           </div>
           <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">รหัส</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ชื่อ-สกุล</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ตำแหน่ง</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">สาขา</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ชม.อบรม</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">ผลประเมิน</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">สถานะ</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">พนักงาน</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">หลักสูตร</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">สถานะ</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">จัดการ</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200">
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-001</td><td class="px-4 py-3 text-sm font-medium">สมชาย ใจดี</td><td class="px-4 py-3 text-sm">ช่างเทคนิคอาวุโส</td><td class="px-4 py-3 text-sm">พระราม 2</td><td class="px-4 py-3 text-sm text-green-600">48 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★★☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">ปกติ</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-002</td><td class="px-4 py-3 text-sm font-medium">สมหญิง รักดี</td><td class="px-4 py-3 text-sm">พนักงานบริการ</td><td class="px-4 py-3 text-sm">พระราม 2</td><td class="px-4 py-3 text-sm text-green-600">24 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★☆☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">ปกติ</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-012</td><td class="px-4 py-3 text-sm font-medium">วิชัย มั่นคง</td><td class="px-4 py-3 text-sm">หัวหน้าช่าง</td><td class="px-4 py-3 text-sm">บางนา</td><td class="px-4 py-3 text-sm text-green-600">62 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★★★</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">ปกติ</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-015</td><td class="px-4 py-3 text-sm font-medium">พิมพ์ สวยงาม</td><td class="px-4 py-3 text-sm">ช่างเทคนิค</td><td class="px-4 py-3 text-sm">บางนา</td><td class="px-4 py-3 text-sm text-red-600 font-medium">8 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★☆☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ต้องอบรมเพิ่ม</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-020</td><td class="px-4 py-3 text-sm font-medium">ธนา รุ่งเรือง</td><td class="px-4 py-3 text-sm">ผู้จัดการสาขา</td><td class="px-4 py-3 text-sm">รังสิต</td><td class="px-4 py-3 text-sm text-green-600">36 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★★☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">ปกติ</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-025</td><td class="px-4 py-3 text-sm font-medium">นภา ใจสะอาด</td><td class="px-4 py-3 text-sm">ช่างเทคนิค</td><td class="px-4 py-3 text-sm">รังสิต</td><td class="px-4 py-3 text-sm text-red-600 font-medium">4 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★☆☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ต้องอบรมเพิ่ม</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-035</td><td class="px-4 py-3 text-sm font-medium">อรุณ สดใส</td><td class="px-4 py-3 text-sm">ช่างเทคนิค</td><td class="px-4 py-3 text-sm">พัทยา</td><td class="px-4 py-3 text-sm text-red-600 font-medium">2 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★☆☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ต้องอบรมเพิ่ม</span></td></tr>
-                <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-mono">AUTO-045</td><td class="px-4 py-3 text-sm font-medium">สมศรี ดีงาม</td><td class="px-4 py-3 text-sm">พนักงานบริการ</td><td class="px-4 py-3 text-sm">เชียงใหม่</td><td class="px-4 py-3 text-sm text-red-600 font-medium">0 ชม.</td><td class="px-4 py-3 text-sm text-yellow-400">★★★☆☆</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ต้องอบรมเพิ่ม</span></td></tr>
-              </tbody>
+              <tbody class="divide-y divide-gray-200" id="enrollments-tbody"></tbody>
             </table>
           </div>
+          <div id="enrollments-empty" class="hidden text-center py-16 text-gray-400"><span class="text-5xl block mb-3">📋</span><p>ยังไม่มีการลงทะเบียน</p></div>
         </div>
 
         <!-- ==================== TAX ==================== -->
@@ -439,388 +147,15 @@
           </div>
           <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
             <h3 class="font-semibold text-blue-800 mb-2">สูตรคำนวณ</h3>
-            <div class="text-sm text-blue-700"><p>ค่าใช้จ่ายที่หักได้ = <strong>ค่าใช้จ่ายจริง x 200%</strong></p><p>ภาษีประหยัด = ค่าหักได้ x อัตราภาษีนิติบุคคล (20%)</p></div>
+            <div class="text-sm text-blue-700"><p>ค่าใช้จ่ายที่หักได้ = ค่าใช้จ่ายจริง x 200%</p><p>ภาษีประหยัด = ค่าหักได้ x อัตราภาษีนิติบุคคล (20%)</p></div>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border-2 border-green-200 p-4"><div class="text-sm text-gray-500">ภาษีประหยัดจริง</div><div class="text-2xl font-bold text-green-700">74,000</div><div class="text-xs text-green-600">เฉพาะ กพร. อนุมัติ</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ศักยภาพทั้งหมด</div><div class="text-2xl font-bold text-blue-600">234,000</div><div class="text-xs text-gray-500">ถ้าทุกหลักสูตรอนุมัติ</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">อนุมัติ / รอ</div><div class="text-2xl font-bold">3 / 5</div><div class="text-xs text-gray-500">หลักสูตร</div></div>
-            <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">อบรมแล้ว</div><div class="text-2xl font-bold text-red-600">42%</div><div class="text-xs text-gray-500">เป้า 50%</div></div>
-          </div>
-          <!-- 50% Progress -->
-          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-2">ความคืบหน้าอบรม 50%</h3>
-            <p class="text-xs text-gray-500 mb-3">ต้องอบรมพนักงานอย่างน้อย 50% จึงได้สิทธิ์เต็ม</p>
-            <div class="w-full bg-gray-200 rounded-full h-8 overflow-hidden relative">
-              <div class="bg-autobacs-orange h-8 rounded-full flex items-center justify-center text-white text-sm font-medium" style="width:42%">42%</div>
-              <div class="absolute top-0 bottom-0 left-1/2 w-0.5 bg-red-500"></div>
-            </div>
-            <div class="flex justify-between text-xs text-gray-500 mt-2"><span>อบรมแล้ว 50 คน</span><span>ต้องอีก 9 คน</span><span>ทั้งหมด 118 คน</span></div>
-          </div>
-          <!-- Approved Table -->
-          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-green-700 mb-4">หลักสูตรที่ได้สิทธิ์ลดหย่อน (3 หลักสูตร)</h3>
-            <div class="overflow-x-auto rounded-xl border"><table class="min-w-full divide-y divide-gray-200"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">หลักสูตร</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ค่าใช้จ่ายจริง</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">หักได้ (x2)</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ภาษีประหยัด</th><th class="px-4 py-3 text-xs font-semibold text-gray-600">กพร.</th></tr></thead><tbody class="divide-y divide-gray-200">
-              <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-medium">เบรค ABS รุ่นใหม่</td><td class="px-4 py-3 text-sm text-right">75,000</td><td class="px-4 py-3 text-sm text-right text-blue-600 font-medium">150,000</td><td class="px-4 py-3 text-sm text-right font-bold text-green-700">30,000</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-medium">จป.หัวหน้างาน</td><td class="px-4 py-3 text-sm text-right">50,000</td><td class="px-4 py-3 text-sm text-right text-blue-600 font-medium">100,000</td><td class="px-4 py-3 text-sm text-right font-bold text-green-700">20,000</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></td></tr>
-              <tr class="hover:bg-gray-50"><td class="px-4 py-3 text-sm font-medium">Customer Service</td><td class="px-4 py-3 text-sm text-right">60,000</td><td class="px-4 py-3 text-sm text-right text-blue-600 font-medium">120,000</td><td class="px-4 py-3 text-sm text-right font-bold text-green-700">24,000</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">อนุมัติ</span></td></tr>
-              <tr class="bg-green-50 font-bold"><td class="px-4 py-3 text-sm">รวม</td><td class="px-4 py-3 text-sm text-right">185,000</td><td class="px-4 py-3 text-sm text-right text-blue-600">370,000</td><td class="px-4 py-3 text-sm text-right text-green-700">74,000</td><td></td></tr>
-            </tbody></table></div>
-          </div>
-        </div>
-
-        <!-- ==================== DUPLICATES ==================== -->
-        <div id="page-duplicates" class="page fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">ตรวจจับรายชื่อซ้ำ</h2><p class="text-sm text-gray-500">ป้องกันการลงทะเบียนซ้ำ, หลักสูตรทับซ้อน, และวันชนกัน</p></div>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">3 รายการรอดำเนินการ</span>
-          </div>
-          <!-- Detection Info -->
-          <div class="bg-gray-50 rounded-xl border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3">ระบบตรวจจับ 3 ชั้น</h3>
-            <div class="grid grid-cols-3 gap-4 text-sm">
-              <div class="p-3 bg-white rounded-lg border"><div class="font-semibold mb-1">ชั้น 1: ตอนกรอก</div><div class="text-xs text-gray-600">ตรวจรหัสซ้ำ, ชื่อคล้าย, วันชน</div></div>
-              <div class="p-3 bg-white rounded-lg border"><div class="font-semibold mb-1">ชั้น 2: ก่อนบันทึก</div><div class="text-xs text-gray-600">เคยอบรมแล้ว?, เนื้อหาทับซ้อน?</div></div>
-              <div class="p-3 bg-white rounded-lg border"><div class="font-semibold mb-1">ชั้น 3: รายงานรวม</div><div class="text-xs text-gray-600">สแกนทั้งปี, เทียบปีก่อน</div></div>
-            </div>
-          </div>
-          <!-- Alert 1 -->
-          <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-red-400 bg-red-50 p-6 mb-4">
-            <div class="flex items-start justify-between">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">🔴</span>
-                <div>
-                  <div class="flex items-center gap-2"><span class="font-semibold">ซ้ำแน่นอน</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">สูง</span></div>
-                  <div class="mt-2 text-sm"><div>พนักงาน: <strong>สมชาย ใจดี (AUTO-001)</strong></div><div>หลักสูตร: <strong>เทคนิคการตั้งศูนย์ถ่วงล้อ</strong></div><div>ชนกับ: <strong class="text-red-600">เทคนิคการตั้งศูนย์ถ่วงล้อ (ปี 2568)</strong></div></div>
-                  <div class="mt-2 p-2 bg-white rounded text-sm">เคยอบรมหลักสูตรเดียวกันแล้วเมื่อปี 2568 — กพร. อาจไม่อนุมัติซ้ำ</div>
-                </div>
-              </div>
-              <div class="flex flex-col gap-2 ml-4"><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700" onclick="this.closest('.bg-red-50').style.opacity='0.4'; this.closest('.bg-red-50').querySelector('.resolve-msg').classList.remove('hidden')">แก้ไข/ลบออก</button><button class="px-4 py-2 rounded-lg font-medium text-xs border border-gray-300 text-gray-700 hover:bg-gray-50">ยืนยันว่าจงใจ</button></div>
-            </div>
-            <div class="resolve-msg hidden mt-2 text-xs text-green-600 font-medium">แก้ไขแล้ว โดย HR Admin</div>
-          </div>
-          <!-- Alert 2 -->
-          <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-yellow-400 bg-yellow-50 p-6 mb-4">
-            <div class="flex items-start justify-between">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">🟡</span>
-                <div>
-                  <div class="flex items-center gap-2"><span class="font-semibold">หลักสูตรคล้ายกัน</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ปานกลาง</span></div>
-                  <div class="mt-2 text-sm"><div>พนักงาน: <strong>สมหญิง รักดี (AUTO-002)</strong></div><div>หลักสูตร: <strong>Customer Service Excellence</strong></div><div>ชนกับ: <strong class="text-red-600">การบริการลูกค้าเบื้องต้น (ปี 2568)</strong></div></div>
-                  <div class="mt-2 p-2 bg-white rounded text-sm">เนื้อหาทับซ้อนกับหลักสูตรที่เคยอบรมเมื่อปี 2568 ประมาณ 60%</div>
-                </div>
-              </div>
-              <div class="flex flex-col gap-2 ml-4"><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700">แก้ไข/ลบออก</button><button class="px-4 py-2 rounded-lg font-medium text-xs border border-gray-300 text-gray-700 hover:bg-gray-50">ยืนยันว่าจงใจ</button></div>
-            </div>
-          </div>
-          <!-- Alert 3 -->
-          <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-orange-400 bg-orange-50 p-6 mb-4">
-            <div class="flex items-start justify-between">
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">🟠</span>
-                <div>
-                  <div class="flex items-center gap-2"><span class="font-semibold">วันชนกัน</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">สูง</span></div>
-                  <div class="mt-2 text-sm"><div>พนักงาน: <strong>วิชัย มั่นคง (AUTO-012)</strong></div><div>หลักสูตร: <strong>ระบบไฟฟ้ารถยนต์ไฮบริด</strong></div><div>ชนกับ: <strong class="text-red-600">ตรวจสภาพรถประจำปี (สาขาบางนา)</strong></div></div>
-                  <div class="mt-2 p-2 bg-white rounded text-sm">วันที่อบรม 22 เม.ย. ชนกับกำหนดการตรวจสภาพรถประจำปีที่สาขา</div>
-                </div>
-              </div>
-              <div class="flex flex-col gap-2 ml-4"><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700">แก้ไข/ลบออก</button><button class="px-4 py-2 rounded-lg font-medium text-xs border border-gray-300 text-gray-700 hover:bg-gray-50">ยืนยันว่าจงใจ</button></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== RECOMMENDATIONS ==================== -->
-        <div id="page-recommendations" class="page fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">แนะนำพนักงานส่งอบรม</h2><p class="text-sm text-gray-500">ระบบวิเคราะห์อัตโนมัติ — คนที่ควรส่งอบรมตามเกณฑ์</p></div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border-2 border-red-200 p-4"><div class="flex items-center gap-2"><span class="text-xl">🔴</span><div class="text-sm text-gray-500">บังคับ</div></div><div class="text-2xl font-bold text-red-600">3 คน</div></div>
-            <div class="bg-white rounded-xl shadow-sm border-2 border-yellow-200 p-4"><div class="flex items-center gap-2"><span class="text-xl">🟡</span><div class="text-sm text-gray-500">แนะนำ</div></div><div class="text-2xl font-bold text-yellow-600">2 คน</div></div>
-            <div class="bg-white rounded-xl shadow-sm border-2 border-green-200 p-4"><div class="flex items-center gap-2"><span class="text-xl">🟢</span><div class="text-sm text-gray-500">โอกาสภาษี</div></div><div class="text-2xl font-bold text-green-600">1 รายการ</div></div>
-            <div class="bg-orange-50 rounded-xl shadow-sm border-2 border-orange-200 p-4"><div class="text-sm text-gray-500">ต้องอบรมอีกถึง 50%</div><div class="text-2xl font-bold text-autobacs-orange">9 คน</div><div class="text-xs text-orange-600">ตอนนี้ 42%</div></div>
-          </div>
-          <!-- Tax Opportunity -->
-          <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <span class="text-3xl">💰</span>
-            <div><div class="font-semibold text-green-800">โอกาสประหยัดภาษีเพิ่ม</div><div class="text-sm text-green-700">งบเหลือ 480,000 บาท — ถ้าใช้หมดจะประหยัดภาษีเพิ่ม <strong>192,000 บาท</strong></div></div>
-          </div>
-          <!-- Rec Cards -->
-          <div class="space-y-4">
-            <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-red-400 bg-red-50 p-6">
-              <div class="flex items-start gap-3"><span class="text-2xl">🔴</span><div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap"><span class="font-semibold">วิชัย มั่นคง</span><span class="text-xs text-gray-500 font-mono">AUTO-012</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">บังคับ</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ใบอนุญาตหมดอายุ</span></div>
-                <div class="mt-1.5 text-sm text-gray-600">ใบ จป.หัวหน้างาน หมดอายุ 30 มิ.ย. 2569</div>
-                <div class="mt-2 flex gap-4 text-xs text-gray-500"><span>สาขา: บางนา</span><span>ตำแหน่ง: หัวหน้าช่าง</span><span class="text-red-600 font-medium">กำหนด: 30 มิ.ย. 2569</span></div>
-                <div class="mt-2 p-2 bg-white rounded border text-sm">แนะนำ: <strong>ความปลอดภัยในการทำงาน (จป.หัวหน้างาน)</strong></div>
-              </div><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700 shrink-0">จัดลงหลักสูตร</button></div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-red-400 bg-red-50 p-6">
-              <div class="flex items-start gap-3"><span class="text-2xl">🔴</span><div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap"><span class="font-semibold">อรุณ สดใส</span><span class="text-xs text-gray-500 font-mono">AUTO-035</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">บังคับ</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">พนักงานใหม่</span></div>
-                <div class="mt-1.5 text-sm text-gray-600">พนักงานใหม่ ยังไม่ผ่าน Safety Orientation (ชม.อบรม 2 ชม.)</div>
-                <div class="mt-2 p-2 bg-white rounded border text-sm">แนะนำ: <strong>การดับเพลิงและอพยพหนีไฟ</strong></div>
-              </div><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700 shrink-0">จัดลงหลักสูตร</button></div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-red-400 bg-red-50 p-6">
-              <div class="flex items-start gap-3"><span class="text-2xl">🔴</span><div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap"><span class="font-semibold">สมศรี ดีงาม</span><span class="text-xs text-gray-500 font-mono">AUTO-045</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">บังคับ</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">พนักงานใหม่</span></div>
-                <div class="mt-1.5 text-sm text-gray-600">พนักงานใหม่ ชั่วโมงอบรม 0 ชม.</div>
-                <div class="mt-2 p-2 bg-white rounded border text-sm">แนะนำ: <strong>Customer Service Excellence</strong></div>
-              </div><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700 shrink-0">จัดลงหลักสูตร</button></div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-yellow-400 bg-yellow-50 p-6">
-              <div class="flex items-start gap-3"><span class="text-2xl">🟡</span><div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap"><span class="font-semibold">พิมพ์ สวยงาม</span><span class="text-xs text-gray-500 font-mono">AUTO-015</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">แนะนำ</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ชั่วโมงต่ำ</span></div>
-                <div class="mt-1.5 text-sm text-gray-600">ชั่วโมงอบรมสะสม 8 ชม. — ต่ำกว่าเป้า 12 ชม./ปี</div>
-                <div class="mt-2 p-2 bg-white rounded border text-sm">แนะนำ: <strong>เทคนิคการตั้งศูนย์ถ่วงล้อ</strong></div>
-              </div><button class="px-4 py-2 rounded-lg font-medium text-xs bg-autobacs-orange text-white hover:bg-orange-700 shrink-0">จัดลงหลักสูตร</button></div>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-green-400 bg-green-50 p-6">
-              <div class="flex items-start gap-3"><span class="text-2xl">🟢</span><div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap"><span class="font-semibold">โอกาสภาษี</span><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">โอกาส</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">โควตาภาษี</span></div>
-                <div class="mt-1.5 text-sm text-gray-600">ยังอบรมเพียง 42% — ต้องอีก 9 คนถึง 50% เพื่อสิทธิ์ลดหย่อนเต็ม</div>
-              </div></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ==================== NOTIFICATIONS ==================== -->
-        <div id="page-notifications" class="page fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div><h2 class="text-2xl font-bold text-gray-800">การแจ้งเตือน</h2><p class="text-sm text-gray-500">4 รายการยังไม่อ่าน</p></div>
-            <button class="px-4 py-2 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200" onclick="document.querySelectorAll('.notif-item').forEach(e=>e.classList.remove('bg-orange-50','border-orange-200'))">อ่านทั้งหมด</button>
-          </div>
-          <!-- Channels -->
-          <div class="bg-gray-50 rounded-xl border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3">ช่องทางแจ้งเตือน</h3>
-            <div class="grid grid-cols-3 gap-4 text-sm">
-              <div class="flex items-center gap-3 p-3 bg-white rounded-lg border"><span class="text-2xl">🌐</span><div><div class="font-medium">In-app</div><div class="text-xs text-gray-500">ทุกการแจ้งเตือน</div></div><span class="ml-auto px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">เปิด</span></div>
-              <div class="flex items-center gap-3 p-3 bg-white rounded-lg border"><span class="text-2xl">💬</span><div><div class="font-medium">LINE Notify</div><div class="text-xs text-gray-500">เรื่องด่วน</div></div><span class="ml-auto px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">เปิด</span></div>
-              <div class="flex items-center gap-3 p-3 bg-white rounded-lg border"><span class="text-2xl">📧</span><div><div class="font-medium">Email</div><div class="text-xs text-gray-500">สรุปรายสัปดาห์</div></div><span class="ml-auto px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">ตั้งค่า</span></div>
-            </div>
-          </div>
-          <!-- Notification items -->
-          <div class="space-y-2">
-            <div class="notif-item bg-white rounded-xl shadow-sm border p-4 bg-orange-50 border-orange-200 flex items-start gap-3 cursor-pointer hover:bg-orange-100" onclick="this.classList.remove('bg-orange-50','border-orange-200')"><span class="text-xl">🔴</span><div class="flex-1"><div class="flex items-center gap-2"><span class="font-semibold text-sm">ใบ จป. ใกล้หมดอายุ</span><span class="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ด่วน</span><span class="w-2 h-2 rounded-full bg-autobacs-orange"></span></div><p class="text-sm text-gray-600 mt-0.5">วิชัย มั่นคง (AUTO-012) ใบ จป.หัวหน้างาน หมดอายุ 30 มิ.ย. 2569</p><div class="text-xs text-gray-400 mt-1">1 มี.ค. 2569</div></div><a onclick="navigate('recommendations')" class="px-4 py-2 rounded-lg text-xs border border-gray-300 text-gray-700 hover:bg-gray-50 shrink-0 cursor-pointer">ดำเนินการ</a></div>
-            <div class="notif-item bg-white rounded-xl shadow-sm border p-4 bg-orange-50 border-orange-200 flex items-start gap-3 cursor-pointer hover:bg-orange-100" onclick="this.classList.remove('bg-orange-50','border-orange-200')"><span class="text-xl">🟡</span><div class="flex-1"><div class="flex items-center gap-2"><span class="font-semibold text-sm">พบรายชื่อซ้ำ</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">เตือน</span><span class="w-2 h-2 rounded-full bg-autobacs-orange"></span></div><p class="text-sm text-gray-600 mt-0.5">สมชาย ใจดี อาจซ้ำกับหลักสูตรที่อบรมแล้วในปี 2568</p><div class="text-xs text-gray-400 mt-1">1 มี.ค. 2569</div></div><a onclick="navigate('duplicates')" class="px-4 py-2 rounded-lg text-xs border border-gray-300 text-gray-700 hover:bg-gray-50 shrink-0 cursor-pointer">ดำเนินการ</a></div>
-            <div class="notif-item bg-white rounded-xl shadow-sm border p-4 flex items-start gap-3 cursor-pointer hover:bg-gray-50"><span class="text-xl">🟢</span><div class="flex-1"><div class="flex items-center gap-2"><span class="font-semibold text-sm">กพร. อนุมัติหลักสูตร</span><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">สำเร็จ</span></div><p class="text-sm text-gray-600 mt-0.5">หลักสูตร 'Customer Service Excellence' ได้รับอนุมัติจาก กพร.</p><div class="text-xs text-gray-400 mt-1">28 ก.พ. 2569 | อ่านแล้ว</div></div></div>
-            <div class="notif-item bg-white rounded-xl shadow-sm border p-4 bg-orange-50 border-orange-200 flex items-start gap-3 cursor-pointer hover:bg-orange-100" onclick="this.classList.remove('bg-orange-50','border-orange-200')"><span class="text-xl">🟡</span><div class="flex-1"><div class="flex items-center gap-2"><span class="font-semibold text-sm">เตือนยื่น ฝ.1</span><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">เตือน</span><span class="w-2 h-2 rounded-full bg-autobacs-orange"></span></div><p class="text-sm text-gray-600 mt-0.5">หลักสูตร 'ระบบไฟฟ้ารถยนต์ไฮบริด' อบรมในอีก 30 วัน ยังไม่ยื่น ฝ.1</p><div class="text-xs text-gray-400 mt-1">22 มี.ค. 2569</div></div><a onclick="navigate('courses')" class="px-4 py-2 rounded-lg text-xs border border-gray-300 text-gray-700 hover:bg-gray-50 shrink-0 cursor-pointer">ดำเนินการ</a></div>
-            <div class="notif-item bg-white rounded-xl shadow-sm border p-4 bg-orange-50 border-orange-200 flex items-start gap-3 cursor-pointer hover:bg-orange-100" onclick="this.classList.remove('bg-orange-50','border-orange-200')"><span class="text-xl">🔵</span><div class="flex-1"><div class="flex items-center gap-2"><span class="font-semibold text-sm">งบอบรมเหลือ</span><span class="px-2 py-0.5 rounded-full text-xs bg-blue-100 text-blue-800">ข้อมูล</span><span class="w-2 h-2 rounded-full bg-autobacs-orange"></span></div><p class="text-sm text-gray-600 mt-0.5">งบเหลือ 480,000 บาท — ประหยัดภาษีเพิ่มได้ ~192,000 บาท</p><div class="text-xs text-gray-400 mt-1">1 เม.ย. 2569</div></div><a onclick="navigate('tax')" class="px-4 py-2 rounded-lg text-xs border border-gray-300 text-gray-700 hover:bg-gray-50 shrink-0 cursor-pointer">ดำเนินการ</a></div>
-          </div>
-        </div>
-
-        <!-- ==================== IMPORT ==================== -->
-        <div id="page-import" class="page fade-in">
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800">นำเข้าข้อมูล</h2>
-              <p class="text-sm text-gray-500">อัพโหลดไฟล์ CSV รายชื่อพนักงาน, สาขา, หลักสูตร เข้าสู่ระบบ (รองรับ 1,000+ รายการ)</p>
-            </div>
-          </div>
-
-          <!-- Import Type Selector -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <button onclick="selectImportType('employees')" id="import-btn-employees" class="import-type-btn bg-white rounded-xl shadow-sm border-2 border-autobacs-orange p-6 text-left hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-2"><span class="text-3xl">👥</span><div><div class="font-semibold text-gray-800">รายชื่อพนักงาน</div><div class="text-xs text-gray-500">รหัส, ชื่อ-สกุล, ตำแหน่ง, สาขา</div></div></div>
-              <div class="text-xs text-gray-400 mt-2">รองรับ: พนักงาน 1,000+ คน, 128+ สาขา</div>
-            </button>
-            <button onclick="selectImportType('branches')" id="import-btn-branches" class="import-type-btn bg-white rounded-xl shadow-sm border-2 border-gray-200 p-6 text-left hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-2"><span class="text-3xl">🏢</span><div><div class="font-semibold text-gray-800">สาขา</div><div class="text-xs text-gray-500">รหัสสาขา, ชื่อ, ที่ตั้ง, ภูมิภาค</div></div></div>
-              <div class="text-xs text-gray-400 mt-2">จัดการ 128+ สาขาทั่วประเทศ</div>
-            </button>
-            <button onclick="selectImportType('courses')" id="import-btn-courses" class="import-type-btn bg-white rounded-xl shadow-sm border-2 border-gray-200 p-6 text-left hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-2"><span class="text-3xl">📚</span><div><div class="font-semibold text-gray-800">หลักสูตร / ผู้เข้าอบรม</div><div class="text-xs text-gray-500">หลักสูตร, ค่าใช้จ่าย, รายชื่อผู้เข้า</div></div></div>
-              <div class="text-xs text-gray-400 mt-2">นำเข้าพร้อมรายชื่อผู้เข้าอบรมทีเดียว</div>
-            </button>
-          </div>
-
-          <!-- CSV Format Guide -->
-          <div id="import-format" class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-3">รูปแบบไฟล์ CSV ที่รองรับ</h3>
-
-            <!-- Employee Format (default) -->
-            <div id="format-employees">
-              <div class="bg-gray-50 rounded-lg p-4 mb-3">
-                <div class="font-medium text-sm mb-2">คอลัมน์ที่ต้องมี (พนักงาน):</div>
-                <div class="overflow-x-auto">
-                  <table class="text-xs border-collapse w-full">
-                    <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">คอลัมน์</th><th class="border px-3 py-1.5 text-left">ตัวอย่าง</th><th class="border px-3 py-1.5 text-left">จำเป็น</th><th class="border px-3 py-1.5 text-left">ลิงก์ไปหน้า</th></tr></thead>
-                    <tbody>
-                      <tr><td class="border px-3 py-1.5 font-mono">employee_code</td><td class="border px-3 py-1.5">AUTO-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 text-xs">ผู้เข้าอบรม</span> <span class="px-1.5 py-0.5 rounded bg-red-100 text-red-700 text-xs">ตรวจจับซ้ำ</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">first_name</td><td class="border px-3 py-1.5">สมชาย</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 text-xs">ผู้เข้าอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">last_name</td><td class="border px-3 py-1.5">ใจดี</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 text-xs">ผู้เข้าอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">position</td><td class="border px-3 py-1.5">ช่างเทคนิค</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs">แนะนำอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">branch_code</td><td class="border px-3 py-1.5">BR-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-xs">แดชบอร์ด</span> <span class="px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 text-xs">ผู้เข้าอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">branch_name</td><td class="border px-3 py-1.5">สาขาพระราม 2</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 text-xs">แดชบอร์ด</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">hire_date</td><td class="border px-3 py-1.5">2019-03-15</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs">แนะนำอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">training_hours</td><td class="border px-3 py-1.5">48</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-green-100 text-green-700 text-xs">คำนวณภาษี</span> <span class="px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs">แนะนำอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">performance_score</td><td class="border px-3 py-1.5">4</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs">แนะนำอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">cert_type</td><td class="border px-3 py-1.5">จป.หัวหน้างาน</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-red-100 text-red-700 text-xs">ตรวจจับซ้ำ</span> <span class="px-1.5 py-0.5 rounded bg-yellow-100 text-yellow-700 text-xs">แนะนำอบรม</span></td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">cert_expiry</td><td class="border px-3 py-1.5">2569-06-30</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td><td class="border px-3 py-1.5"><span class="px-1.5 py-0.5 rounded bg-red-100 text-red-700 text-xs">แจ้งเตือน</span></td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="flex gap-2">
-                <button onclick="downloadTemplate('employees')" class="px-4 py-2 rounded-lg font-medium text-xs bg-gray-100 text-gray-700 hover:bg-gray-200">ดาวน์โหลดตัวอย่าง CSV</button>
-              </div>
-            </div>
-
-            <!-- Branch Format -->
-            <div id="format-branches" class="hidden">
-              <div class="bg-gray-50 rounded-lg p-4 mb-3">
-                <div class="font-medium text-sm mb-2">คอลัมน์ที่ต้องมี (สาขา):</div>
-                <div class="overflow-x-auto">
-                  <table class="text-xs border-collapse w-full">
-                    <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">คอลัมน์</th><th class="border px-3 py-1.5 text-left">ตัวอย่าง</th><th class="border px-3 py-1.5 text-left">จำเป็น</th></tr></thead>
-                    <tbody>
-                      <tr><td class="border px-3 py-1.5 font-mono">branch_code</td><td class="border px-3 py-1.5">BR-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">branch_name</td><td class="border px-3 py-1.5">สาขาพระราม 2</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">region</td><td class="border px-3 py-1.5">กรุงเทพฯ</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">province</td><td class="border px-3 py-1.5">กรุงเทพมหานคร</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">manager_code</td><td class="border px-3 py-1.5">AUTO-020</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">employee_count</td><td class="border px-3 py-1.5">35</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <button onclick="downloadTemplate('branches')" class="px-4 py-2 rounded-lg font-medium text-xs bg-gray-100 text-gray-700 hover:bg-gray-200">ดาวน์โหลดตัวอย่าง CSV</button>
-            </div>
-
-            <!-- Course Format -->
-            <div id="format-courses" class="hidden">
-              <div class="bg-gray-50 rounded-lg p-4 mb-3">
-                <div class="font-medium text-sm mb-2">คอลัมน์ที่ต้องมี (หลักสูตร + ผู้เข้าอบรม):</div>
-                <div class="overflow-x-auto">
-                  <table class="text-xs border-collapse w-full">
-                    <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">คอลัมน์</th><th class="border px-3 py-1.5 text-left">ตัวอย่าง</th><th class="border px-3 py-1.5 text-left">จำเป็น</th></tr></thead>
-                    <tbody>
-                      <tr><td class="border px-3 py-1.5 font-mono">course_name</td><td class="border px-3 py-1.5">เบรค ABS รุ่นใหม่</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">employee_code</td><td class="border px-3 py-1.5">AUTO-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">start_date</td><td class="border px-3 py-1.5">2569-01-20</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">end_date</td><td class="border px-3 py-1.5">2569-01-21</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">hours</td><td class="border px-3 py-1.5">12</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">category</td><td class="border px-3 py-1.5">technical</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">total_cost</td><td class="border px-3 py-1.5">75000</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                      <tr><td class="border px-3 py-1.5 font-mono">selection_criteria</td><td class="border px-3 py-1.5">ช่างอาวุโส upskill</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <button onclick="downloadTemplate('courses')" class="px-4 py-2 rounded-lg font-medium text-xs bg-gray-100 text-gray-700 hover:bg-gray-200">ดาวน์โหลดตัวอย่าง CSV</button>
-            </div>
-          </div>
-
-          <!-- Upload Area -->
-          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-4">อัพโหลดไฟล์</h3>
-            <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-autobacs-orange hover:bg-orange-50 transition-colors cursor-pointer"
-                 onclick="document.getElementById('file-input').click()"
-                 ondragover="event.preventDefault(); this.classList.add('border-autobacs-orange','bg-orange-50')"
-                 ondragleave="this.classList.remove('border-autobacs-orange','bg-orange-50')"
-                 ondrop="event.preventDefault(); this.classList.remove('border-autobacs-orange','bg-orange-50'); handleFiles(event.dataTransfer.files)">
-              <span class="text-5xl block mb-3">📄</span>
-              <div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div>
-              <div class="text-sm text-gray-500">รองรับ .csv, .txt (UTF-8) | สูงสุด 50MB | รองรับ 10,000+ แถว</div>
-              <input type="file" id="file-input" class="hidden" accept=".csv,.txt" onchange="handleFiles(this.files)" />
-            </div>
-          </div>
-
-          <!-- Processing Status (hidden by default) -->
-          <div id="import-processing" class="hidden bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <div class="flex items-center gap-3 mb-4">
-              <div id="import-spinner" class="w-6 h-6 border-2 border-autobacs-orange border-t-transparent rounded-full animate-spin"></div>
-              <h3 class="font-semibold text-gray-800" id="import-status-text">กำลังประมวลผล...</h3>
-            </div>
-            <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
-              <div id="import-progress-bar" class="bg-autobacs-orange h-3 rounded-full transition-all duration-300" style="width: 0%"></div>
-            </div>
-            <div id="import-progress-text" class="text-xs text-gray-500">0 / 0 แถว</div>
-          </div>
-
-          <!-- Validation Results (hidden by default) -->
-          <div id="import-validation" class="hidden space-y-4 mb-6">
-            <div class="bg-white rounded-xl shadow-sm border p-6">
-              <h3 class="font-semibold text-gray-800 mb-4">ผลการตรวจสอบ</h3>
-              <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-                <div class="p-3 bg-gray-50 rounded-lg text-center"><div class="text-2xl font-bold text-gray-800" id="val-total">0</div><div class="text-xs text-gray-500">แถวทั้งหมด</div></div>
-                <div class="p-3 bg-green-50 rounded-lg text-center"><div class="text-2xl font-bold text-green-600" id="val-valid">0</div><div class="text-xs text-green-600">ถูกต้อง</div></div>
-                <div class="p-3 bg-yellow-50 rounded-lg text-center"><div class="text-2xl font-bold text-yellow-600" id="val-warning">0</div><div class="text-xs text-yellow-600">เตือน</div></div>
-                <div class="p-3 bg-red-50 rounded-lg text-center"><div class="text-2xl font-bold text-red-600" id="val-error">0</div><div class="text-xs text-red-600">ผิดพลาด</div></div>
-                <div class="p-3 bg-orange-50 rounded-lg text-center"><div class="text-2xl font-bold text-autobacs-orange" id="val-duplicate">0</div><div class="text-xs text-autobacs-orange">ซ้ำ</div></div>
-              </div>
-
-              <!-- Error/Warning List -->
-              <div id="val-issues" class="hidden">
-                <h4 class="font-medium text-sm text-gray-700 mb-2">รายการที่ต้องตรวจสอบ:</h4>
-                <div id="val-issues-list" class="max-h-48 overflow-y-auto space-y-1 text-xs"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Preview Table (hidden by default) -->
-          <div id="import-preview" class="hidden bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-gray-800">ตัวอย่างข้อมูล (แสดง 50 แถวแรก)</h3>
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-gray-500" id="preview-count">0 แถว</span>
-                <input type="text" id="preview-search" placeholder="ค้นหา..." class="border border-gray-300 rounded-lg px-3 py-1 text-xs w-48" oninput="filterPreview(this.value)" />
-              </div>
-            </div>
-            <div class="overflow-x-auto max-h-96">
-              <table class="min-w-full divide-y divide-gray-200 text-xs" id="preview-table">
-                <thead class="bg-gray-50 sticky top-0" id="preview-thead"></thead>
-                <tbody class="divide-y divide-gray-200" id="preview-tbody"></tbody>
-              </table>
-            </div>
-            <!-- Pagination -->
-            <div class="flex items-center justify-between mt-4 pt-4 border-t">
-              <div class="text-xs text-gray-500" id="pagination-info">แสดง 1-50 จาก 0 แถว</div>
-              <div class="flex gap-1" id="pagination-controls"></div>
-            </div>
-          </div>
-
-          <!-- Data Linking Summary (hidden by default) -->
-          <div id="import-linking" class="hidden bg-white rounded-xl shadow-sm border p-6 mb-6">
-            <h3 class="font-semibold text-gray-800 mb-4">ข้อมูลจะถูกส่งไปยังหน้าต่อไปนี้</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="linking-cards"></div>
-          </div>
-
-          <!-- Import Actions (hidden by default) -->
-          <div id="import-actions" class="hidden flex items-center gap-3 mb-6">
-            <button onclick="confirmImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700 flex items-center gap-2">
-              <span>✓</span> ยืนยันนำเข้า
-            </button>
-            <button onclick="resetImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">
-              ยกเลิก
-            </button>
-            <div class="ml-auto text-sm text-gray-500" id="import-summary-text"></div>
-          </div>
-
-          <!-- Import Success (hidden by default) -->
-          <div id="import-success" class="hidden">
-            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-8 text-center mb-6">
-              <span class="text-5xl block mb-3">✅</span>
-              <div class="text-xl font-bold text-green-800 mb-2" id="success-title">นำเข้าสำเร็จ!</div>
-              <div class="text-sm text-green-700" id="success-detail"></div>
-            </div>
-            <h3 class="font-semibold text-gray-800 mb-4">ไปที่หน้าที่เกี่ยวข้อง:</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="success-links"></div>
-            <button onclick="resetImport()" class="mt-6 px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">นำเข้าไฟล์เพิ่ม</button>
-          </div>
-
-          <!-- Import History -->
-          <div class="bg-white rounded-xl shadow-sm border p-6">
-            <h3 class="font-semibold text-gray-800 mb-4">ประวัติการนำเข้า</h3>
-            <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-200 text-sm">
-                <thead class="bg-gray-50"><tr><th class="px-4 py-2 text-left text-xs font-semibold text-gray-600">วันที่</th><th class="px-4 py-2 text-left text-xs font-semibold text-gray-600">ประเภท</th><th class="px-4 py-2 text-left text-xs font-semibold text-gray-600">ไฟล์</th><th class="px-4 py-2 text-right text-xs font-semibold text-gray-600">จำนวนแถว</th><th class="px-4 py-2 text-left text-xs font-semibold text-gray-600">สถานะ</th><th class="px-4 py-2 text-left text-xs font-semibold text-gray-600">ผู้นำเข้า</th></tr></thead>
-                <tbody class="divide-y divide-gray-200" id="import-history-body">
-                  <tr class="hover:bg-gray-50"><td class="px-4 py-2">5 เม.ย. 2569</td><td class="px-4 py-2">พนักงาน</td><td class="px-4 py-2 font-mono text-xs">all_employees_2569.csv</td><td class="px-4 py-2 text-right">1,247</td><td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">สำเร็จ</span></td><td class="px-4 py-2">HR Admin</td></tr>
-                  <tr class="hover:bg-gray-50"><td class="px-4 py-2">3 เม.ย. 2569</td><td class="px-4 py-2">สาขา</td><td class="px-4 py-2 font-mono text-xs">branches_128.csv</td><td class="px-4 py-2 text-right">128</td><td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">สำเร็จ</span></td><td class="px-4 py-2">HR Admin</td></tr>
-                  <tr class="hover:bg-gray-50"><td class="px-4 py-2">1 เม.ย. 2569</td><td class="px-4 py-2">หลักสูตร</td><td class="px-4 py-2 font-mono text-xs">training_q2.csv</td><td class="px-4 py-2 text-right">342</td><td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">มีเตือน 12</span></td><td class="px-4 py-2">HR Admin</td></tr>
-                </tbody>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="tax-stats"></div>
+          <div class="bg-white rounded-xl shadow-sm border p-6" id="tax-table-wrap">
+            <h3 class="font-semibold text-gray-800 mb-4">รายละเอียดตามหลักสูตร</h3>
+            <div class="overflow-x-auto rounded-xl border">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">หลักสูตร</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ค่าใช้จ่ายจริง</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">หักได้ (x2)</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ภาษีประหยัด</th><th class="px-4 py-3 text-xs font-semibold text-gray-600">สถานะ</th></tr></thead>
+                <tbody class="divide-y divide-gray-200" id="tax-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -830,421 +165,490 @@
     </div>
   </div>
 
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Course Modal -->
+  <div id="modal-course" class="modal-overlay" onclick="if(event.target===this)closeCourseModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+      <h3 class="text-lg font-bold mb-4" id="course-modal-title">เพิ่มหลักสูตร</h3>
+      <form onsubmit="saveCourse(event)">
+        <input type="hidden" id="course-id" />
+        <div class="space-y-3">
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">ชื่อหลักสูตร *</label><input type="text" id="course-name" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">สถาบัน/ผู้จัด</label><input type="text" id="course-provider" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">หมวด</label>
+              <select id="course-category" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <option value="ทักษะช่าง">ทักษะช่าง</option><option value="ความปลอดภัย">ความปลอดภัย</option><option value="บริการลูกค้า">บริการลูกค้า</option><option value="การจัดการ">การจัดการ</option><option value="อื่นๆ">อื่นๆ</option>
+              </select>
+            </div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">ชั่วโมง *</label><input type="number" id="course-hours" required min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">วันเริ่ม</label><input type="date" id="course-start" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">วันสิ้นสุด</label><input type="date" id="course-end" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">ค่าใช้จ่าย (บาท) *</label><input type="number" id="course-cost" required min="0" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">จำนวนรับ (คน)</label><input type="number" id="course-capacity" min="1" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">สถานะ กพร.</label>
+            <select id="course-tax-status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option value="pending">ยังไม่ยื่น</option><option value="submitted">ยื่นแล้ว</option><option value="approved">อนุมัติ</option><option value="rejected">ไม่อนุมัติ</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" onclick="closeCourseModal()" class="px-4 py-2 rounded-lg text-sm border border-gray-300 text-gray-700 hover:bg-gray-50">ยกเลิก</button>
+          <button type="submit" class="px-4 py-2 rounded-lg text-sm bg-autobacs-orange text-white hover:bg-orange-700">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Trainee Modal -->
+  <div id="modal-trainee" class="modal-overlay" onclick="if(event.target===this)closeTraineeModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+      <h3 class="text-lg font-bold mb-4" id="trainee-modal-title">เพิ่มพนักงาน</h3>
+      <form onsubmit="saveTrainee(event)">
+        <input type="hidden" id="trainee-id" />
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">รหัสพนักงาน *</label><input type="text" id="trainee-code" required placeholder="AUTO-001" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">สาขา *</label><input type="text" id="trainee-branch" required placeholder="พระราม 2" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ *</label><input type="text" id="trainee-fname" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">นามสกุล *</label><input type="text" id="trainee-lname" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">ตำแหน่ง *</label><input type="text" id="trainee-position" required placeholder="ช่างเทคนิค" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">วันเริ่มงาน</label><input type="date" id="trainee-hire" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+            <div><label class="block text-sm font-medium text-gray-700 mb-1">โทรศัพท์</label><input type="text" id="trainee-phone" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" onclick="closeTraineeModal()" class="px-4 py-2 rounded-lg text-sm border border-gray-300 text-gray-700 hover:bg-gray-50">ยกเลิก</button>
+          <button type="submit" class="px-4 py-2 rounded-lg text-sm bg-autobacs-orange text-white hover:bg-orange-700">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Enrollment Modal -->
+  <div id="modal-enroll" class="modal-overlay" onclick="if(event.target===this)closeEnrollModal()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+      <h3 class="text-lg font-bold mb-4">ลงทะเบียนอบรม</h3>
+      <form onsubmit="saveEnroll(event)">
+        <input type="hidden" id="enroll-id" />
+        <div class="space-y-3">
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">พนักงาน *</label><select id="enroll-trainee" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></select></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">หลักสูตร *</label><select id="enroll-course" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></select></div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">สถานะ</label>
+            <select id="enroll-status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <option value="registered">ลงทะเบียนแล้ว</option><option value="completed">อบรมเสร็จ</option><option value="cancelled">ยกเลิก</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" onclick="closeEnrollModal()" class="px-4 py-2 rounded-lg text-sm border border-gray-300 text-gray-700 hover:bg-gray-50">ยกเลิก</button>
+          <button type="submit" class="px-4 py-2 rounded-lg text-sm bg-autobacs-orange text-white hover:bg-orange-700">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div id="modal-confirm" class="modal-overlay" onclick="if(event.target===this)closeConfirm()">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm mx-4 p-6 text-center">
+      <span class="text-4xl block mb-3">⚠️</span>
+      <h3 class="text-lg font-bold mb-2">ยืนยันการลบ</h3>
+      <p class="text-sm text-gray-600 mb-6" id="confirm-text">ต้องการลบรายการนี้?</p>
+      <div class="flex justify-center gap-2">
+        <button onclick="closeConfirm()" class="px-4 py-2 rounded-lg text-sm border border-gray-300 text-gray-700 hover:bg-gray-50">ยกเลิก</button>
+        <button onclick="executeDelete()" class="px-4 py-2 rounded-lg text-sm bg-red-600 text-white hover:bg-red-700">ลบ</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ==================== DATA STORE ====================
+    const DB_KEY = 'autobacs_db';
+
+    function loadDB() {
+      try { return JSON.parse(localStorage.getItem(DB_KEY)) || defaultDB(); }
+      catch { return defaultDB(); }
+    }
+
+    function saveDB(db) { localStorage.setItem(DB_KEY, JSON.stringify(db)); }
+
+    function defaultDB() {
+      return { courses: [], trainees: [], enrollments: [], budget: 1200000 };
+    }
+
+    let db = loadDB();
+    let deleteCallback = null;
+
+    function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
     // ==================== NAVIGATION ====================
-    const pageMap = ['dashboard','plan','courses','trainees','tax','duplicates','recommendations','notifications','import'];
+    const pageMap = ['dashboard', 'courses', 'trainees', 'enrollments', 'tax'];
 
     function navigate(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-' + page).classList.add('active');
-      document.querySelectorAll('.nav-item').forEach(n => {
+      document.querySelectorAll('.nav-item').forEach((n, i) => {
         n.classList.remove('active');
         n.classList.add('text-gray-300');
       });
-      const navItems = document.querySelectorAll('.nav-item');
       const idx = pageMap.indexOf(page);
-      if (idx >= 0 && navItems[idx]) {
-        navItems[idx].classList.add('active');
-        navItems[idx].classList.remove('text-gray-300');
-      }
-      document.getElementById('notif-popup').classList.add('hidden');
+      const navItems = document.querySelectorAll('.nav-item');
+      if (idx >= 0 && navItems[idx]) { navItems[idx].classList.add('active'); navItems[idx].classList.remove('text-gray-300'); }
       window.scrollTo(0, 0);
+      renderPage(page);
     }
 
-    function toggleNotifPopup() {
-      document.getElementById('notif-popup').classList.toggle('hidden');
+    function renderPage(page) {
+      if (page === 'dashboard') renderDashboard();
+      else if (page === 'courses') renderCourses();
+      else if (page === 'trainees') renderTrainees();
+      else if (page === 'enrollments') renderEnrollments();
+      else if (page === 'tax') renderTax();
     }
 
-    document.addEventListener('click', function(e) {
-      const popup = document.getElementById('notif-popup');
-      if (!e.target.closest('.relative') && !popup.classList.contains('hidden')) {
-        popup.classList.add('hidden');
-      }
-    });
+    // ==================== DASHBOARD ====================
+    function renderDashboard() {
+      const totalBudget = db.budget || 1200000;
+      const totalCost = db.courses.reduce((s, c) => s + (c.cost || 0), 0);
+      const remaining = totalBudget - totalCost;
+      const pct = totalBudget > 0 ? Math.round((totalCost / totalBudget) * 100) : 0;
+      const totalTrainees = db.trainees.length;
+      const trainedIds = new Set(db.enrollments.filter(e => e.status === 'completed').map(e => e.traineeId));
+      const trainedPct = totalTrainees > 0 ? Math.round((trainedIds.size / totalTrainees) * 100) : 0;
+      const approvedCost = db.courses.filter(c => c.taxStatus === 'approved').reduce((s, c) => s + (c.cost || 0), 0);
+      const taxSaved = Math.round(approvedCost * 2 * 0.2);
 
-    // ==================== IMPORT SYSTEM ====================
-    let currentImportType = 'employees';
-    let parsedData = [];
-    let parsedHeaders = [];
-    let currentPreviewPage = 1;
-    const rowsPerPage = 50;
+      document.getElementById('dash-stats').innerHTML = `
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">งบประมาณรวม</div><div class="text-2xl font-bold text-gray-800">${totalBudget.toLocaleString()}</div><div class="text-xs text-gray-400">บาท</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ใช้ไปแล้ว</div><div class="text-2xl font-bold text-autobacs-orange">${totalCost.toLocaleString()}</div><div class="text-xs text-gray-400">${pct}% ของงบ</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">งบเหลือ</div><div class="text-2xl font-bold text-green-600">${remaining.toLocaleString()}</div><div class="text-xs text-gray-400">บาท</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">หลักสูตร</div><div class="text-2xl font-bold text-blue-600">${db.courses.length}</div><div class="text-xs text-gray-400">หลักสูตร</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">พนักงาน</div><div class="text-2xl font-bold text-purple-600">${totalTrainees}</div><div class="text-xs text-gray-400">${trainedIds.size} คนอบรมแล้ว (${trainedPct}%)</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ภาษีประหยัดได้</div><div class="text-2xl font-bold text-green-700">${taxSaved.toLocaleString()}</div><div class="text-xs text-gray-400">บาท</div></div>
+      `;
 
-    function selectImportType(type) {
-      currentImportType = type;
-      document.querySelectorAll('.import-type-btn').forEach(b => b.classList.remove('border-autobacs-orange'));
-      document.getElementById('import-btn-' + type).classList.add('border-autobacs-orange');
-      document.querySelectorAll('[id^="format-"]').forEach(f => f.classList.add('hidden'));
-      document.getElementById('format-' + type).classList.remove('hidden');
-      resetImport();
-    }
+      const bar = document.getElementById('dash-budget-bar');
+      bar.style.width = Math.min(pct, 100) + '%';
+      bar.textContent = totalCost.toLocaleString();
+      document.getElementById('dash-budget-labels').innerHTML = `<span>0</span><span>ใช้ไป ${pct}%</span><span>${totalBudget.toLocaleString()} บาท</span>`;
 
-    function downloadTemplate(type) {
-      let csv = '';
-      if (type === 'employees') {
-        csv = 'employee_code,first_name,last_name,position,branch_code,branch_name,hire_date,training_hours,performance_score,cert_type,cert_expiry\n';
-        csv += 'AUTO-001,สมชาย,ใจดี,ช่างเทคนิคอาวุโส,BR-001,สาขาพระราม 2,2019-03-15,48,4,จป.หัวหน้างาน,2569-06-30\n';
-        csv += 'AUTO-002,สมหญิง,รักดี,พนักงานบริการลูกค้า,BR-001,สาขาพระราม 2,2020-06-01,24,3,,\n';
-        csv += 'AUTO-003,ประเสริฐ,มานะ,ช่างเทคนิค,BR-002,สาขาบางนา,2021-08-15,12,3,,\n';
-      } else if (type === 'branches') {
-        csv = 'branch_code,branch_name,region,province,manager_code,employee_count\n';
-        csv += 'BR-001,สาขาพระราม 2,กรุงเทพฯ,กรุงเทพมหานคร,AUTO-020,35\n';
-        csv += 'BR-002,สาขาบางนา,กรุงเทพฯ,กรุงเทพมหานคร,AUTO-012,28\n';
-      } else {
-        csv = 'course_name,employee_code,start_date,end_date,hours,category,total_cost,selection_criteria\n';
-        csv += 'เบรค ABS รุ่นใหม่,AUTO-001,2569-01-20,2569-01-21,12,technical,75000,ช่างอาวุโส upskill\n';
-        csv += 'เบรค ABS รุ่นใหม่,AUTO-003,2569-01-20,2569-01-21,12,technical,75000,ช่างสาขาบางนา\n';
-      }
-      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `template_${type}.csv`;
-      link.click();
-    }
-
-    function handleFiles(files) {
-      if (!files || files.length === 0) return;
-      const file = files[0];
-      if (!file.name.match(/\.(csv|txt)$/i)) {
-        alert('กรุณาเลือกไฟล์ .csv หรือ .txt');
-        return;
-      }
-
-      const dropZone = document.getElementById('drop-zone');
-      dropZone.innerHTML = `<div class="flex items-center gap-3 justify-center"><span class="text-2xl">📄</span><div class="text-left"><div class="font-medium text-gray-700">${file.name}</div><div class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</div></div><button onclick="resetImport(); event.stopPropagation();" class="ml-4 text-red-500 hover:text-red-700 text-sm">ลบ</button></div>`;
-
-      // Show processing
-      document.getElementById('import-processing').classList.remove('hidden');
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result;
-        parseCSV(text, file.name);
-      };
-      reader.readAsText(file, 'UTF-8');
-    }
-
-    function parseCSV(text, fileName) {
-      const lines = text.split(/\r?\n/).filter(l => l.trim());
-      if (lines.length < 2) {
-        showImportError('ไฟล์ไม่มีข้อมูล (ต้องมีอย่างน้อย header + 1 แถว)');
-        return;
-      }
-
-      parsedHeaders = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-      parsedData = [];
-      const totalRows = lines.length - 1;
-      let validCount = 0, warningCount = 0, errorCount = 0, duplicateCount = 0;
-      const issues = [];
-      const seenCodes = new Set();
-
-      // Process in chunks for large files
-      let processed = 0;
-      const chunkSize = 200;
-
-      function processChunk(startIdx) {
-        const endIdx = Math.min(startIdx + chunkSize, lines.length);
-        for (let i = startIdx; i < endIdx; i++) {
-          if (i === 0) continue; // skip header
-          const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
-          if (values.length < 2 || values.every(v => !v)) continue;
-
-          const row = {};
-          parsedHeaders.forEach((h, idx) => { row[h] = values[idx] || ''; });
-          row._rowNum = i + 1;
-          row._status = 'valid';
-          row._issues = [];
-
-          // Validate based on import type
-          if (currentImportType === 'employees') {
-            if (!row.employee_code) { row._status = 'error'; row._issues.push('ไม่มีรหัสพนักงาน'); }
-            if (!row.first_name) { row._status = 'error'; row._issues.push('ไม่มีชื่อ'); }
-            if (!row.last_name) { row._status = 'error'; row._issues.push('ไม่มีนามสกุล'); }
-            if (!row.branch_code && !row.branch_name) { row._status = row._status === 'error' ? 'error' : 'warning'; row._issues.push('ไม่มีข้อมูลสาขา'); }
-            if (row.employee_code && seenCodes.has(row.employee_code)) { row._status = 'duplicate'; row._issues.push('รหัสพนักงานซ้ำในไฟล์'); duplicateCount++; }
-            if (row.employee_code) seenCodes.add(row.employee_code);
-            if (row.training_hours && isNaN(Number(row.training_hours))) { row._status = row._status === 'error' ? 'error' : 'warning'; row._issues.push('ชั่วโมงอบรมไม่ใช่ตัวเลข'); }
-          } else if (currentImportType === 'branches') {
-            if (!row.branch_code) { row._status = 'error'; row._issues.push('ไม่มีรหัสสาขา'); }
-            if (!row.branch_name) { row._status = 'error'; row._issues.push('ไม่มีชื่อสาขา'); }
-            if (row.branch_code && seenCodes.has(row.branch_code)) { row._status = 'duplicate'; row._issues.push('รหัสสาขาซ้ำ'); duplicateCount++; }
-            if (row.branch_code) seenCodes.add(row.branch_code);
-          } else {
-            if (!row.course_name) { row._status = 'error'; row._issues.push('ไม่มีชื่อหลักสูตร'); }
-            if (!row.employee_code) { row._status = 'error'; row._issues.push('ไม่มีรหัสพนักงาน'); }
-            const comboKey = (row.employee_code || '') + '|' + (row.course_name || '') + '|' + (row.start_date || '');
-            if (seenCodes.has(comboKey)) { row._status = 'duplicate'; row._issues.push('พนักงาน+หลักสูตร+วันที่ซ้ำ'); duplicateCount++; }
-            seenCodes.add(comboKey);
-          }
-
-          if (row._status === 'error') errorCount++;
-          else if (row._status === 'warning' || row._status === 'duplicate') warningCount++;
-          else validCount++;
-
-          if (row._issues.length > 0) {
-            issues.push({ row: row._rowNum, status: row._status, messages: row._issues });
-          }
-
-          parsedData.push(row);
-          processed++;
-        }
-
-        // Update progress
-        const pct = Math.min(100, Math.round((processed / totalRows) * 100));
-        document.getElementById('import-progress-bar').style.width = pct + '%';
-        document.getElementById('import-progress-text').textContent = `${processed.toLocaleString()} / ${totalRows.toLocaleString()} แถว`;
-
-        if (endIdx < lines.length) {
-          requestAnimationFrame(() => processChunk(endIdx));
-        } else {
-          // Done processing
-          finishProcessing(totalRows, validCount, warningCount, errorCount, duplicateCount, issues, fileName);
-        }
-      }
-
-      processChunk(0);
-    }
-
-    function finishProcessing(total, valid, warnings, errors, duplicates, issues, fileName) {
-      // Hide spinner, show done
-      document.getElementById('import-spinner').classList.add('hidden');
-      document.getElementById('import-status-text').textContent = 'ประมวลผลเสร็จสิ้น';
-      document.getElementById('import-progress-bar').style.width = '100%';
-      document.getElementById('import-progress-bar').classList.add('bg-green-500');
-      document.getElementById('import-progress-bar').classList.remove('bg-autobacs-orange');
-
-      // Show validation
-      document.getElementById('import-validation').classList.remove('hidden');
-      document.getElementById('val-total').textContent = parsedData.length.toLocaleString();
-      document.getElementById('val-valid').textContent = valid.toLocaleString();
-      document.getElementById('val-warning').textContent = warnings.toLocaleString();
-      document.getElementById('val-error').textContent = errors.toLocaleString();
-      document.getElementById('val-duplicate').textContent = duplicates.toLocaleString();
-
-      // Show issues
-      if (issues.length > 0) {
-        document.getElementById('val-issues').classList.remove('hidden');
-        const list = document.getElementById('val-issues-list');
-        list.innerHTML = issues.slice(0, 100).map(i => {
-          const color = i.status === 'error' ? 'red' : i.status === 'duplicate' ? 'orange' : 'yellow';
-          return `<div class="flex items-center gap-2 p-1.5 rounded bg-${color}-50"><span class="px-1.5 py-0.5 rounded text-xs bg-${color}-100 text-${color}-800">แถว ${i.row}</span><span class="text-gray-600">${i.messages.join(', ')}</span></div>`;
+      const rc = document.getElementById('dash-recent-courses');
+      const nc = document.getElementById('dash-no-courses');
+      if (db.courses.length === 0) { rc.classList.add('hidden'); nc.classList.remove('hidden'); }
+      else {
+        rc.classList.remove('hidden'); nc.classList.add('hidden');
+        rc.innerHTML = db.courses.slice(-5).reverse().map(c => {
+          const catColor = { 'ทักษะช่าง': 'blue', 'ความปลอดภัย': 'red', 'บริการลูกค้า': 'green', 'การจัดการ': 'purple' }[c.category] || 'gray';
+          const enrolled = db.enrollments.filter(e => e.courseId === c.id).length;
+          return `<div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+            <div class="flex-1"><div class="font-medium text-sm">${esc(c.name)}</div><div class="flex gap-2 mt-1"><span class="px-2 py-0.5 rounded-full text-xs bg-${catColor}-100 text-${catColor}-800">${esc(c.category)}</span></div></div>
+            <div class="text-right"><div class="text-sm font-medium">${(c.cost||0).toLocaleString()}</div><div class="text-xs text-gray-500">${c.hours} ชม. | ${enrolled} คน</div></div>
+          </div>`;
         }).join('');
-        if (issues.length > 100) {
-          list.innerHTML += `<div class="text-center text-gray-400 py-2">...และอีก ${issues.length - 100} รายการ</div>`;
-        }
       }
-
-      // Show preview
-      renderPreview();
-
-      // Show linking info
-      showLinkingInfo();
-
-      // Show actions
-      document.getElementById('import-actions').classList.remove('hidden');
-      document.getElementById('import-summary-text').textContent =
-        `พร้อมนำเข้า ${valid.toLocaleString()} รายการ จากทั้งหมด ${parsedData.length.toLocaleString()} แถว` +
-        (errors > 0 ? ` (ข้าม ${errors} แถวที่ผิดพลาด)` : '');
     }
 
-    function renderPreview() {
-      document.getElementById('import-preview').classList.remove('hidden');
+    // ==================== COURSES ====================
+    function renderCourses() {
+      const list = document.getElementById('courses-list');
+      const empty = document.getElementById('courses-empty');
+      if (db.courses.length === 0) { list.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+      list.classList.remove('hidden'); empty.classList.add('hidden');
 
-      const thead = document.getElementById('preview-thead');
-      const displayHeaders = parsedHeaders.slice(0, 10);
-      thead.innerHTML = '<tr>' +
-        '<th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">#</th>' +
-        '<th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สถานะ</th>' +
-        displayHeaders.map(h => `<th class="px-3 py-2 text-left text-xs font-semibold text-gray-600 whitespace-nowrap">${h}</th>`).join('') +
-        '</tr>';
-
-      renderPreviewPage(1);
-    }
-
-    function renderPreviewPage(page) {
-      currentPreviewPage = page;
-      const tbody = document.getElementById('preview-tbody');
-      const start = (page - 1) * rowsPerPage;
-      const end = Math.min(start + rowsPerPage, parsedData.length);
-      const displayHeaders = parsedHeaders.slice(0, 10);
-
-      const statusBadge = (s) => {
-        if (s === 'valid') return '<span class="px-1.5 py-0.5 rounded-full text-xs bg-green-100 text-green-800">OK</span>';
-        if (s === 'error') return '<span class="px-1.5 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ผิด</span>';
-        if (s === 'duplicate') return '<span class="px-1.5 py-0.5 rounded-full text-xs bg-orange-100 text-orange-800">ซ้ำ</span>';
-        return '<span class="px-1.5 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">เตือน</span>';
-      };
-
-      tbody.innerHTML = parsedData.slice(start, end).map((row, i) => {
-        const rowClass = row._status === 'error' ? 'bg-red-50' : row._status === 'duplicate' ? 'bg-orange-50' : row._status === 'warning' ? 'bg-yellow-50' : '';
-        return `<tr class="hover:bg-gray-50 ${rowClass}">` +
-          `<td class="px-3 py-1.5 text-gray-400">${start + i + 1}</td>` +
-          `<td class="px-3 py-1.5">${statusBadge(row._status)}</td>` +
-          displayHeaders.map(h => `<td class="px-3 py-1.5 whitespace-nowrap max-w-[200px] truncate">${row[h] || '<span class="text-gray-300">-</span>'}</td>`).join('') +
-          '</tr>';
+      list.innerHTML = db.courses.map(c => {
+        const catColor = { 'ทักษะช่าง': 'blue', 'ความปลอดภัย': 'red', 'บริการลูกค้า': 'green', 'การจัดการ': 'purple' }[c.category] || 'gray';
+        const statusLabel = { pending: 'ยังไม่ยื่น', submitted: 'ยื่นแล้ว', approved: 'อนุมัติ', rejected: 'ไม่อนุมัติ' }[c.taxStatus] || 'ยังไม่ยื่น';
+        const statusColor = { pending: 'gray', submitted: 'yellow', approved: 'green', rejected: 'red' }[c.taxStatus] || 'gray';
+        const enrolled = db.enrollments.filter(e => e.courseId === c.id).length;
+        return `<div class="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition-shadow">
+          <div class="flex items-start justify-between mb-3">
+            <div><h4 class="font-semibold text-gray-800">${esc(c.name)}</h4><p class="text-xs text-gray-500 mt-0.5">${esc(c.provider || '-')}</p></div>
+            <div class="flex gap-1.5"><span class="px-2 py-0.5 rounded-full text-xs bg-${catColor}-100 text-${catColor}-800">${esc(c.category)}</span><span class="px-2 py-0.5 rounded-full text-xs bg-${statusColor}-100 text-${statusColor}-800">${statusLabel}</span></div>
+          </div>
+          <div class="grid grid-cols-4 gap-3 text-sm">
+            <div><div class="text-gray-500 text-xs">วันที่</div><div class="font-medium">${c.startDate || '-'}</div></div>
+            <div><div class="text-gray-500 text-xs">ชั่วโมง</div><div class="font-medium">${c.hours} ชม.</div></div>
+            <div><div class="text-gray-500 text-xs">ลงทะเบียน</div><div class="font-medium">${enrolled}${c.capacity ? '/'+c.capacity : ''} คน</div></div>
+            <div><div class="text-gray-500 text-xs">ค่าใช้จ่าย</div><div class="font-medium text-autobacs-orange">${(c.cost||0).toLocaleString()} บาท</div></div>
+          </div>
+          <div class="mt-3 pt-3 border-t flex gap-2">
+            <button onclick="editCourse('${c.id}')" class="px-3 py-1.5 rounded-lg text-xs bg-blue-50 text-blue-700 hover:bg-blue-100">แก้ไข</button>
+            <button onclick="confirmDelete('หลักสูตร: ${esc(c.name)}', ()=>deleteCourse('${c.id}'))" class="px-3 py-1.5 rounded-lg text-xs bg-red-50 text-red-700 hover:bg-red-100">ลบ</button>
+          </div>
+        </div>`;
       }).join('');
+    }
 
-      document.getElementById('preview-count').textContent = `${parsedData.length.toLocaleString()} แถว`;
-      document.getElementById('pagination-info').textContent = `แสดง ${start + 1}-${end} จาก ${parsedData.length.toLocaleString()} แถว`;
-
-      // Pagination controls
-      const totalPages = Math.ceil(parsedData.length / rowsPerPage);
-      const controls = document.getElementById('pagination-controls');
-      if (totalPages > 1) {
-        let btns = '';
-        if (page > 1) btns += `<button onclick="renderPreviewPage(${page - 1})" class="px-2 py-1 text-xs rounded border hover:bg-gray-100">&#9664;</button>`;
-        const startP = Math.max(1, page - 2);
-        const endP = Math.min(totalPages, page + 2);
-        for (let p = startP; p <= endP; p++) {
-          btns += `<button onclick="renderPreviewPage(${p})" class="px-2 py-1 text-xs rounded border ${p === page ? 'bg-autobacs-orange text-white' : 'hover:bg-gray-100'}">${p}</button>`;
+    function openCourseModal(id) {
+      document.getElementById('course-modal-title').textContent = id ? 'แก้ไขหลักสูตร' : 'เพิ่มหลักสูตร';
+      document.getElementById('course-id').value = id || '';
+      if (id) {
+        const c = db.courses.find(x => x.id === id);
+        if (c) {
+          document.getElementById('course-name').value = c.name;
+          document.getElementById('course-provider').value = c.provider || '';
+          document.getElementById('course-category').value = c.category;
+          document.getElementById('course-hours').value = c.hours;
+          document.getElementById('course-start').value = c.startDate || '';
+          document.getElementById('course-end').value = c.endDate || '';
+          document.getElementById('course-cost').value = c.cost;
+          document.getElementById('course-capacity').value = c.capacity || '';
+          document.getElementById('course-tax-status').value = c.taxStatus || 'pending';
         }
-        if (endP < totalPages) btns += `<span class="px-1 text-gray-400">...</span><button onclick="renderPreviewPage(${totalPages})" class="px-2 py-1 text-xs rounded border hover:bg-gray-100">${totalPages}</button>`;
-        if (page < totalPages) btns += `<button onclick="renderPreviewPage(${page + 1})" class="px-2 py-1 text-xs rounded border hover:bg-gray-100">&#9654;</button>`;
-        controls.innerHTML = btns;
       } else {
-        controls.innerHTML = '';
+        document.querySelectorAll('#modal-course input:not([type=hidden])').forEach(i => i.value = '');
+        document.getElementById('course-category').value = 'ทักษะช่าง';
+        document.getElementById('course-tax-status').value = 'pending';
       }
+      document.getElementById('modal-course').classList.add('active');
     }
+    function closeCourseModal() { document.getElementById('modal-course').classList.remove('active'); }
+    function editCourse(id) { openCourseModal(id); }
 
-    function filterPreview(query) {
-      if (!query) { renderPreviewPage(1); return; }
-      const q = query.toLowerCase();
-      const filtered = parsedData.filter(row =>
-        parsedHeaders.some(h => (row[h] || '').toLowerCase().includes(q))
-      );
-      // Temporarily swap and render
-      const origData = parsedData;
-      parsedData = filtered;
-      renderPreviewPage(1);
-      parsedData = origData;
-      document.getElementById('preview-count').textContent = `${filtered.length.toLocaleString()} / ${origData.length.toLocaleString()} แถว (กรอง)`;
-    }
-
-    function showLinkingInfo() {
-      document.getElementById('import-linking').classList.remove('hidden');
-      const container = document.getElementById('linking-cards');
-
-      const links = {
-        employees: [
-          { page: 'trainees', icon: '👥', title: 'ผู้เข้าอบรม', desc: 'รายชื่อ, ตำแหน่ง, สาขา, ประวัติอบรม', count: parsedData.length + ' คน' },
-          { page: 'dashboard', icon: '📊', title: 'แดชบอร์ด', desc: 'อัพเดทจำนวนพนักงาน, % อบรม', count: 'อัพเดท' },
-          { page: 'duplicates', icon: '🔍', title: 'ตรวจจับซ้ำ', desc: 'ตรวจรหัสซ้ำ, ชื่อคล้ายกัน', count: (document.getElementById('val-duplicate')?.textContent || '0') + ' รายการ' },
-          { page: 'recommendations', icon: '💡', title: 'แนะนำส่งอบรม', desc: 'วิเคราะห์คนที่ควรส่งอบรม ชม.ต่ำ ใบหมดอายุ', count: 'วิเคราะห์ใหม่' },
-          { page: 'tax', icon: '🧮', title: 'คำนวณภาษี', desc: 'อัพเดท % พนักงานอบรม เป้า 50%', count: 'คำนวณใหม่' },
-          { page: 'notifications', icon: '🔔', title: 'แจ้งเตือน', desc: 'แจ้งเตือนใบอนุญาตหมดอายุ', count: 'สร้างใหม่' },
-        ],
-        branches: [
-          { page: 'dashboard', icon: '📊', title: 'แดชบอร์ด', desc: 'อัพเดทจำนวนสาขา, กระจายตามภูมิภาค', count: parsedData.length + ' สาขา' },
-          { page: 'trainees', icon: '👥', title: 'ผู้เข้าอบรม', desc: 'ตัวเลือกกรองสาขาจะอัพเดท', count: 'อัพเดท' },
-          { page: 'plan', icon: '📋', title: 'แผนอบรมประจำปี', desc: 'งบประมาณแยกตามสาขา', count: 'อัพเดท' },
-        ],
-        courses: [
-          { page: 'courses', icon: '📚', title: 'หลักสูตร', desc: 'เพิ่มหลักสูตรใหม่พร้อมรายละเอียด', count: new Set(parsedData.map(r => r.course_name)).size + ' หลักสูตร' },
-          { page: 'trainees', icon: '👥', title: 'ผู้เข้าอบรม', desc: 'จับคู่พนักงานกับหลักสูตร', count: parsedData.length + ' รายการ' },
-          { page: 'duplicates', icon: '🔍', title: 'ตรวจจับซ้ำ', desc: 'ตรวจพนักงานลงซ้ำ, วันชนกัน', count: 'ตรวจอัตโนมัติ' },
-          { page: 'tax', icon: '🧮', title: 'คำนวณภาษี', desc: 'คำนวณสิทธิ์ลดหย่อนใหม่', count: 'คำนวณใหม่' },
-          { page: 'plan', icon: '📋', title: 'แผนอบรมประจำปี', desc: 'อัพเดทปฏิทินและงบประมาณ', count: 'อัพเดท' },
-        ],
+    function saveCourse(e) {
+      e.preventDefault();
+      const id = document.getElementById('course-id').value;
+      const data = {
+        name: document.getElementById('course-name').value.trim(),
+        provider: document.getElementById('course-provider').value.trim(),
+        category: document.getElementById('course-category').value,
+        hours: parseInt(document.getElementById('course-hours').value) || 0,
+        startDate: document.getElementById('course-start').value,
+        endDate: document.getElementById('course-end').value,
+        cost: parseInt(document.getElementById('course-cost').value) || 0,
+        capacity: parseInt(document.getElementById('course-capacity').value) || 0,
+        taxStatus: document.getElementById('course-tax-status').value,
       };
-
-      container.innerHTML = (links[currentImportType] || []).map(l =>
-        `<div onclick="confirmImport(); setTimeout(()=>navigate('${l.page}'),500)" class="p-4 rounded-lg border-2 border-gray-200 hover:border-autobacs-orange hover:bg-orange-50 cursor-pointer transition-colors">
-          <div class="flex items-center gap-2 mb-1"><span class="text-xl">${l.icon}</span><span class="font-semibold text-sm">${l.title}</span></div>
-          <div class="text-xs text-gray-600">${l.desc}</div>
-          <div class="mt-2 text-xs font-medium text-autobacs-orange">${l.count}</div>
-        </div>`
-      ).join('');
+      if (id) {
+        const idx = db.courses.findIndex(x => x.id === id);
+        if (idx >= 0) db.courses[idx] = { ...db.courses[idx], ...data };
+      } else {
+        db.courses.push({ id: genId(), ...data });
+      }
+      saveDB(db);
+      closeCourseModal();
+      renderCourses();
     }
 
-    function confirmImport() {
-      const validCount = parsedData.filter(r => r._status === 'valid').length;
+    function deleteCourse(id) {
+      db.courses = db.courses.filter(x => x.id !== id);
+      db.enrollments = db.enrollments.filter(x => x.courseId !== id);
+      saveDB(db);
+      renderCourses();
+    }
 
-      // Hide other sections
-      document.getElementById('import-processing').classList.add('hidden');
-      document.getElementById('import-validation').classList.add('hidden');
-      document.getElementById('import-preview').classList.add('hidden');
-      document.getElementById('import-linking').classList.add('hidden');
-      document.getElementById('import-actions').classList.add('hidden');
+    // ==================== TRAINEES ====================
+    function renderTrainees() {
+      const tbody = document.getElementById('trainees-tbody');
+      const empty = document.getElementById('trainees-empty');
+      const search = (document.getElementById('trainee-search')?.value || '').toLowerCase();
+      let list = db.trainees;
+      if (search) list = list.filter(t => `${t.code} ${t.fname} ${t.lname} ${t.position} ${t.branch}`.toLowerCase().includes(search));
 
-      // Show success
-      const success = document.getElementById('import-success');
-      success.classList.remove('hidden');
+      if (db.trainees.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+      empty.classList.add('hidden');
 
-      const typeLabel = currentImportType === 'employees' ? 'พนักงาน' : currentImportType === 'branches' ? 'สาขา' : 'หลักสูตร/ผู้เข้าอบรม';
-      document.getElementById('success-title').textContent = `นำเข้า${typeLabel}สำเร็จ!`;
-      document.getElementById('success-detail').textContent =
-        `นำเข้า ${validCount.toLocaleString()} รายการเรียบร้อย` +
-        (currentImportType === 'employees' ? ` | ตรวจพบ ${new Set(parsedData.map(r => r.branch_code || r.branch_name).filter(Boolean)).size} สาขา` : '');
+      tbody.innerHTML = list.map(t => `<tr class="hover:bg-gray-50">
+        <td class="px-4 py-3 text-sm font-mono">${esc(t.code)}</td>
+        <td class="px-4 py-3 text-sm font-medium">${esc(t.fname)} ${esc(t.lname)}</td>
+        <td class="px-4 py-3 text-sm">${esc(t.position)}</td>
+        <td class="px-4 py-3 text-sm">${esc(t.branch)}</td>
+        <td class="px-4 py-3 flex gap-1">
+          <button onclick="editTrainee('${t.id}')" class="px-2 py-1 rounded text-xs bg-blue-50 text-blue-700 hover:bg-blue-100">แก้ไข</button>
+          <button onclick="confirmDelete('พนักงาน: ${esc(t.fname)} ${esc(t.lname)}', ()=>deleteTrainee('${t.id}'))" class="px-2 py-1 rounded text-xs bg-red-50 text-red-700 hover:bg-red-100">ลบ</button>
+        </td>
+      </tr>`).join('');
+    }
 
-      // Show linked pages
-      const pageLinks = {
-        employees: [
-          { page: 'trainees', icon: '👥', title: 'ดูรายชื่อพนักงาน', desc: 'ตรวจสอบข้อมูลที่นำเข้า' },
-          { page: 'duplicates', icon: '🔍', title: 'ตรวจจับรายชื่อซ้ำ', desc: 'ตรวจสอบรหัส/ชื่อซ้ำ' },
-          { page: 'recommendations', icon: '💡', title: 'แนะนำส่งอบรม', desc: 'ดูคนที่ควรส่งอบรม' },
-          { page: 'dashboard', icon: '📊', title: 'แดชบอร์ด', desc: 'ดูภาพรวมที่อัพเดท' },
-        ],
-        branches: [
-          { page: 'dashboard', icon: '📊', title: 'แดชบอร์ด', desc: 'ดูสาขาที่อัพเดท' },
-          { page: 'trainees', icon: '👥', title: 'ผู้เข้าอบรม', desc: 'กรองตามสาขาใหม่' },
-          { page: 'plan', icon: '📋', title: 'แผนอบรม', desc: 'วางแผนตามสาขา' },
-        ],
-        courses: [
-          { page: 'courses', icon: '📚', title: 'ดูหลักสูตร', desc: 'ตรวจสอบหลักสูตรใหม่' },
-          { page: 'trainees', icon: '👥', title: 'ดูผู้เข้าอบรม', desc: 'ตรวจสอบการจับคู่' },
-          { page: 'tax', icon: '🧮', title: 'คำนวณภาษี', desc: 'ดูสิทธิ์ลดหย่อนใหม่' },
-          { page: 'duplicates', icon: '🔍', title: 'ตรวจจับซ้ำ', desc: 'ตรวจสอบความซ้ำซ้อน' },
-        ],
+    function openTraineeModal(id) {
+      document.getElementById('trainee-modal-title').textContent = id ? 'แก้ไขพนักงาน' : 'เพิ่มพนักงาน';
+      document.getElementById('trainee-id').value = id || '';
+      if (id) {
+        const t = db.trainees.find(x => x.id === id);
+        if (t) {
+          document.getElementById('trainee-code').value = t.code;
+          document.getElementById('trainee-fname').value = t.fname;
+          document.getElementById('trainee-lname').value = t.lname;
+          document.getElementById('trainee-position').value = t.position;
+          document.getElementById('trainee-branch').value = t.branch;
+          document.getElementById('trainee-hire').value = t.hireDate || '';
+          document.getElementById('trainee-phone').value = t.phone || '';
+        }
+      } else {
+        document.querySelectorAll('#modal-trainee input:not([type=hidden])').forEach(i => i.value = '');
+      }
+      document.getElementById('modal-trainee').classList.add('active');
+    }
+    function closeTraineeModal() { document.getElementById('modal-trainee').classList.remove('active'); }
+    function editTrainee(id) { openTraineeModal(id); }
+
+    function saveTrainee(e) {
+      e.preventDefault();
+      const id = document.getElementById('trainee-id').value;
+      const data = {
+        code: document.getElementById('trainee-code').value.trim(),
+        fname: document.getElementById('trainee-fname').value.trim(),
+        lname: document.getElementById('trainee-lname').value.trim(),
+        position: document.getElementById('trainee-position').value.trim(),
+        branch: document.getElementById('trainee-branch').value.trim(),
+        hireDate: document.getElementById('trainee-hire').value,
+        phone: document.getElementById('trainee-phone').value.trim(),
       };
-
-      document.getElementById('success-links').innerHTML = (pageLinks[currentImportType] || []).map(l =>
-        `<button onclick="navigate('${l.page}')" class="p-4 rounded-xl border-2 border-gray-200 hover:border-autobacs-orange hover:bg-orange-50 text-left transition-colors">
-          <div class="text-2xl mb-1">${l.icon}</div>
-          <div class="font-semibold text-sm">${l.title}</div>
-          <div class="text-xs text-gray-500 mt-0.5">${l.desc}</div>
-        </button>`
-      ).join('');
-
-      // Add to history
-      const histBody = document.getElementById('import-history-body');
-      const today = new Date();
-      const dateStr = `${today.getDate()} ${['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][today.getMonth()]} ${today.getFullYear() + 543}`;
-      const newRow = document.createElement('tr');
-      newRow.className = 'hover:bg-gray-50 bg-green-50';
-      newRow.innerHTML = `<td class="px-4 py-2">${dateStr}</td><td class="px-4 py-2">${typeLabel}</td><td class="px-4 py-2 font-mono text-xs">uploaded_file.csv</td><td class="px-4 py-2 text-right">${validCount.toLocaleString()}</td><td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs bg-green-100 text-green-800">สำเร็จ (ใหม่)</span></td><td class="px-4 py-2">HR Admin</td>`;
-      histBody.insertBefore(newRow, histBody.firstChild);
+      if (id) {
+        const idx = db.trainees.findIndex(x => x.id === id);
+        if (idx >= 0) db.trainees[idx] = { ...db.trainees[idx], ...data };
+      } else {
+        db.trainees.push({ id: genId(), ...data });
+      }
+      saveDB(db);
+      closeTraineeModal();
+      renderTrainees();
     }
 
-    function resetImport() {
-      parsedData = [];
-      parsedHeaders = [];
-      currentPreviewPage = 1;
-
-      // Reset drop zone
-      const dropZone = document.getElementById('drop-zone');
-      dropZone.innerHTML = `<span class="text-5xl block mb-3">📄</span><div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div><div class="text-sm text-gray-500">รองรับ .csv, .txt (UTF-8) | สูงสุด 50MB | รองรับ 10,000+ แถว</div><input type="file" id="file-input" class="hidden" accept=".csv,.txt" onchange="handleFiles(this.files)" />`;
-
-      // Hide all sections
-      ['import-processing','import-validation','import-preview','import-linking','import-actions','import-success'].forEach(id => {
-        document.getElementById(id).classList.add('hidden');
-      });
-
-      // Reset progress
-      document.getElementById('import-progress-bar').style.width = '0%';
-      document.getElementById('import-progress-bar').classList.remove('bg-green-500');
-      document.getElementById('import-progress-bar').classList.add('bg-autobacs-orange');
-      document.getElementById('import-spinner').classList.remove('hidden');
-      document.getElementById('import-status-text').textContent = 'กำลังประมวลผล...';
-      document.getElementById('val-issues').classList.add('hidden');
-
-      // Reset file input
-      const fi = document.getElementById('file-input');
-      if (fi) fi.value = '';
+    function deleteTrainee(id) {
+      db.trainees = db.trainees.filter(x => x.id !== id);
+      db.enrollments = db.enrollments.filter(x => x.traineeId !== id);
+      saveDB(db);
+      renderTrainees();
     }
 
-    function showImportError(msg) {
-      document.getElementById('import-processing').classList.add('hidden');
-      alert(msg);
+    // ==================== ENROLLMENTS ====================
+    function renderEnrollments() {
+      const tbody = document.getElementById('enrollments-tbody');
+      const empty = document.getElementById('enrollments-empty');
+      if (db.enrollments.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
+      empty.classList.add('hidden');
+
+      tbody.innerHTML = db.enrollments.map(e => {
+        const t = db.trainees.find(x => x.id === e.traineeId);
+        const c = db.courses.find(x => x.id === e.courseId);
+        const statusLabel = { registered: 'ลงทะเบียนแล้ว', completed: 'อบรมเสร็จ', cancelled: 'ยกเลิก' }[e.status] || e.status;
+        const statusColor = { registered: 'blue', completed: 'green', cancelled: 'red' }[e.status] || 'gray';
+        return `<tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 text-sm">${t ? esc(t.code) + ' ' + esc(t.fname) + ' ' + esc(t.lname) : '<span class="text-red-400">ลบแล้ว</span>'}</td>
+          <td class="px-4 py-3 text-sm">${c ? esc(c.name) : '<span class="text-red-400">ลบแล้ว</span>'}</td>
+          <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-${statusColor}-100 text-${statusColor}-800">${statusLabel}</span></td>
+          <td class="px-4 py-3 flex gap-1">
+            <button onclick="editEnroll('${e.id}')" class="px-2 py-1 rounded text-xs bg-blue-50 text-blue-700 hover:bg-blue-100">แก้ไข</button>
+            <button onclick="confirmDelete('การลงทะเบียนนี้', ()=>deleteEnroll('${e.id}'))" class="px-2 py-1 rounded text-xs bg-red-50 text-red-700 hover:bg-red-100">ลบ</button>
+          </td>
+        </tr>`;
+      }).join('');
     }
+
+    function populateEnrollSelects() {
+      const ts = document.getElementById('enroll-trainee');
+      const cs = document.getElementById('enroll-course');
+      ts.innerHTML = '<option value="">-- เลือกพนักงาน --</option>' + db.trainees.map(t => `<option value="${t.id}">${esc(t.code)} ${esc(t.fname)} ${esc(t.lname)}</option>`).join('');
+      cs.innerHTML = '<option value="">-- เลือกหลักสูตร --</option>' + db.courses.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    }
+
+    function openEnrollModal(id) {
+      populateEnrollSelects();
+      document.getElementById('enroll-id').value = id || '';
+      if (id) {
+        const e = db.enrollments.find(x => x.id === id);
+        if (e) {
+          document.getElementById('enroll-trainee').value = e.traineeId;
+          document.getElementById('enroll-course').value = e.courseId;
+          document.getElementById('enroll-status').value = e.status;
+        }
+      } else {
+        document.getElementById('enroll-trainee').value = '';
+        document.getElementById('enroll-course').value = '';
+        document.getElementById('enroll-status').value = 'registered';
+      }
+      document.getElementById('modal-enroll').classList.add('active');
+    }
+    function closeEnrollModal() { document.getElementById('modal-enroll').classList.remove('active'); }
+    function editEnroll(id) { openEnrollModal(id); }
+
+    function saveEnroll(e) {
+      e.preventDefault();
+      const id = document.getElementById('enroll-id').value;
+      const data = {
+        traineeId: document.getElementById('enroll-trainee').value,
+        courseId: document.getElementById('enroll-course').value,
+        status: document.getElementById('enroll-status').value,
+      };
+      if (!data.traineeId || !data.courseId) return;
+      if (id) {
+        const idx = db.enrollments.findIndex(x => x.id === id);
+        if (idx >= 0) db.enrollments[idx] = { ...db.enrollments[idx], ...data };
+      } else {
+        db.enrollments.push({ id: genId(), ...data });
+      }
+      saveDB(db);
+      closeEnrollModal();
+      renderEnrollments();
+    }
+
+    function deleteEnroll(id) {
+      db.enrollments = db.enrollments.filter(x => x.id !== id);
+      saveDB(db);
+      renderEnrollments();
+    }
+
+    // ==================== TAX ====================
+    function renderTax() {
+      const courses = db.courses;
+      const totalCost = courses.reduce((s, c) => s + (c.cost || 0), 0);
+      const approvedCost = courses.filter(c => c.taxStatus === 'approved').reduce((s, c) => s + (c.cost || 0), 0);
+      const taxSaved = Math.round(approvedCost * 2 * 0.2);
+      const potentialTax = Math.round(totalCost * 2 * 0.2);
+      const approvedCount = courses.filter(c => c.taxStatus === 'approved').length;
+
+      document.getElementById('tax-stats').innerHTML = `
+        <div class="bg-white rounded-xl shadow-sm border-2 border-green-200 p-4"><div class="text-sm text-gray-500">ภาษีประหยัดจริง</div><div class="text-2xl font-bold text-green-700">${taxSaved.toLocaleString()}</div><div class="text-xs text-green-600">เฉพาะ กพร. อนุมัติ</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ศักยภาพทั้งหมด</div><div class="text-2xl font-bold text-blue-600">${potentialTax.toLocaleString()}</div><div class="text-xs text-gray-500">ถ้าทุกหลักสูตรอนุมัติ</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">อนุมัติ / ทั้งหมด</div><div class="text-2xl font-bold">${approvedCount} / ${courses.length}</div><div class="text-xs text-gray-500">หลักสูตร</div></div>
+        <div class="bg-white rounded-xl shadow-sm border p-4"><div class="text-sm text-gray-500">ค่าใช้จ่ายรวม</div><div class="text-2xl font-bold">${totalCost.toLocaleString()}</div><div class="text-xs text-gray-500">บาท</div></div>
+      `;
+
+      const tbody = document.getElementById('tax-tbody');
+      if (courses.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">ยังไม่มีหลักสูตร</td></tr>'; return; }
+
+      let totalC = 0, totalD = 0, totalT = 0;
+      tbody.innerHTML = courses.map(c => {
+        const deduct = c.cost * 2;
+        const tax = Math.round(deduct * 0.2);
+        totalC += c.cost; totalD += deduct; totalT += tax;
+        const statusLabel = { pending: 'ยังไม่ยื่น', submitted: 'ยื่นแล้ว', approved: 'อนุมัติ', rejected: 'ไม่อนุมัติ' }[c.taxStatus] || '-';
+        const statusColor = { pending: 'gray', submitted: 'yellow', approved: 'green', rejected: 'red' }[c.taxStatus] || 'gray';
+        return `<tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 text-sm font-medium">${esc(c.name)}</td>
+          <td class="px-4 py-3 text-sm text-right">${c.cost.toLocaleString()}</td>
+          <td class="px-4 py-3 text-sm text-right text-blue-600 font-medium">${deduct.toLocaleString()}</td>
+          <td class="px-4 py-3 text-sm text-right font-bold text-green-700">${tax.toLocaleString()}</td>
+          <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs bg-${statusColor}-100 text-${statusColor}-800">${statusLabel}</span></td>
+        </tr>`;
+      }).join('') + `<tr class="bg-green-50 font-bold"><td class="px-4 py-3 text-sm">รวม</td><td class="px-4 py-3 text-sm text-right">${totalC.toLocaleString()}</td><td class="px-4 py-3 text-sm text-right text-blue-600">${totalD.toLocaleString()}</td><td class="px-4 py-3 text-sm text-right text-green-700">${totalT.toLocaleString()}</td><td></td></tr>`;
+    }
+
+    // ==================== CONFIRM DELETE ====================
+    function confirmDelete(text, callback) {
+      document.getElementById('confirm-text').textContent = `ต้องการลบ "${text}" ?`;
+      deleteCallback = callback;
+      document.getElementById('modal-confirm').classList.add('active');
+    }
+    function closeConfirm() { document.getElementById('modal-confirm').classList.remove('active'); deleteCallback = null; }
+    function executeDelete() { if (deleteCallback) deleteCallback(); closeConfirm(); }
+
+    // ==================== UTILS ====================
+    function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+    // ==================== INIT ====================
+    renderDashboard();
   </script>
 </body>
 </html>
