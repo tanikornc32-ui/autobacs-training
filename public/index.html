@@ -6,6 +6,7 @@
   <title>Autobacs Training Management</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script>
     tailwindcss.config = {
       theme: {
@@ -46,6 +47,9 @@
         <a onclick="navigate('trainees')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">👥</span><span>พนักงาน</span></a>
         <a onclick="navigate('enrollments')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📋</span><span>ลงทะเบียนอบรม</span></a>
         <a onclick="navigate('tax')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">🧮</span><span>คำนวณภาษี</span></a>
+        <div class="mx-4 my-2 border-t border-gray-700"></div>
+        <a onclick="navigate('documents')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📄</span><span>เอกสาร กพร.</span></a>
+        <a onclick="navigate('import')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📥</span><span>นำเข้า Excel</span></a>
       </nav>
       <div class="px-4 py-4 border-t border-gray-700">
         <div class="text-gray-400 text-xs">ปีงบประมาณ 2569</div>
@@ -157,6 +161,106 @@
                 <thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">หลักสูตร</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ค่าใช้จ่ายจริง</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">หักได้ (x2)</th><th class="px-4 py-3 text-right text-xs font-semibold text-gray-600">ภาษีประหยัด</th><th class="px-4 py-3 text-xs font-semibold text-gray-600">สถานะ</th></tr></thead>
                 <tbody class="divide-y divide-gray-200" id="tax-tbody"></tbody>
               </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== DOCUMENTS กพร. ==================== -->
+        <div id="page-documents" class="page fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <div><h2 class="text-2xl font-bold text-gray-800">เอกสาร กพร.</h2><p class="text-sm text-gray-500">เช็คลิสต์เอกสารที่ต้องส่งกรมพัฒนาฝีมือแรงงาน</p></div>
+          </div>
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+            <h3 class="font-semibold text-blue-800 mb-1">ขั้นตอนการยื่น กพร.</h3>
+            <div class="text-sm text-blue-700">ยื่น ฝ.1 ก่อนอบรม 15 วัน > จัดอบรม > ยื่น ฝ.2 หลังอบรม 60 วัน > กพร. ตรวจสอบ > อนุมัติสิทธิ์ลดหย่อน</div>
+          </div>
+          <div id="doc-no-courses" class="hidden text-center py-16 text-gray-400"><span class="text-5xl block mb-3">📄</span><p>ยังไม่มีหลักสูตร กรุณาเพิ่มหลักสูตรก่อน</p></div>
+          <div id="doc-list" class="space-y-4"></div>
+        </div>
+
+        <!-- ==================== IMPORT EXCEL ==================== -->
+        <div id="page-import" class="page fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <div><h2 class="text-2xl font-bold text-gray-800">นำเข้าข้อมูลจาก Excel</h2><p class="text-sm text-gray-500">อัพโหลดไฟล์ .xlsx หรือ .csv เพื่อเพิ่มข้อมูลพนักงานเข้าระบบ</p></div>
+          </div>
+          <!-- Format Guide -->
+          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h3 class="font-semibold text-gray-800 mb-3">รูปแบบไฟล์ที่รองรับ</h3>
+            <div class="bg-gray-50 rounded-lg p-4 mb-4">
+              <div class="font-medium text-sm mb-2">คอลัมน์ที่ต้องมี:</div>
+              <div class="overflow-x-auto">
+                <table class="text-xs border-collapse w-full">
+                  <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">คอลัมน์</th><th class="border px-3 py-1.5 text-left">ตัวอย่าง</th><th class="border px-3 py-1.5 text-left">จำเป็น</th></tr></thead>
+                  <tbody>
+                    <tr><td class="border px-3 py-1.5 font-mono">employee_code</td><td class="border px-3 py-1.5">AUTO-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">first_name</td><td class="border px-3 py-1.5">สมชาย</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">last_name</td><td class="border px-3 py-1.5">ใจดี</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">position</td><td class="border px-3 py-1.5">ช่างเทคนิค</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">branch</td><td class="border px-3 py-1.5">สาขาพระราม 2</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">hire_date</td><td class="border px-3 py-1.5">2019-03-15</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5 font-mono">phone</td><td class="border px-3 py-1.5">081-234-5678</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <button onclick="downloadExcelTemplate()" class="px-4 py-2 rounded-lg font-medium text-xs bg-green-600 text-white hover:bg-green-700">ดาวน์โหลดไฟล์ตัวอย่าง (.xlsx)</button>
+          </div>
+
+          <!-- Upload Area -->
+          <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+            <h3 class="font-semibold text-gray-800 mb-4">อัพโหลดไฟล์</h3>
+            <div id="import-drop-zone" class="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-autobacs-orange hover:bg-orange-50 transition-colors cursor-pointer"
+                 onclick="document.getElementById('import-file-input').click()"
+                 ondragover="event.preventDefault(); this.classList.add('border-autobacs-orange','bg-orange-50')"
+                 ondragleave="this.classList.remove('border-autobacs-orange','bg-orange-50')"
+                 ondrop="event.preventDefault(); this.classList.remove('border-autobacs-orange','bg-orange-50'); handleExcelFile(event.dataTransfer.files)">
+              <span class="text-5xl block mb-3">📄</span>
+              <div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div>
+              <div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv</div>
+              <input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv" onchange="handleExcelFile(this.files)" />
+            </div>
+          </div>
+
+          <!-- Import Preview -->
+          <div id="import-preview-section" class="hidden">
+            <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-gray-800">ตัวอย่างข้อมูล</h3>
+                <div class="flex items-center gap-3">
+                  <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div class="px-2 py-1 bg-gray-50 rounded text-center"><span class="font-bold" id="import-total">0</span> ทั้งหมด</div>
+                    <div class="px-2 py-1 bg-green-50 rounded text-center text-green-700"><span class="font-bold" id="import-valid">0</span> ถูกต้อง</div>
+                    <div class="px-2 py-1 bg-red-50 rounded text-center text-red-700"><span class="font-bold" id="import-error">0</span> ผิดพลาด</div>
+                  </div>
+                </div>
+              </div>
+              <div class="overflow-x-auto max-h-80 rounded-xl border">
+                <table class="min-w-full divide-y divide-gray-200 text-xs">
+                  <thead class="bg-gray-50 sticky top-0" id="import-thead"></thead>
+                  <tbody class="divide-y divide-gray-200" id="import-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+            <div id="import-errors-section" class="hidden bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+              <h4 class="font-semibold text-red-800 mb-2">ข้อผิดพลาด</h4>
+              <div id="import-errors-list" class="text-sm text-red-700 max-h-32 overflow-y-auto"></div>
+            </div>
+            <div class="flex gap-3 mb-6">
+              <button onclick="confirmExcelImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">ยืนยันนำเข้า</button>
+              <button onclick="resetExcelImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">ยกเลิก</button>
+            </div>
+          </div>
+
+          <!-- Import Success -->
+          <div id="import-success-section" class="hidden">
+            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-8 text-center mb-6">
+              <span class="text-5xl block mb-3">✅</span>
+              <div class="text-xl font-bold text-green-800 mb-2" id="import-success-title">นำเข้าสำเร็จ!</div>
+              <div class="text-sm text-green-700" id="import-success-detail"></div>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="navigate('trainees')" class="px-6 py-3 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">ดูรายชื่อพนักงาน</button>
+              <button onclick="resetExcelImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">นำเข้าไฟล์เพิ่ม</button>
             </div>
           </div>
         </div>
@@ -292,7 +396,7 @@
     function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
     // ==================== NAVIGATION ====================
-    const pageMap = ['dashboard', 'courses', 'trainees', 'enrollments', 'tax'];
+    const pageMap = ['dashboard', 'courses', 'trainees', 'enrollments', 'tax', 'documents', 'import'];
 
     function navigate(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -314,6 +418,8 @@
       else if (page === 'trainees') renderTrainees();
       else if (page === 'enrollments') renderEnrollments();
       else if (page === 'tax') renderTax();
+      else if (page === 'documents') renderDocuments();
+      else if (page === 'import') resetExcelImport();
     }
 
     // ==================== DASHBOARD ====================
@@ -643,6 +749,217 @@
     }
     function closeConfirm() { document.getElementById('modal-confirm').classList.remove('active'); deleteCallback = null; }
     function executeDelete() { if (deleteCallback) deleteCallback(); closeConfirm(); }
+
+    // ==================== DOCUMENTS กพร. ====================
+    function getDocChecklist() {
+      return db.docChecklist || {};
+    }
+    function saveDocCheck(courseId, docKey, checked) {
+      if (!db.docChecklist) db.docChecklist = {};
+      if (!db.docChecklist[courseId]) db.docChecklist[courseId] = {};
+      db.docChecklist[courseId][docKey] = checked;
+      saveDB(db);
+    }
+
+    const DOC_ITEMS = [
+      { key: 'plan', label: 'แผนการฝึกอบรม', desc: 'รายละเอียดหลักสูตร, ตารางเวลา, เนื้อหา', phase: 'ก่อนอบรม', icon: '📋' },
+      { key: 'f1', label: 'แบบ ฝ.1 (แจ้งก่อนฝึก)', desc: 'ยื่นก่อนวันอบรมอย่างน้อย 15 วัน', phase: 'ก่อนอบรม', icon: '📝' },
+      { key: 'trainer', label: 'เอกสารวิทยากร', desc: 'ประวัติ, ใบรับรอง, สำเนาบัตรประชาชน', phase: 'ก่อนอบรม', icon: '👨‍🏫' },
+      { key: 'register', label: 'ใบลงทะเบียนผู้เข้าอบรม', desc: 'รายชื่อผู้เข้าอบรมพร้อมลายเซ็น', phase: 'ระหว่างอบรม', icon: '✍️' },
+      { key: 'attendance', label: 'ใบเช็คชื่อ/ลงเวลา', desc: 'ลงเวลาเข้า-ออกทุกวัน', phase: 'ระหว่างอบรม', icon: '⏰' },
+      { key: 'photos', label: 'ภาพถ่ายการอบรม', desc: 'ภาพบรรยากาศ, ป้ายชื่อหลักสูตร', phase: 'ระหว่างอบรม', icon: '📷' },
+      { key: 'f2', label: 'แบบ ฝ.2 (แจ้งหลังฝึก)', desc: 'ยื่นภายใน 60 วันหลังอบรมเสร็จ', phase: 'หลังอบรม', icon: '📝' },
+      { key: 'expense', label: 'หลักฐานค่าใช้จ่าย', desc: 'ใบเสร็จ, ใบแจ้งหนี้, หลักฐานการจ่ายเงิน', phase: 'หลังอบรม', icon: '🧾' },
+      { key: 'cert', label: 'ใบประกาศ/ใบรับรอง', desc: 'ใบรับรองผ่านการอบรม (ถ้ามี)', phase: 'หลังอบรม', icon: '🏆' },
+      { key: 'eval', label: 'แบบประเมินผลอบรม', desc: 'แบบประเมินจากผู้เข้าอบรม', phase: 'หลังอบรม', icon: '📊' },
+    ];
+
+    function renderDocuments() {
+      const list = document.getElementById('doc-list');
+      const empty = document.getElementById('doc-no-courses');
+      if (db.courses.length === 0) { list.classList.add('hidden'); empty.classList.remove('hidden'); return; }
+      list.classList.remove('hidden'); empty.classList.add('hidden');
+      const checks = getDocChecklist();
+
+      list.innerHTML = db.courses.map(c => {
+        const courseChecks = checks[c.id] || {};
+        const done = DOC_ITEMS.filter(d => courseChecks[d.key]).length;
+        const total = DOC_ITEMS.length;
+        const pct = Math.round((done / total) * 100);
+        const pctColor = pct === 100 ? 'green' : pct >= 50 ? 'yellow' : 'red';
+
+        const phases = ['ก่อนอบรม', 'ระหว่างอบรม', 'หลังอบรม'];
+        const phaseHtml = phases.map(phase => {
+          const items = DOC_ITEMS.filter(d => d.phase === phase);
+          return `<div class="mb-3">
+            <div class="text-xs font-semibold text-gray-500 mb-1.5 uppercase">${phase}</div>
+            ${items.map(d => {
+              const checked = courseChecks[d.key] ? 'checked' : '';
+              return `<label class="flex items-start gap-2 p-2 rounded-lg hover:bg-gray-50 cursor-pointer ${courseChecks[d.key] ? 'bg-green-50' : ''}">
+                <input type="checkbox" ${checked} onchange="saveDocCheck('${c.id}','${d.key}',this.checked); renderDocuments()" class="mt-0.5 w-4 h-4 accent-green-600" />
+                <div class="flex-1">
+                  <div class="text-sm font-medium ${courseChecks[d.key] ? 'line-through text-gray-400' : ''}">${d.icon} ${d.label}</div>
+                  <div class="text-xs text-gray-500">${d.desc}</div>
+                </div>
+                ${courseChecks[d.key] ? '<span class="text-green-600 text-xs font-medium">✓ เสร็จ</span>' : ''}
+              </label>`;
+            }).join('')}
+          </div>`;
+        }).join('');
+
+        return `<div class="bg-white rounded-xl shadow-sm border p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-semibold text-gray-800">${esc(c.name)}</h3>
+              <p class="text-xs text-gray-500">${c.startDate || '-'} | ${(c.cost||0).toLocaleString()} บาท</p>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-${pctColor}-600">${pct}%</div>
+              <div class="text-xs text-gray-500">${done}/${total} รายการ</div>
+            </div>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+            <div class="bg-${pctColor}-500 h-2 rounded-full transition-all" style="width:${pct}%"></div>
+          </div>
+          ${phaseHtml}
+        </div>`;
+      }).join('');
+    }
+
+    // ==================== EXCEL IMPORT ====================
+    let importedRows = [];
+
+    function downloadExcelTemplate() {
+      const ws = XLSX.utils.aoa_to_sheet([
+        ['employee_code','first_name','last_name','position','branch','hire_date','phone'],
+        ['AUTO-001','สมชาย','ใจดี','ช่างเทคนิคอาวุโส','สาขาพระราม 2','2019-03-15','081-234-5678'],
+        ['AUTO-002','สมหญิง','รักดี','พนักงานบริการ','สาขาพระราม 2','2020-06-01','082-345-6789'],
+        ['AUTO-003','ประเสริฐ','มานะ','ช่างเทคนิค','สาขาบางนา','2021-08-15','083-456-7890'],
+      ]);
+      ws['!cols'] = [{wch:15},{wch:15},{wch:15},{wch:20},{wch:20},{wch:12},{wch:15}];
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'employees');
+      XLSX.writeFile(wb, 'template_employees.xlsx');
+    }
+
+    function handleExcelFile(files) {
+      if (!files || files.length === 0) return;
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const wb = XLSX.read(e.target.result, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+          if (data.length === 0) { alert('ไฟล์ไม่มีข้อมูล'); return; }
+          processExcelData(data, file.name);
+        } catch (err) {
+          alert('ไม่สามารถอ่านไฟล์ได้: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function processExcelData(data, fileName) {
+      const requiredCols = ['employee_code', 'first_name', 'last_name', 'position', 'branch'];
+      const headers = Object.keys(data[0]);
+      const missing = requiredCols.filter(c => !headers.includes(c));
+
+      importedRows = [];
+      const errors = [];
+      const seenCodes = new Set(db.trainees.map(t => t.code));
+
+      data.forEach((row, i) => {
+        const rowNum = i + 2;
+        const rowErrors = [];
+        if (missing.length > 0) { rowErrors.push('ขาดคอลัมน์: ' + missing.join(', ')); }
+        if (!row.employee_code) rowErrors.push('ไม่มีรหัสพนักงาน');
+        if (!row.first_name) rowErrors.push('ไม่มีชื่อ');
+        if (!row.last_name) rowErrors.push('ไม่มีนามสกุล');
+        if (row.employee_code && seenCodes.has(String(row.employee_code))) rowErrors.push('รหัสซ้ำกับในระบบ');
+
+        const status = rowErrors.length > 0 ? 'error' : 'valid';
+        if (rowErrors.length > 0) errors.push({ row: rowNum, messages: rowErrors });
+        if (row.employee_code) seenCodes.add(String(row.employee_code));
+
+        importedRows.push({
+          code: String(row.employee_code || ''),
+          fname: String(row.first_name || ''),
+          lname: String(row.last_name || ''),
+          position: String(row.position || ''),
+          branch: String(row.branch || ''),
+          hireDate: row.hire_date ? String(row.hire_date) : '',
+          phone: row.phone ? String(row.phone) : '',
+          _status: status,
+          _errors: rowErrors,
+        });
+      });
+
+      // Update drop zone
+      document.getElementById('import-drop-zone').innerHTML = `<div class="flex items-center gap-3 justify-center"><span class="text-2xl">📄</span><div class="text-left"><div class="font-medium text-gray-700">${esc(fileName)}</div><div class="text-xs text-gray-500">${importedRows.length} แถว</div></div></div>`;
+
+      // Show preview
+      const validCount = importedRows.filter(r => r._status === 'valid').length;
+      const errorCount = importedRows.filter(r => r._status === 'error').length;
+      document.getElementById('import-total').textContent = importedRows.length;
+      document.getElementById('import-valid').textContent = validCount;
+      document.getElementById('import-error').textContent = errorCount;
+
+      const thead = document.getElementById('import-thead');
+      thead.innerHTML = '<tr><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">#</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สถานะ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">รหัส</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ชื่อ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">นามสกุล</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ตำแหน่ง</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สาขา</th></tr>';
+
+      const tbody = document.getElementById('import-tbody');
+      tbody.innerHTML = importedRows.slice(0, 100).map((r, i) => {
+        const cls = r._status === 'error' ? 'bg-red-50' : '';
+        const badge = r._status === 'valid' ? '<span class="px-1.5 py-0.5 rounded-full text-xs bg-green-100 text-green-800">OK</span>' : '<span class="px-1.5 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ผิด</span>';
+        return `<tr class="${cls}"><td class="px-3 py-1.5 text-gray-400">${i+1}</td><td class="px-3 py-1.5">${badge}</td><td class="px-3 py-1.5 font-mono">${esc(r.code)}</td><td class="px-3 py-1.5">${esc(r.fname)}</td><td class="px-3 py-1.5">${esc(r.lname)}</td><td class="px-3 py-1.5">${esc(r.position)}</td><td class="px-3 py-1.5">${esc(r.branch)}</td></tr>`;
+      }).join('');
+
+      // Show errors
+      if (errors.length > 0) {
+        document.getElementById('import-errors-section').classList.remove('hidden');
+        document.getElementById('import-errors-list').innerHTML = errors.slice(0, 50).map(e => `<div class="mb-1">แถว ${e.row}: ${e.messages.join(', ')}</div>`).join('');
+      } else {
+        document.getElementById('import-errors-section').classList.add('hidden');
+      }
+
+      document.getElementById('import-preview-section').classList.remove('hidden');
+      document.getElementById('import-success-section').classList.add('hidden');
+    }
+
+    function confirmExcelImport() {
+      const validRows = importedRows.filter(r => r._status === 'valid');
+      if (validRows.length === 0) { alert('ไม่มีข้อมูลที่ถูกต้องเพื่อนำเข้า'); return; }
+
+      validRows.forEach(r => {
+        db.trainees.push({
+          id: genId(),
+          code: r.code,
+          fname: r.fname,
+          lname: r.lname,
+          position: r.position,
+          branch: r.branch,
+          hireDate: r.hireDate,
+          phone: r.phone,
+        });
+      });
+      saveDB(db);
+
+      document.getElementById('import-preview-section').classList.add('hidden');
+      document.getElementById('import-success-section').classList.remove('hidden');
+      document.getElementById('import-success-title').textContent = 'นำเข้าสำเร็จ!';
+      document.getElementById('import-success-detail').textContent = `เพิ่มพนักงาน ${validRows.length} คน เข้าระบบเรียบร้อย`;
+      importedRows = [];
+    }
+
+    function resetExcelImport() {
+      importedRows = [];
+      document.getElementById('import-preview-section').classList.add('hidden');
+      document.getElementById('import-success-section').classList.add('hidden');
+      document.getElementById('import-drop-zone').innerHTML = `<span class="text-5xl block mb-3">📄</span><div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div><div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv</div><input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv" onchange="handleExcelFile(this.files)" />`;
+      const fi = document.getElementById('import-file-input');
+      if (fi) fi.value = '';
+    }
 
     // ==================== UTILS ====================
     function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
