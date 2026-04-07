@@ -53,6 +53,11 @@
         <a onclick="navigate('alerts')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">🔔</span><span>แจ้งเตือน/ตรวจสอบ</span><span id="alert-badge" class="ml-auto hidden w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"></span></a>
       </nav>
       <div class="px-4 py-4 border-t border-gray-700">
+        <div class="flex gap-2 mb-3">
+          <button onclick="exportAllData()" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-medium bg-green-600 text-white hover:bg-green-700 flex items-center justify-center gap-1">📤 ส่งออก</button>
+          <button onclick="document.getElementById('import-json-input').click()" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-1">📥 นำเข้า</button>
+          <input type="file" id="import-json-input" class="hidden" accept=".json" onchange="importAllData(this.files)" />
+        </div>
         <div class="text-gray-400 text-xs">ปีงบประมาณ 2569</div>
         <div class="text-gray-500 text-xs mt-1">Autobacs (Thailand)</div>
       </div>
@@ -1392,6 +1397,58 @@
 
     // ==================== UTILS ====================
     function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+    // ==================== EXPORT / IMPORT DATA ====================
+    function exportAllData() {
+      const exportData = {
+        _exportDate: new Date().toISOString(),
+        _appVersion: 'autobacs-training-v1',
+        courses: db.courses,
+        trainees: db.trainees,
+        enrollments: db.enrollments,
+        budget: db.budget,
+        docChecklist: db.docChecklist || {},
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `autobacs_backup_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importAllData(files) {
+      if (!files || files.length === 0) return;
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data.courses && !data.trainees) {
+            alert('ไฟล์นี้ไม่ใช่ข้อมูล Autobacs Training'); return;
+          }
+          const msg = `นำเข้าข้อมูลจากไฟล์ "${file.name}"?\n\n` +
+            `หลักสูตร: ${(data.courses||[]).length} รายการ\n` +
+            `พนักงาน: ${(data.trainees||[]).length} คน\n` +
+            `ลงทะเบียน: ${(data.enrollments||[]).length} รายการ\n\n` +
+            `ข้อมูลเดิมจะถูกแทนที่ทั้งหมด!`;
+          if (!confirm(msg)) return;
+          db.courses = data.courses || [];
+          db.trainees = data.trainees || [];
+          db.enrollments = data.enrollments || [];
+          db.budget = data.budget || 1200000;
+          db.docChecklist = data.docChecklist || {};
+          saveDB(db);
+          renderDashboard();
+          alert('นำเข้าข้อมูลสำเร็จ!');
+        } catch (err) {
+          alert('ไม่สามารถอ่านไฟล์ได้: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      document.getElementById('import-json-input').value = '';
+    }
 
     // ==================== INIT ====================
     renderDashboard();
