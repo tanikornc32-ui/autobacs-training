@@ -50,6 +50,7 @@
         <div class="mx-4 my-2 border-t border-gray-700"></div>
         <a onclick="navigate('documents')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📄</span><span>เอกสาร กพร.</span></a>
         <a onclick="navigate('import')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">📥</span><span>นำเข้า Excel</span></a>
+        <a onclick="navigate('alerts')" class="nav-item flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg text-sm cursor-pointer text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"><span class="text-lg">🔔</span><span>แจ้งเตือน/ตรวจสอบ</span><span id="alert-badge" class="ml-auto hidden w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center"></span></a>
       </nav>
       <div class="px-4 py-4 border-t border-gray-700">
         <div class="text-gray-400 text-xs">ปีงบประมาณ 2569</div>
@@ -111,6 +112,7 @@
                 <tr>
                   <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">รหัส</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">ชื่อ-สกุล</th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">เลขบัตร ปชช.</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">ตำแหน่ง</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">สาขา</th>
                   <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600">จัดการ</th>
@@ -186,19 +188,23 @@
           <!-- Format Guide -->
           <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
             <h3 class="font-semibold text-gray-800 mb-3">รูปแบบไฟล์ที่รองรับ</h3>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+              <div class="text-sm text-blue-800 font-medium">รองรับทุกรูปแบบ Excel อัตโนมัติ — ระบบจะแมตซ์คอลัมน์ให้เอง ไม่ว่าจะตั้งชื่อเป็นภาษาไทยหรืออังกฤษ</div>
+            </div>
             <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <div class="font-medium text-sm mb-2">คอลัมน์ที่ต้องมี:</div>
+              <div class="font-medium text-sm mb-2">คอลัมน์ที่ระบบรู้จัก (ตั้งชื่อแบบไหนก็ได้):</div>
               <div class="overflow-x-auto">
                 <table class="text-xs border-collapse w-full">
-                  <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">คอลัมน์</th><th class="border px-3 py-1.5 text-left">ตัวอย่าง</th><th class="border px-3 py-1.5 text-left">จำเป็น</th></tr></thead>
+                  <thead><tr class="bg-gray-200"><th class="border px-3 py-1.5 text-left">ข้อมูล</th><th class="border px-3 py-1.5 text-left">ชื่อคอลัมน์ที่รองรับ</th><th class="border px-3 py-1.5 text-left">จำเป็น</th></tr></thead>
                   <tbody>
-                    <tr><td class="border px-3 py-1.5 font-mono">employee_code</td><td class="border px-3 py-1.5">AUTO-001</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">first_name</td><td class="border px-3 py-1.5">สมชาย</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">last_name</td><td class="border px-3 py-1.5">ใจดี</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">position</td><td class="border px-3 py-1.5">ช่างเทคนิค</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">branch</td><td class="border px-3 py-1.5">สาขาพระราม 2</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">hire_date</td><td class="border px-3 py-1.5">2019-03-15</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
-                    <tr><td class="border px-3 py-1.5 font-mono">phone</td><td class="border px-3 py-1.5">081-234-5678</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5">รหัสพนักงาน</td><td class="border px-3 py-1.5 font-mono text-xs">employee_code, รหัสพนักงาน, รหัส, code, emp_code ...</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5">ชื่อ</td><td class="border px-3 py-1.5 font-mono text-xs">first_name, ชื่อ, ชื่อจริง, fname, name ...</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5">นามสกุล</td><td class="border px-3 py-1.5 font-mono text-xs">last_name, นามสกุล, สกุล, lname, surname ...</td><td class="border px-3 py-1.5 text-green-600 font-bold">ต้องมี</td></tr>
+                    <tr><td class="border px-3 py-1.5">ตำแหน่ง</td><td class="border px-3 py-1.5 font-mono text-xs">position, ตำแหน่ง, title, job_title ...</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5">สาขา</td><td class="border px-3 py-1.5 font-mono text-xs">branch, สาขา, แผนก, department, dept ...</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5">เลขบัตร ปชช.</td><td class="border px-3 py-1.5 font-mono text-xs">national_id, เลขบัตร, บัตรประชาชน, id_card ...</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5">วันเริ่มงาน</td><td class="border px-3 py-1.5 font-mono text-xs">hire_date, วันเริ่มงาน, start_date ...</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
+                    <tr><td class="border px-3 py-1.5">โทรศัพท์</td><td class="border px-3 py-1.5 font-mono text-xs">phone, โทรศัพท์, เบอร์, tel, mobile ...</td><td class="border px-3 py-1.5 text-gray-400">ไม่บังคับ</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -216,13 +222,14 @@
                  ondrop="event.preventDefault(); this.classList.remove('border-autobacs-orange','bg-orange-50'); handleExcelFile(event.dataTransfer.files)">
               <span class="text-5xl block mb-3">📄</span>
               <div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div>
-              <div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv</div>
-              <input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv" onchange="handleExcelFile(this.files)" />
+              <div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv, .tsv, .ods และอื่นๆ</div>
+              <input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv,.tsv,.ods,.xlsm,.xlsb" onchange="handleExcelFile(this.files)" />
             </div>
           </div>
 
           <!-- Import Preview -->
           <div id="import-preview-section" class="hidden">
+            <div id="import-mapping-info" class="hidden bg-green-50 border border-green-200 rounded-xl p-3 mb-4 text-sm text-green-800"></div>
             <div class="bg-white rounded-xl shadow-sm border p-6 mb-6">
               <div class="flex items-center justify-between mb-4">
                 <h3 class="font-semibold text-gray-800">ตัวอย่างข้อมูล</h3>
@@ -263,6 +270,17 @@
               <button onclick="resetExcelImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">นำเข้าไฟล์เพิ่ม</button>
             </div>
           </div>
+        </div>
+
+        <!-- ==================== ALERTS ==================== -->
+        <div id="page-alerts" class="page fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <div><h2 class="text-2xl font-bold text-gray-800">แจ้งเตือน / ตรวจสอบ</h2><p class="text-sm text-gray-500">ตรวจจับปัญหาอัตโนมัติ — ชื่อซ้ำ, หลักสูตรซ้ำ, ความเสี่ยงลดหย่อนภาษี</p></div>
+            <button onclick="renderAlerts()" class="px-4 py-2 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">ตรวจสอบใหม่</button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="alert-summary"></div>
+          <div id="alert-list" class="space-y-3"></div>
+          <div id="alert-empty" class="hidden text-center py-16 text-gray-400"><span class="text-5xl block mb-3">✅</span><p class="text-lg font-medium">ไม่พบปัญหา</p><p class="text-sm">ข้อมูลทั้งหมดถูกต้อง</p></div>
         </div>
 
       </main>
@@ -325,6 +343,7 @@
             <div><label class="block text-sm font-medium text-gray-700 mb-1">ชื่อ *</label><input type="text" id="trainee-fname" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
             <div><label class="block text-sm font-medium text-gray-700 mb-1">นามสกุล *</label><input type="text" id="trainee-lname" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
           </div>
+          <div><label class="block text-sm font-medium text-gray-700 mb-1">เลขบัตรประจำตัวประชาชน</label><input type="text" id="trainee-national-id" maxlength="13" pattern="\d{13}" placeholder="1234567890123" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono" oninput="this.value=this.value.replace(/\D/g,'')" /></div>
           <div><label class="block text-sm font-medium text-gray-700 mb-1">ตำแหน่ง *</label><input type="text" id="trainee-position" required placeholder="ช่างเทคนิค" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
           <div class="grid grid-cols-2 gap-3">
             <div><label class="block text-sm font-medium text-gray-700 mb-1">วันเริ่มงาน</label><input type="date" id="trainee-hire" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" /></div>
@@ -396,7 +415,7 @@
     function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
     // ==================== NAVIGATION ====================
-    const pageMap = ['dashboard', 'courses', 'trainees', 'enrollments', 'tax', 'documents', 'import'];
+    const pageMap = ['dashboard', 'courses', 'trainees', 'enrollments', 'tax', 'documents', 'import', 'alerts'];
 
     function navigate(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -420,6 +439,7 @@
       else if (page === 'tax') renderTax();
       else if (page === 'documents') renderDocuments();
       else if (page === 'import') resetExcelImport();
+      else if (page === 'alerts') renderAlerts();
     }
 
     // ==================== DASHBOARD ====================
@@ -559,7 +579,7 @@
       const empty = document.getElementById('trainees-empty');
       const search = (document.getElementById('trainee-search')?.value || '').toLowerCase();
       let list = db.trainees;
-      if (search) list = list.filter(t => `${t.code} ${t.fname} ${t.lname} ${t.position} ${t.branch}`.toLowerCase().includes(search));
+      if (search) list = list.filter(t => `${t.code} ${t.fname} ${t.lname} ${t.nationalId||''} ${t.position} ${t.branch}`.toLowerCase().includes(search));
 
       if (db.trainees.length === 0) { tbody.innerHTML = ''; empty.classList.remove('hidden'); return; }
       empty.classList.add('hidden');
@@ -567,6 +587,7 @@
       tbody.innerHTML = list.map(t => `<tr class="hover:bg-gray-50">
         <td class="px-4 py-3 text-sm font-mono">${esc(t.code)}</td>
         <td class="px-4 py-3 text-sm font-medium">${esc(t.fname)} ${esc(t.lname)}</td>
+        <td class="px-4 py-3 text-sm font-mono text-gray-500">${t.nationalId ? esc(t.nationalId) : '-'}</td>
         <td class="px-4 py-3 text-sm">${esc(t.position)}</td>
         <td class="px-4 py-3 text-sm">${esc(t.branch)}</td>
         <td class="px-4 py-3 flex gap-1">
@@ -587,6 +608,7 @@
           document.getElementById('trainee-lname').value = t.lname;
           document.getElementById('trainee-position').value = t.position;
           document.getElementById('trainee-branch').value = t.branch;
+          document.getElementById('trainee-national-id').value = t.nationalId || '';
           document.getElementById('trainee-hire').value = t.hireDate || '';
           document.getElementById('trainee-phone').value = t.phone || '';
         }
@@ -605,6 +627,7 @@
         code: document.getElementById('trainee-code').value.trim(),
         fname: document.getElementById('trainee-fname').value.trim(),
         lname: document.getElementById('trainee-lname').value.trim(),
+        nationalId: document.getElementById('trainee-national-id').value.trim(),
         position: document.getElementById('trainee-position').value.trim(),
         branch: document.getElementById('trainee-branch').value.trim(),
         hireDate: document.getElementById('trainee-hire').value,
@@ -831,12 +854,12 @@
 
     function downloadExcelTemplate() {
       const ws = XLSX.utils.aoa_to_sheet([
-        ['employee_code','first_name','last_name','position','branch','hire_date','phone'],
-        ['AUTO-001','สมชาย','ใจดี','ช่างเทคนิคอาวุโส','สาขาพระราม 2','2019-03-15','081-234-5678'],
-        ['AUTO-002','สมหญิง','รักดี','พนักงานบริการ','สาขาพระราม 2','2020-06-01','082-345-6789'],
-        ['AUTO-003','ประเสริฐ','มานะ','ช่างเทคนิค','สาขาบางนา','2021-08-15','083-456-7890'],
+        ['employee_code','first_name','last_name','national_id','position','branch','hire_date','phone'],
+        ['AUTO-001','สมชาย','ใจดี','1100100123456','ช่างเทคนิคอาวุโส','สาขาพระราม 2','2019-03-15','081-234-5678'],
+        ['AUTO-002','สมหญิง','รักดี','1100200234567','พนักงานบริการ','สาขาพระราม 2','2020-06-01','082-345-6789'],
+        ['AUTO-003','ประเสริฐ','มานะ','1100300345678','ช่างเทคนิค','สาขาบางนา','2021-08-15','083-456-7890'],
       ]);
-      ws['!cols'] = [{wch:15},{wch:15},{wch:15},{wch:20},{wch:20},{wch:12},{wch:15}];
+      ws['!cols'] = [{wch:15},{wch:15},{wch:15},{wch:16},{wch:20},{wch:20},{wch:12},{wch:15}];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'employees');
       XLSX.writeFile(wb, 'template_employees.xlsx');
@@ -860,36 +883,113 @@
       reader.readAsArrayBuffer(file);
     }
 
+    // Smart column matching — maps Thai/English headers to internal fields
+    function autoMatchColumns(headers) {
+      const rules = [
+        { field: 'code', patterns: ['employee_code','emp_code','รหัสพนักงาน','รหัส','code','id','ลำดับ','emp_id','employee_id','staff_code','staff_id','รหัสประจำตัว'] },
+        { field: 'fname', patterns: ['first_name','fname','ชื่อ','ชื่อจริง','name','ชื่อพนักงาน','firstname','given_name'] },
+        { field: 'lname', patterns: ['last_name','lname','นามสกุล','สกุล','surname','lastname','family_name'] },
+        { field: 'nationalId', patterns: ['national_id','เลขบัตร','บัตรประชาชน','เลขบัตรประชาชน','เลขบัตรประจำตัวประชาชน','id_card','citizen_id','เลขประจำตัว','thai_id','id_number','เลข13หลัก','personal_id'] },
+        { field: 'position', patterns: ['position','ตำแหน่ง','title','job_title','job','ตำแหน่งงาน','role'] },
+        { field: 'branch', patterns: ['branch','สาขา','แผนก','department','dept','หน่วยงาน','ฝ่าย','division','section'] },
+        { field: 'hireDate', patterns: ['hire_date','วันเริ่มงาน','start_date','join_date','วันที่เริ่มงาน','วันเข้าทำงาน','date_hired','hiredate','entry_date'] },
+        { field: 'phone', patterns: ['phone','โทรศัพท์','เบอร์','tel','mobile','เบอร์โทร','telephone','เบอร์โทรศัพท์','mobile_phone','contact'] },
+      ];
+      const mapping = {};
+      headers.forEach(h => {
+        const norm = h.toLowerCase().trim().replace(/[\s_\-\.]+/g, '_');
+        for (const rule of rules) {
+          if (mapping[rule.field]) continue; // already matched
+          for (const p of rule.patterns) {
+            if (norm === p.toLowerCase() || norm.includes(p.toLowerCase()) || p.toLowerCase().includes(norm)) {
+              mapping[rule.field] = h;
+              break;
+            }
+          }
+        }
+      });
+      // Fallback: if "ชื่อ" column found but no lname, check for full name pattern
+      if (mapping.fname && !mapping.lname) {
+        // Try to find a "ชื่อ-สกุล" or "ชื่อ นามสกุล" column that might contain both
+        headers.forEach(h => {
+          const norm = h.toLowerCase().trim();
+          if (!mapping._fullname && (norm.includes('ชื่อ-สกุล') || norm.includes('ชื่อ สกุล') || norm.includes('full_name') || norm.includes('fullname') || norm.includes('ชื่อ-นามสกุล'))) {
+            mapping._fullname = h;
+          }
+        });
+      }
+      // If no fname but found fullname
+      if (!mapping.fname) {
+        headers.forEach(h => {
+          const norm = h.toLowerCase().trim();
+          if (norm.includes('ชื่อ-สกุล') || norm.includes('ชื่อ สกุล') || norm.includes('full_name') || norm.includes('fullname') || norm.includes('ชื่อ-นามสกุล') || norm === 'ชื่อ นามสกุล') {
+            mapping._fullname = h;
+          }
+        });
+      }
+      return mapping;
+    }
+
     function processExcelData(data, fileName) {
-      const requiredCols = ['employee_code', 'first_name', 'last_name', 'position', 'branch'];
       const headers = Object.keys(data[0]);
-      const missing = requiredCols.filter(c => !headers.includes(c));
+      const colMap = autoMatchColumns(headers);
+
+      // Show mapping info
+      const mappedInfo = [];
+      if (colMap.code) mappedInfo.push(`รหัส→"${colMap.code}"`);
+      if (colMap.fname) mappedInfo.push(`ชื่อ→"${colMap.fname}"`);
+      if (colMap.lname) mappedInfo.push(`สกุล→"${colMap.lname}"`);
+      if (colMap._fullname) mappedInfo.push(`ชื่อ-สกุล→"${colMap._fullname}"`);
+      if (colMap.nationalId) mappedInfo.push(`บัตร ปชช.→"${colMap.nationalId}"`);
+      if (colMap.position) mappedInfo.push(`ตำแหน่ง→"${colMap.position}"`);
+      if (colMap.branch) mappedInfo.push(`สาขา→"${colMap.branch}"`);
 
       importedRows = [];
       const errors = [];
       const seenCodes = new Set(db.trainees.map(t => t.code));
 
+      const hasName = colMap.fname || colMap._fullname;
+      if (!colMap.code && !hasName) {
+        alert('ไม่พบคอลัมน์ที่จำเป็น (รหัสพนักงาน หรือ ชื่อ)\nระบบรู้จักคอลัมน์: ' + headers.join(', '));
+        return;
+      }
+
       data.forEach((row, i) => {
         const rowNum = i + 2;
         const rowErrors = [];
-        if (missing.length > 0) { rowErrors.push('ขาดคอลัมน์: ' + missing.join(', ')); }
-        if (!row.employee_code) rowErrors.push('ไม่มีรหัสพนักงาน');
-        if (!row.first_name) rowErrors.push('ไม่มีชื่อ');
-        if (!row.last_name) rowErrors.push('ไม่มีนามสกุล');
-        if (row.employee_code && seenCodes.has(String(row.employee_code))) rowErrors.push('รหัสซ้ำกับในระบบ');
+
+        let fname = '', lname = '';
+        if (colMap._fullname && !colMap.fname) {
+          const full = String(row[colMap._fullname] || '').trim();
+          const parts = full.split(/\s+/);
+          fname = parts[0] || '';
+          lname = parts.slice(1).join(' ') || '';
+        } else {
+          fname = colMap.fname ? String(row[colMap.fname] || '').trim() : '';
+          lname = colMap.lname ? String(row[colMap.lname] || '').trim() : '';
+        }
+
+        const code = colMap.code ? String(row[colMap.code] || '').trim() : '';
+        const nationalId = colMap.nationalId ? String(row[colMap.nationalId] || '').trim().replace(/\D/g,'') : '';
+
+        if (!code && !fname) { rowErrors.push('ไม่มีรหัสและชื่อ'); }
+        if (!fname) rowErrors.push('ไม่มีชื่อ');
+        if (code && seenCodes.has(code)) rowErrors.push('รหัสซ้ำกับในระบบ');
+        if (nationalId && nationalId.length !== 13) rowErrors.push('เลขบัตร ปชช. ไม่ครบ 13 หลัก');
 
         const status = rowErrors.length > 0 ? 'error' : 'valid';
         if (rowErrors.length > 0) errors.push({ row: rowNum, messages: rowErrors });
-        if (row.employee_code) seenCodes.add(String(row.employee_code));
+        if (code) seenCodes.add(code);
 
         importedRows.push({
-          code: String(row.employee_code || ''),
-          fname: String(row.first_name || ''),
-          lname: String(row.last_name || ''),
-          position: String(row.position || ''),
-          branch: String(row.branch || ''),
-          hireDate: row.hire_date ? String(row.hire_date) : '',
-          phone: row.phone ? String(row.phone) : '',
+          code: code,
+          fname: fname,
+          lname: lname,
+          nationalId: nationalId,
+          position: colMap.position ? String(row[colMap.position] || '').trim() : '',
+          branch: colMap.branch ? String(row[colMap.branch] || '').trim() : '',
+          hireDate: colMap.hireDate ? String(row[colMap.hireDate] || '').trim() : '',
+          phone: colMap.phone ? String(row[colMap.phone] || '').trim() : '',
           _status: status,
           _errors: rowErrors,
         });
@@ -905,14 +1005,21 @@
       document.getElementById('import-valid').textContent = validCount;
       document.getElementById('import-error').textContent = errorCount;
 
+      // Show column mapping info
+      const mapDiv = document.getElementById('import-mapping-info');
+      if (mapDiv) {
+        mapDiv.classList.remove('hidden');
+        mapDiv.innerHTML = `<span class="font-medium">คอลัมน์ที่แมตซ์ได้:</span> ${mappedInfo.length > 0 ? mappedInfo.join(' | ') : '<span class="text-red-600">ไม่พบคอลัมน์ที่ตรง</span>'}`;
+      }
+
       const thead = document.getElementById('import-thead');
-      thead.innerHTML = '<tr><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">#</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สถานะ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">รหัส</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ชื่อ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">นามสกุล</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ตำแหน่ง</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สาขา</th></tr>';
+      thead.innerHTML = '<tr><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">#</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สถานะ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">รหัส</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ชื่อ</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">นามสกุล</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">บัตร ปชช.</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">ตำแหน่ง</th><th class="px-3 py-2 text-left text-xs font-semibold text-gray-600">สาขา</th></tr>';
 
       const tbody = document.getElementById('import-tbody');
       tbody.innerHTML = importedRows.slice(0, 100).map((r, i) => {
         const cls = r._status === 'error' ? 'bg-red-50' : '';
         const badge = r._status === 'valid' ? '<span class="px-1.5 py-0.5 rounded-full text-xs bg-green-100 text-green-800">OK</span>' : '<span class="px-1.5 py-0.5 rounded-full text-xs bg-red-100 text-red-800">ผิด</span>';
-        return `<tr class="${cls}"><td class="px-3 py-1.5 text-gray-400">${i+1}</td><td class="px-3 py-1.5">${badge}</td><td class="px-3 py-1.5 font-mono">${esc(r.code)}</td><td class="px-3 py-1.5">${esc(r.fname)}</td><td class="px-3 py-1.5">${esc(r.lname)}</td><td class="px-3 py-1.5">${esc(r.position)}</td><td class="px-3 py-1.5">${esc(r.branch)}</td></tr>`;
+        return `<tr class="${cls}"><td class="px-3 py-1.5 text-gray-400">${i+1}</td><td class="px-3 py-1.5">${badge}</td><td class="px-3 py-1.5 font-mono">${esc(r.code)}</td><td class="px-3 py-1.5">${esc(r.fname)}</td><td class="px-3 py-1.5">${esc(r.lname)}</td><td class="px-3 py-1.5 font-mono text-xs">${esc(r.nationalId)}</td><td class="px-3 py-1.5">${esc(r.position)}</td><td class="px-3 py-1.5">${esc(r.branch)}</td></tr>`;
       }).join('');
 
       // Show errors
@@ -937,6 +1044,7 @@
           code: r.code,
           fname: r.fname,
           lname: r.lname,
+          nationalId: r.nationalId || '',
           position: r.position,
           branch: r.branch,
           hireDate: r.hireDate,
@@ -956,9 +1064,234 @@
       importedRows = [];
       document.getElementById('import-preview-section').classList.add('hidden');
       document.getElementById('import-success-section').classList.add('hidden');
-      document.getElementById('import-drop-zone').innerHTML = `<span class="text-5xl block mb-3">📄</span><div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div><div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv</div><input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv" onchange="handleExcelFile(this.files)" />`;
+      const mapDiv = document.getElementById('import-mapping-info');
+      if (mapDiv) mapDiv.classList.add('hidden');
+      document.getElementById('import-drop-zone').innerHTML = `<span class="text-5xl block mb-3">📄</span><div class="font-semibold text-gray-700 mb-1">ลากไฟล์มาวางที่นี่ หรือ คลิกเพื่อเลือก</div><div class="text-sm text-gray-500">รองรับ .xlsx, .xls, .csv, .tsv, .ods</div><input type="file" id="import-file-input" class="hidden" accept=".xlsx,.xls,.csv,.tsv,.ods,.xlsm,.xlsb" onchange="handleExcelFile(this.files)" />`;
       const fi = document.getElementById('import-file-input');
       if (fi) fi.value = '';
+    }
+
+    // ==================== ALERTS ENGINE ====================
+    function runAlertChecks() {
+      const alerts = [];
+
+      // 1. ชื่อพนักงานซ้ำ
+      const nameMap = {};
+      db.trainees.forEach(t => {
+        const fullName = (t.fname + ' ' + t.lname).trim().toLowerCase();
+        if (!nameMap[fullName]) nameMap[fullName] = [];
+        nameMap[fullName].push(t);
+      });
+      Object.entries(nameMap).forEach(([name, list]) => {
+        if (list.length > 1) {
+          alerts.push({ type: 'duplicate', severity: 'high', icon: '🔴', title: 'ชื่อพนักงานซ้ำ', desc: `"${list[0].fname} ${list[0].lname}" มี ${list.length} รายการ (รหัส: ${list.map(t=>t.code).join(', ')})`, action: 'ตรวจสอบว่าเป็นคนเดียวกันหรือไม่' });
+        }
+      });
+
+      // 2. รหัสพนักงานซ้ำ
+      const codeMap = {};
+      db.trainees.forEach(t => {
+        if (!t.code) return;
+        if (!codeMap[t.code]) codeMap[t.code] = [];
+        codeMap[t.code].push(t);
+      });
+      Object.entries(codeMap).forEach(([code, list]) => {
+        if (list.length > 1) {
+          alerts.push({ type: 'duplicate', severity: 'high', icon: '🔴', title: 'รหัสพนักงานซ้ำ', desc: `รหัส "${code}" มี ${list.length} รายการ`, action: 'แก้ไขรหัสให้ไม่ซ้ำกัน' });
+        }
+      });
+
+      // 3. พนักงานลงทะเบียนหลักสูตรเดียวกันซ้ำ
+      const enrollMap = {};
+      db.enrollments.forEach(e => {
+        const key = e.traineeId + '|' + e.courseId;
+        if (!enrollMap[key]) enrollMap[key] = [];
+        enrollMap[key].push(e);
+      });
+      Object.entries(enrollMap).forEach(([key, list]) => {
+        if (list.length > 1) {
+          const t = db.trainees.find(x => x.id === list[0].traineeId);
+          const c = db.courses.find(x => x.id === list[0].courseId);
+          if (t && c) {
+            alerts.push({ type: 'duplicate', severity: 'high', icon: '🔴', title: 'ลงทะเบียนซ้ำ', desc: `${t.fname} ${t.lname} ลงหลักสูตร "${c.name}" ซ้ำ ${list.length} ครั้ง`, action: 'ลบรายการที่ซ้ำออก' });
+          }
+        }
+      });
+
+      // 4. หลักสูตรชื่อคล้ายกัน
+      for (let i = 0; i < db.courses.length; i++) {
+        for (let j = i + 1; j < db.courses.length; j++) {
+          const a = db.courses[i].name.toLowerCase().replace(/\s/g, '');
+          const b = db.courses[j].name.toLowerCase().replace(/\s/g, '');
+          if (a === b || (a.length > 5 && b.length > 5 && (a.includes(b) || b.includes(a)))) {
+            alerts.push({ type: 'duplicate', severity: 'medium', icon: '🟡', title: 'หลักสูตรชื่อคล้ายกัน', desc: `"${db.courses[i].name}" กับ "${db.courses[j].name}" อาจเป็นหลักสูตรเดียวกัน`, action: 'ตรวจสอบว่าซ้ำหรือไม่ — กพร. อาจไม่อนุมัติซ้ำ' });
+          }
+        }
+      }
+
+      // 5. หลักสูตรวันชนกัน
+      for (let i = 0; i < db.courses.length; i++) {
+        for (let j = i + 1; j < db.courses.length; j++) {
+          const a = db.courses[i], b = db.courses[j];
+          if (a.startDate && b.startDate && a.endDate && b.endDate) {
+            if (a.startDate <= b.endDate && b.startDate <= a.endDate) {
+              alerts.push({ type: 'schedule', severity: 'medium', icon: '🟡', title: 'หลักสูตรวันชนกัน', desc: `"${a.name}" (${a.startDate}) ชนกับ "${b.name}" (${b.startDate})`, action: 'พนักงานอาจไม่สามารถเข้าทั้ง 2 หลักสูตรได้' });
+            }
+          }
+        }
+      }
+
+      // 6. ยังไม่ยื่น ฝ.1 แต่ใกล้วันอบรม
+      const today = new Date().toISOString().split('T')[0];
+      db.courses.forEach(c => {
+        if (c.startDate && c.taxStatus === 'pending') {
+          const diff = Math.ceil((new Date(c.startDate) - new Date()) / 86400000);
+          if (diff >= 0 && diff <= 30) {
+            alerts.push({ type: 'tax_risk', severity: 'high', icon: '🔴', title: 'ยังไม่ยื่น ฝ.1', desc: `"${c.name}" อบรมอีก ${diff} วัน แต่ยังไม่ยื่น ฝ.1 (ต้องยื่นก่อน 15 วัน)`, action: 'ยื่น ฝ.1 ด่วน มิเช่นนั้นจะเสียสิทธิ์ลดหย่อน' });
+          }
+        }
+      });
+
+      // 7. อบรมเสร็จแล้วแต่ยังไม่ยื่น ฝ.2
+      db.courses.forEach(c => {
+        if (c.endDate && (c.taxStatus === 'pending' || c.taxStatus === 'submitted')) {
+          const diff = Math.ceil((new Date() - new Date(c.endDate)) / 86400000);
+          if (diff > 0 && diff <= 60) {
+            const checks = (db.docChecklist || {})[c.id] || {};
+            if (!checks.f2) {
+              alerts.push({ type: 'tax_risk', severity: 'high', icon: '🔴', title: 'ยังไม่ยื่น ฝ.2', desc: `"${c.name}" อบรมเสร็จแล้ว ${diff} วัน (ต้องยื่นภายใน 60 วัน เหลือ ${60-diff} วัน)`, action: 'ยื่น ฝ.2 ก่อนหมดเขต' });
+            }
+          } else if (diff > 60) {
+            const checks = (db.docChecklist || {})[c.id] || {};
+            if (!checks.f2) {
+              alerts.push({ type: 'tax_risk', severity: 'high', icon: '⛔', title: 'เกินกำหนดยื่น ฝ.2', desc: `"${c.name}" เกินกำหนด 60 วันแล้ว (${diff} วัน) — อาจเสียสิทธิ์ลดหย่อน`, action: 'ติดต่อ กพร. เพื่อขอยื่นล่าช้า' });
+            }
+          }
+        }
+      });
+
+      // 8. อบรมไม่ถึง 50% — เสี่ยงไม่ได้สิทธิ์เต็ม
+      if (db.trainees.length > 0) {
+        const trainedIds = new Set(db.enrollments.filter(e => e.status === 'completed').map(e => e.traineeId));
+        const pct = Math.round((trainedIds.size / db.trainees.length) * 100);
+        if (pct < 50) {
+          const need = Math.ceil(db.trainees.length * 0.5) - trainedIds.size;
+          alerts.push({ type: 'tax_risk', severity: 'medium', icon: '🟡', title: 'อบรมยังไม่ถึง 50%', desc: `อบรมแล้ว ${trainedIds.size}/${db.trainees.length} คน (${pct}%) — ต้องอีก ${need} คนถึงจะได้สิทธิ์ลดหย่อนเต็ม`, action: 'เพิ่มพนักงานเข้าอบรมให้ครบ 50%' });
+        }
+      }
+
+      // 9. หลักสูตรไม่มีค่าใช้จ่าย
+      db.courses.forEach(c => {
+        if (!c.cost || c.cost === 0) {
+          alerts.push({ type: 'data', severity: 'low', icon: '🔵', title: 'หลักสูตรไม่มีค่าใช้จ่าย', desc: `"${c.name}" ค่าใช้จ่าย 0 บาท — ไม่มีสิทธิ์ลดหย่อน`, action: 'เพิ่มค่าใช้จ่ายให้หลักสูตร' });
+        }
+      });
+
+      // 10. หลักสูตรไม่มีวันที่
+      db.courses.forEach(c => {
+        if (!c.startDate) {
+          alerts.push({ type: 'data', severity: 'low', icon: '🔵', title: 'หลักสูตรไม่มีวันที่', desc: `"${c.name}" ยังไม่กำหนดวันอบรม — ไม่สามารถยื่น ฝ.1 ได้`, action: 'กำหนดวันอบรมให้หลักสูตร' });
+        }
+      });
+
+      // 11. หลักสูตรไม่มีผู้ลงทะเบียน
+      db.courses.forEach(c => {
+        const enrolled = db.enrollments.filter(e => e.courseId === c.id).length;
+        if (enrolled === 0) {
+          alerts.push({ type: 'data', severity: 'low', icon: '🔵', title: 'ไม่มีผู้ลงทะเบียน', desc: `"${c.name}" ยังไม่มีพนักงานลงทะเบียน`, action: 'เพิ่มพนักงานเข้าหลักสูตร' });
+        }
+      });
+
+      // 12. เอกสารไม่ครบ สำหรับหลักสูตรที่อนุมัติแล้ว
+      db.courses.forEach(c => {
+        if (c.taxStatus === 'approved') {
+          const checks = (db.docChecklist || {})[c.id] || {};
+          const done = DOC_ITEMS.filter(d => checks[d.key]).length;
+          if (done < DOC_ITEMS.length) {
+            alerts.push({ type: 'tax_risk', severity: 'medium', icon: '🟡', title: 'เอกสารไม่ครบ', desc: `"${c.name}" อนุมัติแล้วแต่เอกสารครบเพียง ${done}/${DOC_ITEMS.length} รายการ`, action: 'เตรียมเอกสารให้ครบเพื่อรองรับการตรวจสอบ' });
+            }
+        }
+      });
+
+      return alerts;
+    }
+
+    function renderAlerts() {
+      const alerts = runAlertChecks();
+      const list = document.getElementById('alert-list');
+      const empty = document.getElementById('alert-empty');
+      const summary = document.getElementById('alert-summary');
+
+      const high = alerts.filter(a => a.severity === 'high').length;
+      const medium = alerts.filter(a => a.severity === 'medium').length;
+      const low = alerts.filter(a => a.severity === 'low').length;
+      const dupCount = alerts.filter(a => a.type === 'duplicate').length;
+
+      summary.innerHTML = `
+        <div class="bg-white rounded-xl shadow-sm border-2 ${high > 0 ? 'border-red-200' : 'border-gray-200'} p-4"><div class="flex items-center gap-2"><span class="text-xl">🔴</span><div class="text-sm text-gray-500">เร่งด่วน</div></div><div class="text-2xl font-bold ${high > 0 ? 'text-red-600' : 'text-gray-400'}">${high}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border-2 ${medium > 0 ? 'border-yellow-200' : 'border-gray-200'} p-4"><div class="flex items-center gap-2"><span class="text-xl">🟡</span><div class="text-sm text-gray-500">ควรแก้ไข</div></div><div class="text-2xl font-bold ${medium > 0 ? 'text-yellow-600' : 'text-gray-400'}">${medium}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border-2 ${low > 0 ? 'border-blue-200' : 'border-gray-200'} p-4"><div class="flex items-center gap-2"><span class="text-xl">🔵</span><div class="text-sm text-gray-500">ข้อมูลขาด</div></div><div class="text-2xl font-bold ${low > 0 ? 'text-blue-600' : 'text-gray-400'}">${low}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border-2 ${dupCount > 0 ? 'border-orange-200' : 'border-gray-200'} p-4"><div class="flex items-center gap-2"><span class="text-xl">🔍</span><div class="text-sm text-gray-500">ซ้ำ/ชนกัน</div></div><div class="text-2xl font-bold ${dupCount > 0 ? 'text-orange-600' : 'text-gray-400'}">${dupCount}</div></div>
+      `;
+
+      // Update badge
+      const badge = document.getElementById('alert-badge');
+      if (high + medium > 0) {
+        badge.classList.remove('hidden');
+        badge.textContent = high + medium;
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      if (alerts.length === 0) {
+        list.classList.add('hidden'); empty.classList.remove('hidden');
+        return;
+      }
+      list.classList.remove('hidden'); empty.classList.add('hidden');
+
+      const severityOrder = { high: 0, medium: 1, low: 2 };
+      alerts.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+
+      list.innerHTML = alerts.map(a => {
+        const borderColor = { high: 'red', medium: 'yellow', low: 'blue' }[a.severity];
+        const bgColor = { high: 'red', medium: 'yellow', low: 'blue' }[a.severity];
+        const sevLabel = { high: 'เร่งด่วน', medium: 'ควรแก้ไข', low: 'ข้อมูล' }[a.severity];
+        return `<div class="bg-white rounded-xl shadow-sm border border-l-4 border-l-${borderColor}-400 p-4">
+          <div class="flex items-start gap-3">
+            <span class="text-xl">${a.icon}</span>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-semibold text-sm">${esc(a.title)}</span>
+                <span class="px-2 py-0.5 rounded-full text-xs bg-${bgColor}-100 text-${bgColor}-800">${sevLabel}</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">${esc(a.desc)}</p>
+              <p class="text-xs text-gray-500 mt-1.5 bg-gray-50 rounded px-2 py-1">💡 ${esc(a.action)}</p>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ==================== DASHBOARD ALERTS BANNER ====================
+    function renderDashboardAlerts() {
+      const alerts = runAlertChecks();
+      const high = alerts.filter(a => a.severity === 'high');
+      if (high.length > 0) {
+        return `<div class="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-4 mb-6 cursor-pointer" onclick="navigate('alerts')">
+          <span class="text-2xl">⚠️</span>
+          <div class="flex-1"><div class="font-semibold text-red-800">พบ ${high.length} รายการเร่งด่วน</div><div class="text-sm text-red-700">${high.slice(0,2).map(a => a.title).join(' | ')}${high.length > 2 ? ' | ...' : ''}</div></div>
+          <span class="px-4 py-2 rounded-lg font-medium text-xs bg-red-600 text-white hover:bg-red-700">ดูทั้งหมด</span>
+        </div>`;
+      }
+      const medium = alerts.filter(a => a.severity === 'medium');
+      if (medium.length > 0) {
+        return `<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center gap-4 mb-6 cursor-pointer" onclick="navigate('alerts')">
+          <span class="text-2xl">⚠️</span>
+          <div class="flex-1"><div class="font-semibold text-yellow-800">พบ ${medium.length} รายการควรแก้ไข</div><div class="text-sm text-yellow-700">${medium.slice(0,2).map(a => a.title).join(' | ')}</div></div>
+          <span class="px-4 py-2 rounded-lg font-medium text-xs bg-yellow-600 text-white hover:bg-yellow-700">ดูทั้งหมด</span>
+        </div>`;
+      }
+      return '';
     }
 
     // ==================== UTILS ====================
