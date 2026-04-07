@@ -103,7 +103,10 @@
         <div id="page-trainees" class="page fade-in">
           <div class="flex items-center justify-between mb-6">
             <div><h2 class="text-2xl font-bold text-gray-800">พนักงาน</h2><p class="text-sm text-gray-500">จัดการข้อมูลพนักงาน</p></div>
-            <button onclick="openTraineeModal()" class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ เพิ่มพนักงาน</button>
+            <div class="flex gap-2">
+              <button onclick="openTraineeModal()" class="px-4 py-2 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">+ เพิ่มพนักงาน</button>
+              <button onclick="clearAllTrainees()" class="px-4 py-2 rounded-lg font-medium text-sm bg-red-100 text-red-700 hover:bg-red-200 border border-red-300">ล้างข้อมูลทั้งหมด</button>
+            </div>
           </div>
           <div class="mb-4"><input type="text" id="trainee-search" placeholder="ค้นหาชื่อ, รหัส, สาขา..." class="border border-gray-300 rounded-lg px-4 py-2 text-sm w-full max-w-md" oninput="renderTrainees()" /></div>
           <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
@@ -652,6 +655,15 @@
       renderTrainees();
     }
 
+    function clearAllTrainees() {
+      if (db.trainees.length === 0) { alert('ไม่มีข้อมูลพนักงาน'); return; }
+      if (!confirm(`ต้องการลบพนักงานทั้งหมด ${db.trainees.length} คน และการลงทะเบียนอบรมที่เกี่ยวข้อง?\n\nการดำเนินการนี้ไม่สามารถย้อนกลับได้!`)) return;
+      db.trainees = [];
+      db.enrollments = [];
+      saveDB(db);
+      renderTrainees();
+    }
+
     // ==================== ENROLLMENTS ====================
     function renderEnrollments() {
       const tbody = document.getElementById('enrollments-tbody');
@@ -888,7 +900,7 @@
     // Smart column matching — maps Thai/English headers to internal fields
     function autoMatchColumns(headers) {
       const rules = [
-        { field: 'code', patterns: ['employee_code','emp_code','รหัสพนักงาน','รหัส','code','id','ลำดับ','emp_id','employee_id','staff_code','staff_id','รหัสประจำตัว'] },
+        { field: 'code', patterns: ['employee_code','emp_code','รหัสพนักงาน','รหัส','code','emp_id','employee_id','staff_code','staff_id','รหัสประจำตัว','employee_no','emp_no'] },
         { field: 'fname', patterns: ['first_name','fname','ชื่อ','ชื่อจริง','name','ชื่อพนักงาน','firstname','given_name'] },
         { field: 'lname', patterns: ['last_name','lname','นามสกุล','สกุล','surname','lastname','family_name'] },
         { field: 'nationalId', patterns: ['national_id','เลขบัตร','บัตรประชาชน','เลขบัตรประชาชน','เลขบัตรประจำตัวประชาชน','id_card','citizen_id','เลขประจำตัว','thai_id','id_number','เลข13หลัก','personal_id'] },
