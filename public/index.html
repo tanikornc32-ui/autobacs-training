@@ -268,6 +268,7 @@
             <div class="flex gap-3">
               <button onclick="navigate('trainees')" class="px-6 py-3 rounded-lg font-medium text-sm bg-autobacs-orange text-white hover:bg-orange-700">ดูรายชื่อพนักงาน</button>
               <button onclick="resetExcelImport()" class="px-6 py-3 rounded-lg font-medium text-sm bg-gray-100 text-gray-700 hover:bg-gray-200">นำเข้าไฟล์เพิ่ม</button>
+              <button id="import-undo-btn" onclick="undoLastImport()" class="hidden px-6 py-3 rounded-lg font-medium text-sm bg-red-100 text-red-700 hover:bg-red-200 border border-red-300">ย้อนกลับ (ลบข้อมูลที่เพิ่งนำเข้า)</button>
             </div>
           </div>
         </div>
@@ -851,6 +852,7 @@
 
     // ==================== EXCEL IMPORT ====================
     let importedRows = [];
+    let lastImportedIds = []; // track IDs for undo
 
     function downloadExcelTemplate() {
       const ws = XLSX.utils.aoa_to_sheet([
@@ -1038,9 +1040,12 @@
       const validRows = importedRows.filter(r => r._status === 'valid');
       if (validRows.length === 0) { alert('ไม่มีข้อมูลที่ถูกต้องเพื่อนำเข้า'); return; }
 
+      lastImportedIds = [];
       validRows.forEach(r => {
+        const newId = genId();
+        lastImportedIds.push(newId);
         db.trainees.push({
-          id: genId(),
+          id: newId,
           code: r.code,
           fname: r.fname,
           lname: r.lname,
@@ -1057,7 +1062,20 @@
       document.getElementById('import-success-section').classList.remove('hidden');
       document.getElementById('import-success-title').textContent = 'นำเข้าสำเร็จ!';
       document.getElementById('import-success-detail').textContent = `เพิ่มพนักงาน ${validRows.length} คน เข้าระบบเรียบร้อย`;
+      document.getElementById('import-undo-btn').classList.remove('hidden');
       importedRows = [];
+    }
+
+    function undoLastImport() {
+      if (lastImportedIds.length === 0) { alert('ไม่มีข้อมูลที่จะย้อนกลับ'); return; }
+      if (!confirm(`ต้องการลบพนักงาน ${lastImportedIds.length} คน ที่เพิ่งนำเข้าหรือไม่?`)) return;
+      db.trainees = db.trainees.filter(t => !lastImportedIds.includes(t.id));
+      db.enrollments = db.enrollments.filter(e => !lastImportedIds.includes(e.traineeId));
+      saveDB(db);
+      document.getElementById('import-success-title').textContent = 'ย้อนกลับสำเร็จ!';
+      document.getElementById('import-success-detail').textContent = `ลบพนักงาน ${lastImportedIds.length} คน ที่เพิ่งนำเข้าออกแล้ว`;
+      document.getElementById('import-undo-btn').classList.add('hidden');
+      lastImportedIds = [];
     }
 
     function resetExcelImport() {
