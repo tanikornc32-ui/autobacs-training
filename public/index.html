@@ -369,8 +369,20 @@
       <form onsubmit="saveEnroll(event)">
         <input type="hidden" id="enroll-id" />
         <div class="space-y-3">
-          <div><label class="block text-sm font-medium text-gray-700 mb-1">พนักงาน *</label><select id="enroll-trainee" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></select></div>
-          <div><label class="block text-sm font-medium text-gray-700 mb-1">หลักสูตร *</label><select id="enroll-course" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></select></div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">พนักงาน *</label>
+            <input type="text" id="enroll-trainee-search" placeholder="พิมพ์ชื่อ, รหัส, สาขา เพื่อค้นหา..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-1" oninput="filterEnrollTrainee()" onfocus="document.getElementById('enroll-trainee-list').classList.remove('hidden')" />
+            <input type="hidden" id="enroll-trainee" required />
+            <div id="enroll-trainee-list" class="hidden max-h-40 overflow-y-auto border border-gray-200 rounded-lg bg-white shadow-sm"></div>
+            <div id="enroll-trainee-selected" class="hidden text-xs text-green-700 bg-green-50 rounded px-2 py-1 mt-1"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">หลักสูตร *</label>
+            <input type="text" id="enroll-course-search" placeholder="พิมพ์ชื่อหลักสูตรเพื่อค้นหา..." class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm mb-1" oninput="filterEnrollCourse()" onfocus="document.getElementById('enroll-course-list').classList.remove('hidden')" />
+            <input type="hidden" id="enroll-course" required />
+            <div id="enroll-course-list" class="hidden max-h-40 overflow-y-auto border border-gray-200 rounded-lg bg-white shadow-sm"></div>
+            <div id="enroll-course-selected" class="hidden text-xs text-blue-700 bg-blue-50 rounded px-2 py-1 mt-1"></div>
+          </div>
           <div><label class="block text-sm font-medium text-gray-700 mb-1">สถานะ</label>
             <select id="enroll-status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
               <option value="registered">ลงทะเบียนแล้ว</option><option value="completed">อบรมเสร็จ</option><option value="cancelled">ยกเลิก</option>
@@ -688,31 +700,85 @@
       }).join('');
     }
 
-    function populateEnrollSelects() {
-      const ts = document.getElementById('enroll-trainee');
-      const cs = document.getElementById('enroll-course');
-      ts.innerHTML = '<option value="">-- เลือกพนักงาน --</option>' + db.trainees.map(t => `<option value="${t.id}">${esc(t.code)} ${esc(t.fname)} ${esc(t.lname)}</option>`).join('');
-      cs.innerHTML = '<option value="">-- เลือกหลักสูตร --</option>' + db.courses.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('');
+    function filterEnrollTrainee() {
+      const search = document.getElementById('enroll-trainee-search').value.toLowerCase();
+      const list = document.getElementById('enroll-trainee-list');
+      const filtered = db.trainees.filter(t => `${t.code} ${t.fname} ${t.lname} ${t.branch||''} ${t.position||''}`.toLowerCase().includes(search));
+      list.classList.remove('hidden');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="px-3 py-2 text-sm text-gray-400">ไม่พบพนักงาน</div>';
+      } else {
+        list.innerHTML = filtered.slice(0, 50).map(t => `<div class="px-3 py-2 text-sm hover:bg-orange-50 cursor-pointer border-b border-gray-100" onclick="selectEnrollTrainee('${t.id}')"><span class="font-mono text-gray-500">${esc(t.code)}</span> <span class="font-medium">${esc(t.fname)} ${esc(t.lname)}</span> <span class="text-gray-400 text-xs">${esc(t.branch||'')}</span></div>`).join('');
+      }
+    }
+
+    function selectEnrollTrainee(id) {
+      const t = db.trainees.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('enroll-trainee').value = id;
+      document.getElementById('enroll-trainee-search').value = `${t.code} ${t.fname} ${t.lname}`;
+      document.getElementById('enroll-trainee-list').classList.add('hidden');
+      const sel = document.getElementById('enroll-trainee-selected');
+      sel.classList.remove('hidden');
+      sel.textContent = `เลือกแล้ว: ${t.code} ${t.fname} ${t.lname} (${t.branch||'-'})`;
+    }
+
+    function filterEnrollCourse() {
+      const search = document.getElementById('enroll-course-search').value.toLowerCase();
+      const list = document.getElementById('enroll-course-list');
+      const filtered = db.courses.filter(c => `${c.name} ${c.provider||''}`.toLowerCase().includes(search));
+      list.classList.remove('hidden');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="px-3 py-2 text-sm text-gray-400">ไม่พบหลักสูตร</div>';
+      } else {
+        list.innerHTML = filtered.map(c => `<div class="px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer border-b border-gray-100" onclick="selectEnrollCourse('${c.id}')"><span class="font-medium">${esc(c.name)}</span></div>`).join('');
+      }
+    }
+
+    function selectEnrollCourse(id) {
+      const c = db.courses.find(x => x.id === id);
+      if (!c) return;
+      document.getElementById('enroll-course').value = id;
+      document.getElementById('enroll-course-search').value = c.name;
+      document.getElementById('enroll-course-list').classList.add('hidden');
+      const sel = document.getElementById('enroll-course-selected');
+      sel.classList.remove('hidden');
+      sel.textContent = `เลือกแล้ว: ${c.name}`;
     }
 
     function openEnrollModal(id) {
-      populateEnrollSelects();
       document.getElementById('enroll-id').value = id || '';
+      document.getElementById('enroll-trainee').value = '';
+      document.getElementById('enroll-course').value = '';
+      document.getElementById('enroll-trainee-search').value = '';
+      document.getElementById('enroll-course-search').value = '';
+      document.getElementById('enroll-trainee-list').classList.add('hidden');
+      document.getElementById('enroll-course-list').classList.add('hidden');
+      document.getElementById('enroll-trainee-selected').classList.add('hidden');
+      document.getElementById('enroll-course-selected').classList.add('hidden');
+      document.getElementById('enroll-status').value = 'registered';
+
       if (id) {
         const e = db.enrollments.find(x => x.id === id);
         if (e) {
-          document.getElementById('enroll-trainee').value = e.traineeId;
-          document.getElementById('enroll-course').value = e.courseId;
+          selectEnrollTrainee(e.traineeId);
+          selectEnrollCourse(e.courseId);
           document.getElementById('enroll-status').value = e.status;
         }
-      } else {
-        document.getElementById('enroll-trainee').value = '';
-        document.getElementById('enroll-course').value = '';
-        document.getElementById('enroll-status').value = 'registered';
       }
       document.getElementById('modal-enroll').classList.add('active');
     }
     function closeEnrollModal() { document.getElementById('modal-enroll').classList.remove('active'); }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(ev) {
+      if (!ev.target.closest('#enroll-trainee-search') && !ev.target.closest('#enroll-trainee-list')) {
+        document.getElementById('enroll-trainee-list')?.classList.add('hidden');
+      }
+      if (!ev.target.closest('#enroll-course-search') && !ev.target.closest('#enroll-course-list')) {
+        document.getElementById('enroll-course-list')?.classList.add('hidden');
+      }
+    });
     function editEnroll(id) { openEnrollModal(id); }
 
     function saveEnroll(e) {
@@ -723,7 +789,7 @@
         courseId: document.getElementById('enroll-course').value,
         status: document.getElementById('enroll-status').value,
       };
-      if (!data.traineeId || !data.courseId) return;
+      if (!data.traineeId || !data.courseId) { alert('กรุณาเลือกพนักงานและหลักสูตร'); return; }
       if (id) {
         const idx = db.enrollments.findIndex(x => x.id === id);
         if (idx >= 0) db.enrollments[idx] = { ...db.enrollments[idx], ...data };
