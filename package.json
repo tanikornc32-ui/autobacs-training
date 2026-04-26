@@ -18,7 +18,8 @@
     "recharts": "latest",
     "xlsx": "latest",
     "pptxgenjs": "latest",
-    "lucide-react": "latest"
+    "lucide-react": "latest",
+    "qrcode.react": "latest"
   },
   "devDependencies": {}
 }
