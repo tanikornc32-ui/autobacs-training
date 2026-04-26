@@ -6,6 +6,7 @@ import { Download, FileSpreadsheet, Presentation, MapPin, Users, Trophy, Pencil,
 
 const AUTOBACS_ORANGE = '#f58220';
 const COLORS = ['#f58220', '#ffb168', '#ffd0a3', '#7a3b00'];
+const POSITION_OPTIONS = ['ผู้จัดการร้าน', 'ที่ปรึกษาการขาย (SA)', 'อื่นๆ'];
 
 const questions = [
   ['ในปี 2026 ปัจจัยใดที่ Google ให้ความสำคัญสูงสุดในการประเมินความน่าเชื่อถือของรีวิว?', ['ความเกี่ยวข้องของเนื้อหาและความน่าเชื่อถือของข้อมูล', 'ราคาของสินค้าหรือบริการในรีวิว', 'รีวิวจาก Local Guide เท่านั้น', 'จำนวนดาวรวมทั้งหมด'], 0],
@@ -21,13 +22,13 @@ const questions = [
 ].map(([text, choices, answer]) => ({ text, choices, answer }));
 
 const demoRows = [
-  { id: 1, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'Service Advisor', branch: 'ศรีนครินทร์', phase: 'ก่อนอบรม', score: 5 },
-  { id: 2, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'Service Advisor', branch: 'ศรีนครินทร์', phase: 'หลังอบรม', score: 9 },
-  { id: 3, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'Store Manager', branch: 'รามอินทรา', phase: 'ก่อนอบรม', score: 6 },
-  { id: 4, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'Store Manager', branch: 'รามอินทรา', phase: 'หลังอบรม', score: 8 }
+  { id: 1, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'ที่ปรึกษาการขาย (SA)', branch: 'ศรีนครินทร์', phase: 'ก่อนอบรม', score: 5 },
+  { id: 2, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'ที่ปรึกษาการขาย (SA)', branch: 'ศรีนครินทร์', phase: 'หลังอบรม', score: 9 },
+  { id: 3, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'ผู้จัดการร้าน', branch: 'รามอินทรา', phase: 'ก่อนอบรม', score: 6 },
+  { id: 4, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'ผู้จัดการร้าน', branch: 'รามอินทรา', phase: 'หลังอบรม', score: 8 }
 ];
 
-const blankForm = { batch: 'PR รุ่น 1/2026', fullName: '', position: '', branch: '', phase: 'ก่อนอบรม', answers: Array(10).fill('') };
+const blankForm = { batch: 'PR รุ่น 1/2026', fullName: '', position: '', otherPosition: '', branch: '', phase: 'ก่อนอบรม', answers: Array(10).fill('') };
 const average = rows => rows.length ? Number((rows.reduce((s, r) => s + Number(r.score || 0), 0) / rows.length).toFixed(2)) : 0;
 const scoreAnswers = answers => questions.reduce((sum, q, i) => sum + (Number(answers[i]) === q.answer ? 1 : 0), 0);
 
@@ -61,8 +62,13 @@ export default function App() {
 
   function submitSurvey(e) {
     e.preventDefault();
-    if (!form.batch || !form.fullName || !form.position || !form.branch || form.answers.some(a => a === '')) return alert('กรุณากรอก รุ่นอบรม ข้อมูลผู้เข้าอบรม และตอบข้อสอบให้ครบ 10 ข้อ');
-    const newRow = { id: Date.now(), batch: form.batch, fullName: form.fullName, position: form.position, branch: form.branch, phase: form.phase, score, submittedAt: new Date().toLocaleString('th-TH') };
+    const finalPosition = form.position === 'อื่นๆ' ? form.otherPosition.trim() : form.position;
+    if (!form.batch || !form.fullName || !finalPosition || !form.branch || form.answers.some(a => a === '')) return alert('กรุณากรอกข้อมูลให้ครบ รวมถึงตำแหน่ง และตอบข้อสอบให้ครบ 10 ข้อ');
+    if (form.phase === 'หลังอบรม' && score < 8) {
+      alert(`คะแนนหลังอบรม ${score}/10 ยังไม่ผ่านเกณฑ์ ต้องได้ 8 คะแนนขึ้นไป กรุณาทำแบบทดสอบใหม่ทันที`);
+      return;
+    }
+    const newRow = { id: Date.now(), batch: form.batch, fullName: form.fullName, position: finalPosition, branch: form.branch, phase: form.phase, score, submittedAt: new Date().toLocaleString('th-TH') };
     setRows([...rows, newRow]);
     setSelectedBatch(form.batch);
     setForm({ ...blankForm, batch: form.batch });
@@ -79,6 +85,7 @@ export default function App() {
 
   function saveEdit() {
     if (!editRow.batch || !editRow.fullName || !editRow.position || !editRow.branch) return alert('กรุณากรอกข้อมูลให้ครบ');
+    if (editRow.phase === 'หลังอบรม' && Number(editRow.score) < 8) return alert('คะแนนหลังอบรมต้อง 8 คะแนนขึ้นไป หากไม่ถึงควรให้ผู้เข้าอบรมทำใหม่ทันที');
     setRows(rows.map(r => r.id === editingId ? { ...editRow, score: Number(editRow.score) } : r));
     setSelectedBatch(editRow.batch);
     setEditingId(null);
@@ -113,13 +120,13 @@ export default function App() {
   }
 
   return <main className="app-shell">
-    <section className="hero"><div><p className="eyebrow">Autobacs Academy</p><h1>PR Training Pre-Post Survey App</h1><p>เก็บผลเป็นรุ่นอบรม แก้ไข/ลบรายชื่อได้ และ Export เฉพาะรุ่น</p></div><div className="hero-actions"><button onClick={exportExcel}><FileSpreadsheet size={18}/> Export Excel</button><button onClick={exportPowerPoint}><Presentation size={18}/> Export PowerPoint</button></div></section>
+    <section className="hero"><div><p className="eyebrow">Autobacs Academy</p><h1>PR Training Pre-Post Survey App</h1><p>ระบบแบบสอบถามก่อน-หลังอบรม พร้อม Dashboard และ Export รายงาน</p></div><div className="hero-actions"><button onClick={exportExcel}><FileSpreadsheet size={18}/> Export Excel</button><button onClick={exportPowerPoint}><Presentation size={18}/> Export PowerPoint</button></div></section>
 
     <section className="card batch-card"><h2>จัดการรุ่นอบรม</h2><div className="form-grid"><input value={form.batch} onChange={e => setForm({ ...form, batch: e.target.value })} placeholder="ระบุรุ่น เช่น PR รุ่น 2/2026"/><select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)}><option>ทั้งหมด</option>{batches.map(b => <option key={b}>{b}</option>)}</select></div></section>
 
     <section className="kpi-grid"><div className="kpi"><Users/><span>รายการในรุ่น</span><strong>{summary.total}</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยก่อนอบรม</span><strong>{summary.preAvg}/10</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยหลังอบรม</span><strong>{summary.postAvg}/10</strong></div><div className="kpi"><Download/><span>คะแนนเพิ่มขึ้น</span><strong>{summary.gain}</strong></div></section>
 
-    <section className="layout"><form className="card form-card" onSubmit={submitSurvey}><h2>แบบสอบถาม / ข้อสอบ PR 10 ข้อ</h2><div className="form-grid"><input value={form.fullName} onChange={e => setForm({ ...form, fullName: e.target.value })} placeholder="ชื่อ-สกุล"/><input value={form.position} onChange={e => setForm({ ...form, position: e.target.value })} placeholder="ตำแหน่ง"/><input value={form.branch} onChange={e => setForm({ ...form, branch: e.target.value })} placeholder="สาขา"/><select value={form.phase} onChange={e => setForm({ ...form, phase: e.target.value })}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></div><div className="questions">{questions.map((q, index) => <div className="question" key={q.text}><b>{index + 1}. {q.text}</b><select value={form.answers[index]} onChange={e => { const answers = [...form.answers]; answers[index] = e.target.value; setForm({ ...form, answers }); }}><option value="">เลือกคำตอบ</option>{q.choices.map((c, ci) => <option key={c} value={ci}>{c}</option>)}</select></div>)}</div><button className="primary" type="submit">บันทึกคะแนน {score}/10</button></form><div className="card dashboard-card"><div className="dashboard-head"><h2>Dashboard เฉพาะรุ่น: {selectedBatch}</h2><select value={chartType} onChange={e => setChartType(e.target.value)}><option value="bar">กราฟแท่ง</option><option value="pie">วงกลม</option><option value="donut">โดนัท</option><option value="grid">กริด</option><option value="map">แผนที่</option></select></div><ChartPanel /></div></section>
+    <section className="layout"><form className="card form-card" onSubmit={submitSurvey}><h2>แบบสอบถาม / ข้อสอบ PR 10 ข้อ</h2><div className="form-grid"><input value={form.fullName} onChange={e => setForm({ ...form, fullName: e.target.value })} placeholder="ชื่อ-สกุล"/><select value={form.position} onChange={e => setForm({ ...form, position: e.target.value, otherPosition: '' })}><option value="">เลือกตำแหน่ง</option>{POSITION_OPTIONS.map(p => <option key={p}>{p}</option>)}</select>{form.position === 'อื่นๆ' && <input value={form.otherPosition} onChange={e => setForm({ ...form, otherPosition: e.target.value })} placeholder="ระบุตำแหน่งอื่นๆ"/>}<input value={form.branch} onChange={e => setForm({ ...form, branch: e.target.value })} placeholder="สาขา"/><select value={form.phase} onChange={e => setForm({ ...form, phase: e.target.value })}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></div><p className="pass-note">หมายเหตุ: หลังอบรมต้องได้อย่างน้อย 8/10 หากไม่ถึงระบบจะให้ทำใหม่ทันที</p><div className="questions">{questions.map((q, index) => <div className="question" key={q.text}><b>{index + 1}. {q.text}</b><select value={form.answers[index]} onChange={e => { const answers = [...form.answers]; answers[index] = e.target.value; setForm({ ...form, answers }); }}><option value="">เลือกคำตอบ</option>{q.choices.map((c, ci) => <option key={c} value={ci}>{c}</option>)}</select></div>)}</div><button className="primary" type="submit">บันทึกคะแนน {score}/10</button></form><div className="card dashboard-card"><div className="dashboard-head"><h2>Dashboard เฉพาะรุ่น: {selectedBatch}</h2><select value={chartType} onChange={e => setChartType(e.target.value)}><option value="bar">กราฟแท่ง</option><option value="pie">วงกลม</option><option value="donut">โดนัท</option><option value="grid">กริด</option><option value="map">แผนที่</option></select></div><ChartPanel /></div></section>
 
     <section className="card"><h2>รายชื่อและคะแนนในรุ่นอบรม</h2><div className="table-wrap"><table><thead><tr><th>รุ่น</th><th>ชื่อ-สกุล</th><th>ตำแหน่ง</th><th>สาขา</th><th>ช่วง</th><th>คะแนน</th><th>จัดการ</th></tr></thead><tbody>{filteredRows.map(r => <tr key={r.id}>{editingId === r.id ? <><td><input value={editRow.batch} onChange={e => setEditRow({ ...editRow, batch: e.target.value })}/></td><td><input value={editRow.fullName} onChange={e => setEditRow({ ...editRow, fullName: e.target.value })}/></td><td><input value={editRow.position} onChange={e => setEditRow({ ...editRow, position: e.target.value })}/></td><td><input value={editRow.branch} onChange={e => setEditRow({ ...editRow, branch: e.target.value })}/></td><td><select value={editRow.phase} onChange={e => setEditRow({ ...editRow, phase: e.target.value })}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></td><td><input type="number" min="0" max="10" value={editRow.score} onChange={e => setEditRow({ ...editRow, score: e.target.value })}/></td><td className="row-actions"><button className="icon-btn save" onClick={saveEdit}><Save size={16}/></button><button className="icon-btn" onClick={() => { setEditingId(null); setEditRow(null); }}><X size={16}/></button></td></> : <><td>{r.batch}</td><td>{r.fullName}</td><td>{r.position}</td><td>{r.branch}</td><td>{r.phase}</td><td>{r.score}/10</td><td className="row-actions"><button className="icon-btn" onClick={() => startEdit(r)}><Pencil size={16}/></button><button className="icon-btn danger" onClick={() => deleteRow(r.id)}><Trash2 size={16}/></button></td></>}</tr>)}</tbody></table></div></section>
 
