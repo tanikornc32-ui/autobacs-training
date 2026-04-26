@@ -2,5 +2,22 @@
   "name": "autobacs-training",
   "version": "1.0.0",
   "private": true,
-  "description": "Autobacs Training Tax Deduction Management"
+  "description": "Autobacs PR Training Pre-Post Survey App",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "recharts": "latest",
+    "xlsx": "latest",
+    "pptxgenjs": "latest",
+    "lucide-react": "latest"
+  },
+  "devDependencies": {}
 }
