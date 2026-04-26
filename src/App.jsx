@@ -1,135 +1,45 @@
-import React, { useMemo, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import * as XLSX from 'xlsx';
-import pptxgen from 'pptxgenjs';
-import { Download, FileSpreadsheet, Presentation, MapPin, Users, Trophy, Pencil, Trash2, Save, X } from 'lucide-react';
+import React,{useMemo,useState}from'react';
+import{BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,PieChart,Pie,Cell,Legend}from'recharts';
+import*as XLSX from'xlsx';
+import pptxgen from'pptxgenjs';
+import{Download,FileSpreadsheet,Presentation,MapPin,Users,Trophy,Pencil,Trash2,Save,X}from'lucide-react';
 
-const AUTOBACS_ORANGE = '#f58220';
-const COLORS = ['#f58220', '#ffb168', '#ffd0a3', '#7a3b00'];
-const POSITION_OPTIONS = ['ผู้จัดการร้าน', 'ที่ปรึกษาการขาย (SA)', 'อื่นๆ'];
+const AUTOBACS_ORANGE='#f58220';
+const COLORS=['#f58220','#ffb168','#ffd0a3','#7a3b00'];
+const POSITION_OPTIONS=['ผู้จัดการร้าน','ที่ปรึกษาการขาย (SA)','อื่นๆ'];
 
-const questions = [
-  ['ในปี 2026 ปัจจัยใดที่ Google ให้ความสำคัญสูงสุดในการประเมินความน่าเชื่อถือของรีวิว?', ['ความเกี่ยวข้องของเนื้อหาและความน่าเชื่อถือของข้อมูล', 'ราคาของสินค้าหรือบริการในรีวิว', 'รีวิวจาก Local Guide เท่านั้น', 'จำนวนดาวรวมทั้งหมด'], 0],
-  ['ข้อใดคือ 3 ปัจจัยหลักที่ Google ใช้จัดอันดับร้านค้าใน Local 3-Pack?', ['Quantity, Quality, Frequency', 'Design, Rating, Promotion', 'Relevance, Distance, Prominence', 'Price, Location, Speed'], 2],
-  ['เหตุใดรีวิวที่มีข้อความว่า “เปลี่ยนยางไวมาก” จึงมีประโยชน์ต่อสาขา?', ['ช่วยเพิ่ม keyword และบริบทบริการจริง', 'ทำให้ราคาแพงขึ้น', 'ลดความจำเป็นในการตอบรีวิว', 'ทำให้รีวิวหายเร็วขึ้น'], 0],
-  ['การตอบรีวิวเชิงลบที่เหมาะสมควรเริ่มจากอะไร?', ['โต้แย้งทันที', 'ขอโทษ รับฟัง และชวนแก้ไขปัญหา', 'ลบรีวิว', 'ไม่ต้องตอบ'], 1],
-  ['Social Media ของสาขาควรสื่อสารภาพลักษณ์แบบใด?', ['ช่างมืออาชีพ บริการไว เชื่อถือได้', 'ขายลดราคาอย่างเดียว', 'ใช้ศัพท์เทคนิคยาก ๆ', 'โพสต์เฉพาะวันหยุด'], 0],
-  ['คอนเทนต์หลังอบรมควรติดตามผลจากอะไรเป็นหลัก?', ['จำนวนโพสต์ คุณภาพเนื้อหา และ engagement', 'จำนวนพนักงานทั้งหมด', 'ขนาดพื้นที่ร้าน', 'จำนวนที่จอดรถ'], 0],
-  ['Call to Action ที่ดีสำหรับศูนย์บริการรถยนต์ควรเป็นอย่างไร?', ['ชัดเจน เช่น นัดหมาย/สอบถาม/เข้ารับบริการ', 'ยาวและซับซ้อน', 'ไม่มีข้อมูลติดต่อ', 'ใช้คำสั่งแข็ง ๆ เท่านั้น'], 0],
-  ['รูปภาพ/วิดีโอที่ดีสำหรับ PR สาขาควรเน้นอะไร?', ['ความสะอาด ทีมงาน ขั้นตอนบริการ และผลลัพธ์จริง', 'ภาพไม่เกี่ยวกับร้าน', 'ภาพเบลอ ๆ เพื่อความธรรมชาติ', 'ใช้ข้อความล้วนเท่านั้น'], 0],
-  ['การวัดผล PR Training แบบ Pre-Post มีประโยชน์อย่างไร?', ['เห็นพัฒนาการก่อนและหลังอบรม', 'ใช้แทนการทำงานจริงทั้งหมด', 'ทำให้ไม่ต้องติดตามสาขา', 'ลดจำนวนคำถาม'], 0],
-  ['ข้อมูลใดสำคัญต่อการวิเคราะห์คะแนนรายบุคคล?', ['ชื่อ ตำแหน่ง สาขา รุ่นอบรม รอบก่อน/หลัง และคะแนน', 'สีเสื้อ', 'เบอร์รองเท้า', 'รุ่นโทรศัพท์'], 0]
-].map(([text, choices, answer]) => ({ text, choices, answer }));
+const questions=[
+ ['ความหมายของคำว่า PR (Public Relations) ตามที่ Autobacs ต้องการสื่อสารกับพนักงานคืออะไร?',['การแสดงความสัมพันธ์ที่ดีกับลูกค้าในที่สาธารณะและทุกที่ที่มีโอกาส','การจัดกิจกรรมส่งเสริมการขายเพื่อเพิ่มยอดขายในระยะสั้น','การจัดการข้อร้องเรียนของลูกค้าผ่านทางอีเมลเท่านั้น','การซื้อพื้นที่โฆษณาในหนังสือพิมพ์และโทรทัศน์เพื่อให้คนรู้จักแบรนด์'],0],
+ ['ข้อใดจัดอยู่ในกลุ่ม Owned Media หรือสื่อที่แบรนด์เป็นเจ้าของเอง?',['การจ้าง Influencer ชื่อดังมารีวิวสินค้าที่หน้าร้าน','การที่ลูกค้าโพสต์ชมเชยการบริการลงใน Facebook ส่วนตัว','โฆษณาบนป้ายบิลบอร์ดขนาดใหญ่ริมทางด่วน','หน้าแฟนเพจ Facebook และช่อง TikTok ของทางสาขา'],3],
+ ['สื่อประเภทใดที่มีความน่าเชื่อถือสูงสุด เนื่องจากเป็นการบอกต่อจากผู้ใช้งานจริง?',['Paid Media','Earned Media','Google Ads','Owned Media'],1],
+ ['ในฐานะวัยรุ่น Autobacs หรือทหารราบ หน้าที่หลักของคุณที่ส่งผลต่อ Owned Media คืออะไร?',['การซื้อโฆษณา Meta Ads เพื่อยิงไปยังกลุ่มเป้าหมาย','การอนุมัติงบประมาณการตลาดประจำปี','การซ่อมบำรุงเครื่องจักรในโรงงานผลิตยาง','การสร้างประสบการณ์ที่ดีให้ลูกค้า เพื่อให้เกิดการบอกต่อ'],3],
+ ['ตัวอย่างของ Earned Media ที่เห็นได้ชัดเจนที่สุดตามตารางข้อมูลคือข้อใด?',['การแชร์คอนเทนต์แบบ Viral โดยที่ไม่ได้จ้าง','การส่ง Newsletter ทางอีเมลหาลูกค้า','การติดป้ายโฆษณาหน้าร้านและบนบรรจุภัณฑ์','การทำ SEO เพื่อให้เว็บไซต์ติดอันดับการค้นหา'],0],
+ ['ข้อดีของ Owned Media เมื่อเทียบกับ Paid Media ในระยะยาวคืออะไร?',['ไม่ต้องใช้บุคลากรในการดูแลจัดการเนื้อหา','สามารถกำหนดกลุ่มเป้าหมายได้แม่นยำ 100% ตั้งแต่วันแรก','สามารถเข้าถึงกลุ่มเป้าหมายใหม่ได้รวดเร็วกว่า','มีต้นทุนในการดำเนินงานในระยะยาวต่ำกว่า'],3],
+ ['คำว่า Public Relations ตามรากศัพท์ที่อธิบายในบทเรียนประกอบด้วยคำว่าอะไรบ้าง?',['Public (สาธารณะ) + Reporting (การรายงาน)','Public (สาธารณะ) + Relations (ความสัมพันธ์)','Promotion (โปรโมชั่น) + Relations (ความสัมพันธ์)','Personal (ส่วนตัว) + Relations (ความสัมพันธ์)'],1],
+ ['ข้อใดคือตัวอย่างของงานหลังบ้านที่ดีที่สามารถนำมาทำคอนเทนต์ PR ได้?',['การแสดงความรู้ที่ถูกต้องเรื่องเทคนิคของช่างและผลิตภัณฑ์','การจัดโปรโมชั่นลดราคายาง 50% ตลอดทั้งปี','การแจกใบปลิวโฆษณาตามหมู่บ้าน','การตกแต่งห้องรับรองลูกค้าให้ดูหรูหรา'],0],
+ ['UGC หรือ User Generated Content มีความหมายตรงกับข้อใด?',['เนื้อหาที่กราฟิกดีไซน์เนอร์ของบริษัทออกแบบ','เนื้อหาที่เป็นความลับทางการค้าของบริษัท','เนื้อหาที่ลูกค้าหรือผู้ใช้งานเป็นคนสร้างขึ้นเอง','เนื้อหาที่ได้จากการซื้อโฆษณาในหนังสือพิมพ์'],2],
+ ['เมื่อลูกค้าเกิดความภักดีและบอกต่อ (Loyalty & Advocacy) จะส่งผลให้เกิดสื่อประเภทใดมากที่สุด?',['Paid Media','Earned Media','Owned Media','Sponsorship'],1]
+].map(([text,choices,answer])=>({text,choices,answer}));
 
-const demoRows = [
-  { id: 1, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'ที่ปรึกษาการขาย (SA)', branch: 'ศรีนครินทร์', phase: 'ก่อนอบรม', score: 5 },
-  { id: 2, batch: 'PR รุ่น 1/2026', fullName: 'สมชาย Autobacs', position: 'ที่ปรึกษาการขาย (SA)', branch: 'ศรีนครินทร์', phase: 'หลังอบรม', score: 9 },
-  { id: 3, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'ผู้จัดการร้าน', branch: 'รามอินทรา', phase: 'ก่อนอบรม', score: 6 },
-  { id: 4, batch: 'PR รุ่น 1/2026', fullName: 'กมล Training', position: 'ผู้จัดการร้าน', branch: 'รามอินทรา', phase: 'หลังอบรม', score: 8 }
+const demoRows=[
+{id:1,batch:'PR รุ่น 1/2026',fullName:'สมชาย Autobacs',position:'ที่ปรึกษาการขาย (SA)',branch:'ศรีนครินทร์',phase:'ก่อนอบรม',score:5},
+{id:2,batch:'PR รุ่น 1/2026',fullName:'สมชาย Autobacs',position:'ที่ปรึกษาการขาย (SA)',branch:'ศรีนครินทร์',phase:'หลังอบรม',score:9},
+{id:3,batch:'PR รุ่น 1/2026',fullName:'กมล Training',position:'ผู้จัดการร้าน',branch:'รามอินทรา',phase:'ก่อนอบรม',score:6},
+{id:4,batch:'PR รุ่น 1/2026',fullName:'กมล Training',position:'ผู้จัดการร้าน',branch:'รามอินทรา',phase:'หลังอบรม',score:8}
 ];
+const blankForm={batch:'PR รุ่น 1/2026',fullName:'',position:'',otherPosition:'',branch:'',phase:'ก่อนอบรม',answers:Array(10).fill('')};
+const average=rows=>rows.length?Number((rows.reduce((s,r)=>s+Number(r.score||0),0)/rows.length).toFixed(2)):0;
+const scoreAnswers=answers=>questions.reduce((sum,q,i)=>sum+(Number(answers[i])===q.answer?1:0),0);
 
-const blankForm = { batch: 'PR รุ่น 1/2026', fullName: '', position: '', otherPosition: '', branch: '', phase: 'ก่อนอบรม', answers: Array(10).fill('') };
-const average = rows => rows.length ? Number((rows.reduce((s, r) => s + Number(r.score || 0), 0) / rows.length).toFixed(2)) : 0;
-const scoreAnswers = answers => questions.reduce((sum, q, i) => sum + (Number(answers[i]) === q.answer ? 1 : 0), 0);
-
-export default function App() {
-  const [rows, setRows] = useState(demoRows);
-  const [form, setForm] = useState(blankForm);
-  const [chartType, setChartType] = useState('bar');
-  const [selectedBatch, setSelectedBatch] = useState('PR รุ่น 1/2026');
-  const [editingId, setEditingId] = useState(null);
-  const [editRow, setEditRow] = useState(null);
-
-  const score = scoreAnswers(form.answers);
-  const batches = useMemo(() => Array.from(new Set(rows.map(r => r.batch))).filter(Boolean), [rows]);
-  const filteredRows = selectedBatch === 'ทั้งหมด' ? rows : rows.filter(r => r.batch === selectedBatch);
-  const preRows = filteredRows.filter(r => r.phase === 'ก่อนอบรม');
-  const postRows = filteredRows.filter(r => r.phase === 'หลังอบรม');
-  const summary = { total: filteredRows.length, preAvg: average(preRows), postAvg: average(postRows) };
-  summary.gain = Number((summary.postAvg - summary.preAvg).toFixed(2));
-  const comparisonData = [{ name: 'ก่อนอบรม', score: summary.preAvg }, { name: 'หลังอบรม', score: summary.postAvg }];
-
-  const personData = useMemo(() => {
-    const grouped = {};
-    filteredRows.forEach(r => {
-      const key = `${r.batch}-${r.fullName}-${r.branch}`;
-      grouped[key] ||= { batch: r.batch, name: r.fullName, position: r.position, branch: r.branch, pre: null, post: null };
-      if (r.phase === 'ก่อนอบรม') grouped[key].pre = r.score;
-      if (r.phase === 'หลังอบรม') grouped[key].post = r.score;
-    });
-    return Object.values(grouped).map(i => ({ ...i, diff: (i.post ?? 0) - (i.pre ?? 0) }));
-  }, [filteredRows]);
-
-  function submitSurvey(e) {
-    e.preventDefault();
-    const finalPosition = form.position === 'อื่นๆ' ? form.otherPosition.trim() : form.position;
-    if (!form.batch || !form.fullName || !finalPosition || !form.branch || form.answers.some(a => a === '')) return alert('กรุณากรอกข้อมูลให้ครบ รวมถึงตำแหน่ง และตอบข้อสอบให้ครบ 10 ข้อ');
-    if (form.phase === 'หลังอบรม' && score < 8) {
-      alert(`คะแนนหลังอบรม ${score}/10 ยังไม่ผ่านเกณฑ์ ต้องได้ 8 คะแนนขึ้นไป กรุณาทำแบบทดสอบใหม่ทันที`);
-      return;
-    }
-    const newRow = { id: Date.now(), batch: form.batch, fullName: form.fullName, position: finalPosition, branch: form.branch, phase: form.phase, score, submittedAt: new Date().toLocaleString('th-TH') };
-    setRows([...rows, newRow]);
-    setSelectedBatch(form.batch);
-    setForm({ ...blankForm, batch: form.batch });
-  }
-
-  function deleteRow(id) {
-    if (confirm('ยืนยันลบรายการนี้?')) setRows(rows.filter(r => r.id !== id));
-  }
-
-  function startEdit(row) {
-    setEditingId(row.id);
-    setEditRow({ ...row });
-  }
-
-  function saveEdit() {
-    if (!editRow.batch || !editRow.fullName || !editRow.position || !editRow.branch) return alert('กรุณากรอกข้อมูลให้ครบ');
-    if (editRow.phase === 'หลังอบรม' && Number(editRow.score) < 8) return alert('คะแนนหลังอบรมต้อง 8 คะแนนขึ้นไป หากไม่ถึงควรให้ผู้เข้าอบรมทำใหม่ทันที');
-    setRows(rows.map(r => r.id === editingId ? { ...editRow, score: Number(editRow.score) } : r));
-    setSelectedBatch(editRow.batch);
-    setEditingId(null);
-    setEditRow(null);
-  }
-
-  function exportExcel() {
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(filteredRows), 'Survey Data');
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(personData), 'Individual Analysis');
-    XLSX.writeFile(workbook, `autobacs-pr-training-${selectedBatch}.xlsx`);
-  }
-
-  function exportPowerPoint() {
-    const pptx = new pptxgen();
-    pptx.layout = 'LAYOUT_WIDE';
-    const title = pptx.addSlide();
-    title.background = { color: 'FFF2E4' };
-    title.addText(`Autobacs PR Training: ${selectedBatch}`, { x: 0.6, y: 0.5, w: 12, h: 0.6, fontSize: 28, bold: true, color: 'F58220' });
-    title.addText(`ทั้งหมด ${summary.total} รายการ | ก่อนอบรม ${summary.preAvg}/10 | หลังอบรม ${summary.postAvg}/10 | เพิ่มขึ้น ${summary.gain}`, { x: 0.6, y: 1.35, w: 12, h: 0.5, fontSize: 17, color: '333333' });
-    const slide = pptx.addSlide();
-    slide.addText('Individual Score Analysis', { x: 0.5, y: 0.3, w: 8, h: 0.4, fontSize: 24, bold: true, color: 'F58220' });
-    slide.addTable([['Batch','Name','Branch','Pre','Post','Diff'], ...personData.map(i => [i.batch, i.name, i.branch, i.pre ?? '-', i.post ?? '-', i.diff])], { x: 0.4, y: 1, w: 12.5, h: 4.8, border: { color: 'DDDDDD' }, fontSize: 11 });
-    pptx.writeFile({ fileName: `autobacs-pr-training-${selectedBatch}.pptx` });
-  }
-
-  function ChartPanel() {
-    if (chartType === 'grid') return <div className="score-grid">{comparisonData.map(i => <div className="score-box" key={i.name}><span>{i.name}</span><strong>{i.score}/10</strong></div>)}</div>;
-    if (chartType === 'map') return <div className="map-box"><p><MapPin size={18}/> แผนที่จำลองคะแนนตามสาขา เฉพาะ {selectedBatch}</p>{filteredRows.map((r, i) => <span key={r.id} style={{ left: `${20 + (i * 13) % 60}%`, top: `${22 + (i * 17) % 50}%` }} title={`${r.branch}: ${r.score}`} />)}</div>;
-    if (chartType === 'pie' || chartType === 'donut') return <ResponsiveContainer width="100%" height={300}><PieChart><Pie data={comparisonData} dataKey="score" nameKey="name" innerRadius={chartType === 'donut' ? 65 : 0} outerRadius={105} label>{comparisonData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}</Pie><Tooltip/><Legend/></PieChart></ResponsiveContainer>;
-    return <ResponsiveContainer width="100%" height={300}><BarChart data={comparisonData}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="name"/><YAxis domain={[0,10]}/><Tooltip/><Bar dataKey="score" fill={AUTOBACS_ORANGE} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>;
-  }
-
-  return <main className="app-shell">
-    <section className="hero"><div><p className="eyebrow">Autobacs Academy</p><h1>PR Training Pre-Post Survey App</h1><p>ระบบแบบสอบถามก่อน-หลังอบรม พร้อม Dashboard และ Export รายงาน</p></div><div className="hero-actions"><button onClick={exportExcel}><FileSpreadsheet size={18}/> Export Excel</button><button onClick={exportPowerPoint}><Presentation size={18}/> Export PowerPoint</button></div></section>
-
-    <section className="card batch-card"><h2>จัดการรุ่นอบรม</h2><div className="form-grid"><input value={form.batch} onChange={e => setForm({ ...form, batch: e.target.value })} placeholder="ระบุรุ่น เช่น PR รุ่น 2/2026"/><select value={selectedBatch} onChange={e => setSelectedBatch(e.target.value)}><option>ทั้งหมด</option>{batches.map(b => <option key={b}>{b}</option>)}</select></div></section>
-
-    <section className="kpi-grid"><div className="kpi"><Users/><span>รายการในรุ่น</span><strong>{summary.total}</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยก่อนอบรม</span><strong>{summary.preAvg}/10</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยหลังอบรม</span><strong>{summary.postAvg}/10</strong></div><div className="kpi"><Download/><span>คะแนนเพิ่มขึ้น</span><strong>{summary.gain}</strong></div></section>
-
-    <section className="layout"><form className="card form-card" onSubmit={submitSurvey}><h2>แบบสอบถาม / ข้อสอบ PR 10 ข้อ</h2><div className="form-grid"><input value={form.fullName} onChange={e => setForm({ ...form, fullName: e.target.value })} placeholder="ชื่อ-สกุล"/><select value={form.position} onChange={e => setForm({ ...form, position: e.target.value, otherPosition: '' })}><option value="">เลือกตำแหน่ง</option>{POSITION_OPTIONS.map(p => <option key={p}>{p}</option>)}</select>{form.position === 'อื่นๆ' && <input value={form.otherPosition} onChange={e => setForm({ ...form, otherPosition: e.target.value })} placeholder="ระบุตำแหน่งอื่นๆ"/>}<input value={form.branch} onChange={e => setForm({ ...form, branch: e.target.value })} placeholder="สาขา"/><select value={form.phase} onChange={e => setForm({ ...form, phase: e.target.value })}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></div><p className="pass-note">หมายเหตุ: หลังอบรมต้องได้อย่างน้อย 8/10 หากไม่ถึงระบบจะให้ทำใหม่ทันที</p><div className="questions">{questions.map((q, index) => <div className="question" key={q.text}><b>{index + 1}. {q.text}</b><select value={form.answers[index]} onChange={e => { const answers = [...form.answers]; answers[index] = e.target.value; setForm({ ...form, answers }); }}><option value="">เลือกคำตอบ</option>{q.choices.map((c, ci) => <option key={c} value={ci}>{c}</option>)}</select></div>)}</div><button className="primary" type="submit">บันทึกคะแนน {score}/10</button></form><div className="card dashboard-card"><div className="dashboard-head"><h2>Dashboard เฉพาะรุ่น: {selectedBatch}</h2><select value={chartType} onChange={e => setChartType(e.target.value)}><option value="bar">กราฟแท่ง</option><option value="pie">วงกลม</option><option value="donut">โดนัท</option><option value="grid">กริด</option><option value="map">แผนที่</option></select></div><ChartPanel /></div></section>
-
-    <section className="card"><h2>รายชื่อและคะแนนในรุ่นอบรม</h2><div className="table-wrap"><table><thead><tr><th>รุ่น</th><th>ชื่อ-สกุล</th><th>ตำแหน่ง</th><th>สาขา</th><th>ช่วง</th><th>คะแนน</th><th>จัดการ</th></tr></thead><tbody>{filteredRows.map(r => <tr key={r.id}>{editingId === r.id ? <><td><input value={editRow.batch} onChange={e => setEditRow({ ...editRow, batch: e.target.value })}/></td><td><input value={editRow.fullName} onChange={e => setEditRow({ ...editRow, fullName: e.target.value })}/></td><td><input value={editRow.position} onChange={e => setEditRow({ ...editRow, position: e.target.value })}/></td><td><input value={editRow.branch} onChange={e => setEditRow({ ...editRow, branch: e.target.value })}/></td><td><select value={editRow.phase} onChange={e => setEditRow({ ...editRow, phase: e.target.value })}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></td><td><input type="number" min="0" max="10" value={editRow.score} onChange={e => setEditRow({ ...editRow, score: e.target.value })}/></td><td className="row-actions"><button className="icon-btn save" onClick={saveEdit}><Save size={16}/></button><button className="icon-btn" onClick={() => { setEditingId(null); setEditRow(null); }}><X size={16}/></button></td></> : <><td>{r.batch}</td><td>{r.fullName}</td><td>{r.position}</td><td>{r.branch}</td><td>{r.phase}</td><td>{r.score}/10</td><td className="row-actions"><button className="icon-btn" onClick={() => startEdit(r)}><Pencil size={16}/></button><button className="icon-btn danger" onClick={() => deleteRow(r.id)}><Trash2 size={16}/></button></td></>}</tr>)}</tbody></table></div></section>
-
-    <section className="card"><h2>วิเคราะห์คะแนนรายบุคคล</h2><div className="table-wrap"><table><thead><tr><th>รุ่น</th><th>ชื่อ-สกุล</th><th>สาขา</th><th>ก่อนอบรม</th><th>หลังอบรม</th><th>พัฒนา</th></tr></thead><tbody>{personData.map(i => <tr key={`${i.batch}-${i.name}-${i.branch}`}><td>{i.batch}</td><td>{i.name}</td><td>{i.branch}</td><td>{i.pre ?? '-'}</td><td>{i.post ?? '-'}</td><td className={i.diff >= 0 ? 'positive' : 'negative'}>{i.diff}</td></tr>)}</tbody></table></div></section>
-  </main>;
-}
+export default function App(){
+const[rows,setRows]=useState(demoRows);const[form,setForm]=useState(blankForm);const[chartType,setChartType]=useState('bar');const[selectedBatch,setSelectedBatch]=useState('PR รุ่น 1/2026');const[editingId,setEditingId]=useState(null);const[editRow,setEditRow]=useState(null);
+const score=scoreAnswers(form.answers);const batches=useMemo(()=>Array.from(new Set(rows.map(r=>r.batch))).filter(Boolean),[rows]);const filteredRows=selectedBatch==='ทั้งหมด'?rows:rows.filter(r=>r.batch===selectedBatch);const preRows=filteredRows.filter(r=>r.phase==='ก่อนอบรม');const postRows=filteredRows.filter(r=>r.phase==='หลังอบรม');const summary={total:filteredRows.length,preAvg:average(preRows),postAvg:average(postRows)};summary.gain=Number((summary.postAvg-summary.preAvg).toFixed(2));const comparisonData=[{name:'ก่อนอบรม',score:summary.preAvg},{name:'หลังอบรม',score:summary.postAvg}];
+const personData=useMemo(()=>{const grouped={};filteredRows.forEach(r=>{const key=`${r.batch}-${r.fullName}-${r.branch}`;grouped[key]||={batch:r.batch,name:r.fullName,position:r.position,branch:r.branch,pre:null,post:null};if(r.phase==='ก่อนอบรม')grouped[key].pre=r.score;if(r.phase==='หลังอบรม')grouped[key].post=r.score});return Object.values(grouped).map(i=>({...i,diff:(i.post??0)-(i.pre??0)}))},[filteredRows]);
+function submitSurvey(e){e.preventDefault();const finalPosition=form.position==='อื่นๆ'?form.otherPosition.trim():form.position;if(!form.batch||!form.fullName||!finalPosition||!form.branch||form.answers.some(a=>a===''))return alert('กรุณากรอกข้อมูลให้ครบ รวมถึงตำแหน่ง และตอบข้อสอบให้ครบ 10 ข้อ');if(form.phase==='หลังอบรม'&&score<8){alert(`คะแนนหลังอบรม ${score}/10 ยังไม่ผ่านเกณฑ์ ต้องได้ 8 คะแนนขึ้นไป กรุณาทำแบบทดสอบใหม่ทันที`);return}const newRow={id:Date.now(),batch:form.batch,fullName:form.fullName,position:finalPosition,branch:form.branch,phase:form.phase,score,submittedAt:new Date().toLocaleString('th-TH')};setRows([...rows,newRow]);setSelectedBatch(form.batch);setForm({...blankForm,batch:form.batch})}
+function deleteRow(id){if(confirm('ยืนยันลบรายการนี้?'))setRows(rows.filter(r=>r.id!==id))}
+function startEdit(row){setEditingId(row.id);setEditRow({...row})}
+function saveEdit(){if(!editRow.batch||!editRow.fullName||!editRow.position||!editRow.branch)return alert('กรุณากรอกข้อมูลให้ครบ');if(editRow.phase==='หลังอบรม'&&Number(editRow.score)<8)return alert('คะแนนหลังอบรมต้อง 8 คะแนนขึ้นไป หากไม่ถึงควรให้ผู้เข้าอบรมทำใหม่ทันที');setRows(rows.map(r=>r.id===editingId?{...editRow,score:Number(editRow.score)}:r));setSelectedBatch(editRow.batch);setEditingId(null);setEditRow(null)}
+function exportExcel(){const workbook=XLSX.utils.book_new();XLSX.utils.book_append_sheet(workbook,XLSX.utils.json_to_sheet(filteredRows),'Survey Data');XLSX.utils.book_append_sheet(workbook,XLSX.utils.json_to_sheet(personData),'Individual Analysis');XLSX.writeFile(workbook,`autobacs-pr-training-${selectedBatch}.xlsx`)}
+function exportPowerPoint(){const pptx=new pptxgen();pptx.layout='LAYOUT_WIDE';const title=pptx.addSlide();title.background={color:'FFF2E4'};title.addText(`Autobacs PR Training: ${selectedBatch}`,{x:.6,y:.5,w:12,h:.6,fontSize:28,bold:true,color:'F58220'});title.addText(`ทั้งหมด ${summary.total} รายการ | ก่อนอบรม ${summary.preAvg}/10 | หลังอบรม ${summary.postAvg}/10 | เพิ่มขึ้น ${summary.gain}`,{x:.6,y:1.35,w:12,h:.5,fontSize:17,color:'333333'});const slide=pptx.addSlide();slide.addText('Individual Score Analysis',{x:.5,y:.3,w:8,h:.4,fontSize:24,bold:true,color:'F58220'});slide.addTable([['Batch','Name','Branch','Pre','Post','Diff'],...personData.map(i=>[i.batch,i.name,i.branch,i.pre??'-',i.post??'-',i.diff])],{x:.4,y:1,w:12.5,h:4.8,border:{color:'DDDDDD'},fontSize:11});pptx.writeFile({fileName:`autobacs-pr-training-${selectedBatch}.pptx`})}
+function ChartPanel(){if(chartType==='grid')return <div className="score-grid">{comparisonData.map(i=><div className="score-box" key={i.name}><span>{i.name}</span><strong>{i.score}/10</strong></div>)}</div>;if(chartType==='map')return <div className="map-box"><p><MapPin size={18}/> แผนที่จำลองคะแนนตามสาขา เฉพาะ {selectedBatch}</p>{filteredRows.map((r,i)=><span key={r.id} style={{left:`${20+(i*13)%60}%`,top:`${22+(i*17)%50}%`}} title={`${r.branch}: ${r.score}`}/>)}</div>;if(chartType==='pie'||chartType==='donut')return <ResponsiveContainer width="100%" height={300}><PieChart><Pie data={comparisonData} dataKey="score" nameKey="name" innerRadius={chartType==='donut'?65:0} outerRadius={105} label>{comparisonData.map((_,i)=><Cell key={i} fill={COLORS[i]}/>)}</Pie><Tooltip/><Legend/></PieChart></ResponsiveContainer>;return <ResponsiveContainer width="100%" height={300}><BarChart data={comparisonData}><CartesianGrid strokeDasharray="3 3"/><XAxis dataKey="name"/><YAxis domain={[0,10]}/><Tooltip/><Bar dataKey="score" fill={AUTOBACS_ORANGE} radius={[10,10,0,0]}/></BarChart></ResponsiveContainer>}
+return <main className="app-shell"><section className="hero"><div><p className="eyebrow">Autobacs Academy</p><h1>PR Training Pre-Post Survey App</h1><p>ระบบแบบสอบถามก่อน-หลังอบรม พร้อม Dashboard และ Export รายงาน</p></div><div className="hero-actions"><button onClick={exportExcel}><FileSpreadsheet size={18}/> Export Excel</button><button onClick={exportPowerPoint}><Presentation size={18}/> Export PowerPoint</button></div></section><section className="card batch-card"><h2>จัดการรุ่นอบรม</h2><div className="form-grid"><input value={form.batch} onChange={e=>setForm({...form,batch:e.target.value})} placeholder="ระบุรุ่น เช่น PR รุ่น 2/2026"/><select value={selectedBatch} onChange={e=>setSelectedBatch(e.target.value)}><option>ทั้งหมด</option>{batches.map(b=><option key={b}>{b}</option>)}</select></div></section><section className="kpi-grid"><div className="kpi"><Users/><span>รายการในรุ่น</span><strong>{summary.total}</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยก่อนอบรม</span><strong>{summary.preAvg}/10</strong></div><div className="kpi"><Trophy/><span>เฉลี่ยหลังอบรม</span><strong>{summary.postAvg}/10</strong></div><div className="kpi"><Download/><span>คะแนนเพิ่มขึ้น</span><strong>{summary.gain}</strong></div></section><section className="layout"><form className="card form-card" onSubmit={submitSurvey}><h2>แบบสอบถาม / ข้อสอบ PR 10 ข้อ</h2><div className="form-grid"><input value={form.fullName} onChange={e=>setForm({...form,fullName:e.target.value})} placeholder="ชื่อ-สกุล"/><select value={form.position} onChange={e=>setForm({...form,position:e.target.value,otherPosition:''})}><option value="">เลือกตำแหน่ง</option>{POSITION_OPTIONS.map(p=><option key={p}>{p}</option>)}</select>{form.position==='อื่นๆ'&&<input value={form.otherPosition} onChange={e=>setForm({...form,otherPosition:e.target.value})} placeholder="ระบุตำแหน่งอื่นๆ"/>}<input value={form.branch} onChange={e=>setForm({...form,branch:e.target.value})} placeholder="สาขา"/><select value={form.phase} onChange={e=>setForm({...form,phase:e.target.value})}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></div><p className="pass-note">หมายเหตุ: หลังอบรมต้องได้อย่างน้อย 8/10 หากไม่ถึงระบบจะให้ทำใหม่ทันที</p><div className="questions">{questions.map((q,index)=><div className="question" key={q.text}><b>{index+1}. {q.text}</b><select value={form.answers[index]} onChange={e=>{const answers=[...form.answers];answers[index]=e.target.value;setForm({...form,answers})}}><option value="">เลือกคำตอบ</option>{q.choices.map((c,ci)=><option key={c} value={ci}>{c}</option>)}</select></div>)}</div><button className="primary" type="submit">บันทึกคะแนน {score}/10</button></form><div className="card dashboard-card"><div className="dashboard-head"><h2>Dashboard เฉพาะรุ่น: {selectedBatch}</h2><select value={chartType} onChange={e=>setChartType(e.target.value)}><option value="bar">กราฟแท่ง</option><option value="pie">วงกลม</option><option value="donut">โดนัท</option><option value="grid">กริด</option><option value="map">แผนที่</option></select></div><ChartPanel/></div></section><section className="card"><h2>รายชื่อและคะแนนในรุ่นอบรม</h2><div className="table-wrap"><table><thead><tr><th>รุ่น</th><th>ชื่อ-สกุล</th><th>ตำแหน่ง</th><th>สาขา</th><th>ช่วง</th><th>คะแนน</th><th>จัดการ</th></tr></thead><tbody>{filteredRows.map(r=><tr key={r.id}>{editingId===r.id?<><td><input value={editRow.batch} onChange={e=>setEditRow({...editRow,batch:e.target.value})}/></td><td><input value={editRow.fullName} onChange={e=>setEditRow({...editRow,fullName:e.target.value})}/></td><td><input value={editRow.position} onChange={e=>setEditRow({...editRow,position:e.target.value})}/></td><td><input value={editRow.branch} onChange={e=>setEditRow({...editRow,branch:e.target.value})}/></td><td><select value={editRow.phase} onChange={e=>setEditRow({...editRow,phase:e.target.value})}><option>ก่อนอบรม</option><option>หลังอบรม</option></select></td><td><input type="number" min="0" max="10" value={editRow.score} onChange={e=>setEditRow({...editRow,score:e.target.value})}/></td><td className="row-actions"><button className="icon-btn save" onClick={saveEdit}><Save size={16}/></button><button className="icon-btn" onClick={()=>{setEditingId(null);setEditRow(null)}}><X size={16}/></button></td></>:<><td>{r.batch}</td><td>{r.fullName}</td><td>{r.position}</td><td>{r.branch}</td><td>{r.phase}</td><td>{r.score}/10</td><td className="row-actions"><button className="icon-btn" onClick={()=>startEdit(r)}><Pencil size={16}/></button><button className="icon-btn danger" onClick={()=>deleteRow(r.id)}><Trash2 size={16}/></button></td></>}</tr>)}</tbody></table></div></section><section className="card"><h2>วิเคราะห์คะแนนรายบุคคล</h2><div className="table-wrap"><table><thead><tr><th>รุ่น</th><th>ชื่อ-สกุล</th><th>สาขา</th><th>ก่อนอบรม</th><th>หลังอบรม</th><th>พัฒนา</th></tr></thead><tbody>{personData.map(i=><tr key={`${i.batch}-${i.name}-${i.branch}`}><td>{i.batch}</td><td>{i.name}</td><td>{i.branch}</td><td>{i.pre??'-'}</td><td>{i.post??'-'}</td><td className={i.diff>=0?'positive':'negative'}>{i.diff}</td></tr>)}</tbody></table></div></section></main>}
